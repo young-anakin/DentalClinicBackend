@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Source\\Repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj": {}
+    "C:\\Users\\user\\source\\repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Source\\Repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj": {
+    "C:\\Users\\user\\source\\repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Source\\Repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj",
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj",
         "projectName": "DentalClinic",
-        "projectPath": "C:\\Users\\user\\Source\\Repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj",
+        "projectPath": "C:\\Users\\user\\source\\repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Source\\Repos\\Dental-web-system\\DentalClinic\\obj\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\Dental-web-system\\DentalClinic\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",

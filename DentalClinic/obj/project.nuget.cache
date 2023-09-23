@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "//cguU3t0UJIiOC7QxNH8Yc+sqC+VaFZ+c47kXWwvPjrOykD8hklf4WmsvrQYaoKcebBPEG4Z2/U7C7embprFg==",
+  "dgSpecHash": "PkYVeTMzga0QecScq/9l5Wcf3Zfwd6Hka5wXhHmBAiaiE9K1ONHTDk0czRXHEA901vD1dOJbaBMjt3FJZusQbg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Source\\Repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj",
+  "projectFilePath": "C:\\Users\\user\\source\\repos\\Dental-web-system\\DentalClinic\\DentalClinic.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
