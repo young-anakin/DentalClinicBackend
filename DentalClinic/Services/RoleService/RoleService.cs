@@ -47,11 +47,10 @@ namespace DentalClinic.Services.RoleService
         public async Task<Role> UpdateRole(UpdateRoleDTO roleDTO)
         {
             var role = await _context.Roles
-                    .Where(ro=>ro.RoleID == roleDTO.RoleId)
+                    .Where(ro=>ro.RoleID == roleDTO.RoleIds)
                     .FirstOrDefaultAsync();
             if (role == null) throw new KeyNotFoundException("Role Not Found");
             role = _mapper.Map(roleDTO, role);
-
             _context.Roles.Update(role);
             await _context.SaveChangesAsync();
             return role;

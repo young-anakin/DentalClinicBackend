@@ -30,7 +30,16 @@ namespace DentalClinic.Context
         public DbSet<HealthProgress> HealthProgresses { get; set; }
 
         public DbSet<Appointment> Appointments { get; set; }
-        
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<City> Cities { get; set; }
+        public DbSet<SubCity> SubCities { get; set; }
+
+        public DbSet<CompanySetting> CompanySettings { get; set; }
+
+
+
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var added = ChangeTracker.Entries<IAuditableEntity>().Where(E => E.State == EntityState.Added).ToList();

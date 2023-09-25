@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230924191225_RealSettingAdded")]
+    partial class RealSettingAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,6 +68,9 @@ namespace DentalClinic.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CityId"));
 
+                    b.Property<int?>("CityId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("CityName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -73,6 +79,8 @@ namespace DentalClinic.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CityId");
+
+                    b.HasIndex("CityId1");
 
                     b.HasIndex("CountryId");
 
@@ -94,9 +102,6 @@ namespace DentalClinic.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("EarlyReminderDate")
                         .HasColumnType("int");
 
@@ -109,9 +114,6 @@ namespace DentalClinic.Migrations
 
                     b.Property<decimal>("MaximumLoanAmount")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("CompanySettingID");
 
@@ -604,6 +606,10 @@ namespace DentalClinic.Migrations
 
             modelBuilder.Entity("DentalClinic.Models.City", b =>
                 {
+                    b.HasOne("DentalClinic.Models.City", null)
+                        .WithMany("Cities")
+                        .HasForeignKey("CityId1");
+
                     b.HasOne("DentalClinic.Models.Country", "Country")
                         .WithMany("CityList")
                         .HasForeignKey("CountryId")
@@ -724,7 +730,7 @@ namespace DentalClinic.Migrations
             modelBuilder.Entity("DentalClinic.Models.SubCity", b =>
                 {
                     b.HasOne("DentalClinic.Models.City", "City")
-                        .WithMany("SubCities")
+                        .WithMany()
                         .HasForeignKey("CityID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -753,7 +759,7 @@ namespace DentalClinic.Migrations
 
             modelBuilder.Entity("DentalClinic.Models.City", b =>
                 {
-                    b.Navigation("SubCities");
+                    b.Navigation("Cities");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Country", b =>

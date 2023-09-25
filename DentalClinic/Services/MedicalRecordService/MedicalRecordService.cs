@@ -65,6 +65,30 @@ namespace DentalClinic.Services.MedicalRecordService
             await _context.MedicalRecords.AddAsync(record);
             await _context.SaveChangesAsync();
         }
+        public async Task<MedicalRecord> DeleteMedicalRecord(int MedicalRecordID)
+        {
+            var MedicalRecord = await _context.MedicalRecords.
+                                 Where(mr=> mr.Medical_RecordID == MedicalRecordID)       
+                                .FirstOrDefaultAsync()?? throw new KeyNotFoundException("Medical Record Not Found!");
+            _context.MedicalRecords.Remove(MedicalRecord);
+           await _context.SaveChangesAsync();
+            return MedicalRecord;
+        }
+        //Medical record Update Not needed
+        //public async Task<MedicalRecord> UpdateMedicalRecord(UpdateMedicalRecordDTO medicalRecordDTO)
+        //{
+        //    var record = await _context.MedicalRecords
+        //                        .Where(mr=> mr.Medical_RecordID == medicalRecordDTO.MedicalRecordID)
+        //                        .FirstOrDefaultAsync()?? throw new KeyNotFoundException("Medical Record not Found!");
+        //    record.Patient = await _context.Patients
+        //                .Where(pa => pa.PatientId == medicalRecordDTO.PatientIdNo)
+        //                .FirstOrDefaultAsync();
+        //    var TreatmentBY = await _context.Employees
+        //                .Where(e => e.EmployeeId == medicalRecordDTO.TreatedByID)
+        //                .FirstOrDefaultAsync();
+        //    record.TreatedBy = TreatmentBY;
+
+        //}
         public async Task<List<MedicalRecord>> GetMedicalRecordforPatient(int patientID)
         {
             var record = await _context.MedicalRecords

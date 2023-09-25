@@ -24,7 +24,14 @@ namespace DentalClinic.Controllers
             }
             catch (Exception ex)
             {
-                return this.ParseException(ex);
+                var errorMessage = "An error occurred while creating the role.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         [HttpDelete("{Name}")]
@@ -37,7 +44,14 @@ namespace DentalClinic.Controllers
             }
             catch (Exception ex)
             {
-                return this.ParseException(ex);
+                var errorMessage = "An error occurred while deleting the role.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         [HttpGet]
@@ -47,9 +61,16 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _roleService.GetRoles());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return this.ParseException(ex);
+                var errorMessage = "An error occurred while returning the role.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         [HttpPut]
@@ -59,9 +80,16 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _roleService.UpdateRole(roleDTO));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred."); // Generic error response for other exceptions.
+                var errorMessage = "An error occurred while Updating the role.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
 

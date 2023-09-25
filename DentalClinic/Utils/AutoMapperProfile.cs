@@ -8,6 +8,7 @@ using DentalClinic.DTOs.PatientDTO;
 using DentalClinic.DTOs.Pricing;
 using DentalClinic.DTOs.ProcedureDTO;
 using DentalClinic.DTOs.RoleDTO;
+using DentalClinic.DTOs.SettingsDTO;
 using DentalClinic.Models;
 
 namespace Secretary_Job_Mgmt.Utils
@@ -37,6 +38,10 @@ namespace Secretary_Job_Mgmt.Utils
             CreateMap<UpdatePatientDTO, PatientProfile>();
             CreateMap<UpdateProcedureDTO, Procedure>();
             CreateMap<UpdateEmployeeDTO, Employee>();
+            CreateMap<UpdateAppointmentDTO, Appointment>();
+            CreateMap<UpdateRoleDTO, Role>();
+            CreateMap<UpdateCompanySettingDTO, CompanySetting>();
+            CreateMap<AddCompanySettingsDTO, CompanySetting>();
 
             //CreateMap<UpdateBlogPostDTO, BlogPost>();
 

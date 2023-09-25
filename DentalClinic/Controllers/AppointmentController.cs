@@ -27,7 +27,7 @@ namespace DentalClinic.Controllers
             }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Health Progress.";
+                var errorMessage = "An error occurred while adding the Appointment.";
 
                 if (ex.InnerException != null)
                 {
@@ -48,7 +48,7 @@ namespace DentalClinic.Controllers
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Health Progress.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Appointment.");
             }
         }
         [HttpGet("GetSpecificEmployeeApp")]
@@ -62,10 +62,49 @@ namespace DentalClinic.Controllers
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Health Progress.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Appointment.");
+            }
+        }
+        [HttpDelete]
+        public async Task<ActionResult> DeleteAppointment (int appointmentID)
+        {
+            try
+            {
+                await _appointmentService.DeleteAppointment(appointmentID);
+                return Ok("Registration successful.");
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "An error occurred while Deleting the Appointment.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdateAppointment(UpdateAppointmentDTO appointmentDTO)
+        {
+            try
+            {
 
+                return Ok(await _appointmentService.UpdateAppointment(appointmentDTO));
+            }   
+            catch (Exception ex)
+            {
+                var errorMessage = "An error occurred while Updating the Appointment.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+            }
+        }
     }
 }

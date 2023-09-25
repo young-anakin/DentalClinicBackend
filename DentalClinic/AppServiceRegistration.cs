@@ -1,4 +1,5 @@
 ﻿using DentalClinic.Services.AppointmentService;
+using DentalClinic.Services.CompanySettingService;
 using DentalClinic.Services.EmployeeService;
 using DentalClinic.Services.HealthProgressService;
 using DentalClinic.Services.MedicalRecordService;
@@ -24,6 +25,8 @@ namespace DentalClinic
             services.AddScoped<IToolsService, ToolsService>();
             services.AddScoped<IHealthProgressService, HealthProgressService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ICompanySettingService, CompanySettingService>();
+
 
         }
 

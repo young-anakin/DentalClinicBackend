@@ -17,10 +17,7 @@ namespace DentalClinic.Services.Tools
         public string[] ReturnArrayofCommaSeparatedStrings(string inputString)
         {
             string[] strings = {
-            "Hello",
-            "World",
-            "OpenAI",
-            "ChatGPT"
+
         };
             if (string.IsNullOrEmpty(inputString))
             {

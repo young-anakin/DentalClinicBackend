@@ -62,6 +62,26 @@ namespace DentalClinic.Services.AppointmentService
 
             return appointments;
         }
+        public async Task<Appointment> DeleteAppointment(int AppID)
+        {
+            var appointment = await _context.Appointments
+                                    .Where(ap=> ap.AppointmentId == AppID)
+                                    .FirstOrDefaultAsync()?? throw new KeyNotFoundException("Appointment Not Found!");
+            _context.Appointments.Remove(appointment);
+            await _context.SaveChangesAsync();
+            return appointment;
+        }
+        public async Task<Appointment> UpdateAppointment(UpdateAppointmentDTO appointmentDTO)
+        {
+            var appointment = await _context.Appointments
+                                    .Where(ap => ap.AppointmentId == appointmentDTO.AppointmentID)
+                                    .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Appointment Not Found");
+            appointment = _mapper.Map(appointmentDTO, appointment);
+
+            _context.Appointments.Update(appointment); 
+            await _context.SaveChangesAsync();
+            return appointment;
+        }
 
     }
 }

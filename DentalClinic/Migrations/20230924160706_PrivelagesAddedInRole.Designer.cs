@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230924160706_PrivelagesAddedInRole")]
+    partial class PrivelagesAddedInRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,84 +58,6 @@ namespace DentalClinic.Migrations
                     b.HasIndex("PatientID");
 
                     b.ToTable("Appointments");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.City", b =>
-                {
-                    b.Property<int>("CityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CityId"));
-
-                    b.Property<string>("CityName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CityId");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.CompanySetting", b =>
-                {
-                    b.Property<int>("CompanySettingID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanySettingID"));
-
-                    b.Property<int>("CardExpireAfter")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EarlyReminderDate")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LoanExpireAfter")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("MaximumLoanAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("CompanySettingID");
-
-                    b.ToTable("CompanySettings");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.Country", b =>
-                {
-                    b.Property<int>("CountryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryID"));
-
-                    b.Property<string>("CountryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CountryID");
-
-                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Employee", b =>
@@ -518,28 +443,6 @@ namespace DentalClinic.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("DentalClinic.Models.SubCity", b =>
-                {
-                    b.Property<int>("SubCityID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubCityID"));
-
-                    b.Property<int>("CityID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SubCityName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SubCityID");
-
-                    b.HasIndex("CityID");
-
-                    b.ToTable("SubCities");
-                });
-
             modelBuilder.Entity("DentalClinic.Models.UserAccount", b =>
                 {
                     b.Property<int>("UserAccountId")
@@ -600,17 +503,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("Dentist");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.City", b =>
-                {
-                    b.HasOne("DentalClinic.Models.Country", "Country")
-                        .WithMany("CityList")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.HealthProgress", b =>
@@ -721,17 +613,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("MedicalRecord");
                 });
 
-            modelBuilder.Entity("DentalClinic.Models.SubCity", b =>
-                {
-                    b.HasOne("DentalClinic.Models.City", "City")
-                        .WithMany("SubCities")
-                        .HasForeignKey("CityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-                });
-
             modelBuilder.Entity("DentalClinic.Models.UserAccount", b =>
                 {
                     b.HasOne("DentalClinic.Models.Employee", "Employee")
@@ -749,16 +630,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.City", b =>
-                {
-                    b.Navigation("SubCities");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.Country", b =>
-                {
-                    b.Navigation("CityList");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Employee", b =>
