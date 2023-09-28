@@ -73,6 +73,8 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
+
+
         [HttpPut]
         public async Task<ActionResult> UpdateEmployee(UpdateRoleDTO roleDTO)
         {

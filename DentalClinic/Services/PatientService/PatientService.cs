@@ -3,6 +3,7 @@ using DentalClinic.Context;
 using DentalClinic.Models;
 using DentalClinic.DTOs.PatientDTO;
 using Microsoft.EntityFrameworkCore;
+using DentalClinic.Services.Tools;
 
 namespace DentalClinic.Services.PatientService
 {
@@ -10,10 +11,12 @@ namespace DentalClinic.Services.PatientService
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public PatientService(DataContext context, IMapper mapper)
+        private readonly IToolsService _toolsService;
+        public PatientService(DataContext context, IMapper mapper, IToolsService toolsService)
         {
             _context = context;
             _mapper = mapper;
+            _toolsService = toolsService;
         }
         public async Task<Patient> AddPatient(AddPatientDTO patientDTO)
         {
@@ -72,21 +75,48 @@ namespace DentalClinic.Services.PatientService
             return patient;
                                                 
         }
-        public async Task<List<Patient>> GetAllPatients()
+        public async Task<List<DisplayPatientDTO>> GetAllPatients()
         {
-            var patients = await _context.Patients
-                                .Include(p=> p.Profile)
-                                .ToListAsync();
-            return patients;
+        var patients = await _context.Patients.ToListAsync();
+            // Create a list of PatientDTO with calculated ages
+            var patientDTOs = patients.Select(p => new DisplayPatientDTO
+            {
+                PatientId = p.PatientId,
+                PatientFullName = p.PatientFullName,
+                Age = _toolsService.CalculateAge(p.DateOfBirth),
+                Phone = p.Phone,
+                Gender = p.Gender,
+                Country = p.Country,
+                City = p.City,
+                Subcity = p.Subcity,
+                Address = p.Address
+            }).ToList();
+            return patientDTOs;
         }
-        public async Task<Patient> GetSpecificPatient(int ID)
+        public async Task<DisplayPatientDTO> GetSpecificPatient(int ID)
         {
-            var patient = await _context.Patients
-                                .Where(p=> p.PatientId == ID)
-                                .Include(p=>p.Profile)
-                                .FirstOrDefaultAsync()
-                                ?? throw new KeyNotFoundException("Patient Not Found");
-            return patient;
+            var patients = await _context.Patients.
+                                                 Where(pp => pp.PatientId == ID)
+                                                .FirstOrDefaultAsync();
+            var PatientProfile = await _context.patientProfiles
+                                                .Where(pp=> pp.Patient_Id == ID)
+                                                .FirstOrDefaultAsync();
+            var patientDTO = new DisplayPatientDTO
+            {
+                PatientId = patients.PatientId,
+                PatientFullName = patients.PatientFullName,
+                Age = _toolsService.CalculateAge(patients.DateOfBirth),
+                Phone = patients.Phone,
+                Gender = patients.Gender,
+                Country = patients.Country,
+                City = patients.City,
+                Subcity = patients.Subcity,
+                Address = patients.Address,
+                MedicalHistory = PatientProfile.MedicalHistory,
+                Chronics = PatientProfile.Chronics,
+                Allergies = PatientProfile.Allergies,
+            };
+            return patientDTO;
         }
 
     }

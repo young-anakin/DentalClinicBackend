@@ -7,8 +7,10 @@ namespace DentalClinic.Services.PatientService
     {
         Task<Patient> AddPatient(AddPatientDTO patientDTO);
         Task<Patient> DeletePatient(int ID);
-        Task<List<Patient>> GetAllPatients();
-        Task<Patient> GetSpecificPatient(int ID);
+        //Task<List<Patient>> GetAllPatients();
+        Task<List<DisplayPatientDTO>> GetAllPatients();
         Task<Patient> UpdatePatient(UpdatePatientDTO patientDTO);
+
+        Task<DisplayPatientDTO> GetSpecificPatient(int ID);
     }
 }

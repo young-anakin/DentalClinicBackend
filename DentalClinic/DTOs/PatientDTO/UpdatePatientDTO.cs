@@ -21,8 +21,7 @@
 
         public string Allergies { get; set; } = string.Empty;
 
-        public string previousConditions { get; set; } = string.Empty;
+        public string Chronics { get; set; } = string.Empty;
 
-        public string FamilyHistory { get; set; } = string.Empty;
     }
 }

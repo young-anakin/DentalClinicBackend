@@ -27,6 +27,20 @@ namespace DentalClinic.Services.Tools
             string[] separatedStrings = inputString.Split(',');
             return separatedStrings;
         }
+        public int CalculateAge(DateTime birthDate)
+        {
+            DateTime currentDate = DateTime.Today;
+            int age = currentDate.Year - birthDate.Year;
+
+            if (currentDate.Month < birthDate.Month ||
+                (currentDate.Month == birthDate.Month && currentDate.Day < birthDate.Day))
+            {
+                age--;
+            }
+
+            return age;
+        }
     }
+
 }
 
