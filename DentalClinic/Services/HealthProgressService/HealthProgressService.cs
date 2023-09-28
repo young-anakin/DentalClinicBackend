@@ -19,7 +19,7 @@ namespace DentalClinic.Services.HealthProgressService
 
 
 
-        public async Task AddHealthProgressToEmployee(AddHealthProgressDTO progressDTO)
+        public async Task<HealthProgress> AddHealthProgressToEmployee(AddHealthProgressDTO progressDTO)
         {
             var Patient = await _context.Patients
                         .FirstOrDefaultAsync(p => p.PatientId == progressDTO.PatientID);
@@ -39,7 +39,7 @@ namespace DentalClinic.Services.HealthProgressService
             //progress.Employee = Employee;
             _context.HealthProgresses.Add(healthProgress);
             await _context.SaveChangesAsync();
-            //return healthProgress;
+            return healthProgress;
         }
         public async Task<List<HealthProgress>> GetHealthProgressesForPatient(int patientId)
         {

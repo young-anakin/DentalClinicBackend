@@ -19,8 +19,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _pricingService.AddPricingReason(pricingReasonDTO);
-                return Ok("Registration successful.");
+               
+                return Ok(await _pricingService.AddPricingReason(pricingReasonDTO));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
@@ -34,8 +34,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _pricingService.AddPricingDescription(descriptionDTO);
-                return Ok("Registration successful.");
+                
+                return Ok(await _pricingService.AddPricingDescription(descriptionDTO));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
@@ -48,8 +48,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _pricingService.GetPricingReasonsList();
-                return Ok("Registration successful.");
+                
+                return Ok(await _pricingService.GetPricingReasonsList());
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
@@ -62,8 +62,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _pricingService.GetPricingDescriptions();
-                return Ok("Registration successful.");
+                
+                return Ok(await _pricingService.GetPricingDescriptions());
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)

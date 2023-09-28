@@ -19,8 +19,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _healthProgressService.AddHealthProgressToEmployee(healthProgressDTO);
-                return Ok("Registration successful.");
+               
+                return Ok(await _healthProgressService.AddHealthProgressToEmployee(healthProgressDTO));
             }
             catch (Exception ex)
             {

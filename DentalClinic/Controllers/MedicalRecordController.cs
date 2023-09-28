@@ -21,8 +21,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _recordService.AddMedicalRecord(medicalRecordDTO);
-                return Ok("Registration successful.");
+                
+                return Ok(await _recordService.AddMedicalRecord(medicalRecordDTO));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)

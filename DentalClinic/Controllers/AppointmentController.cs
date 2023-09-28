@@ -22,8 +22,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _appointmentService.AddAppointment(appointmentDTO);
-                return Ok("Registration successful.");
+                
+                return Ok(await _appointmentService.AddAppointment(appointmentDTO););
             }
             catch (Exception ex)
             {
@@ -70,8 +70,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _appointmentService.DeleteAppointment(appointmentID);
-                return Ok("Registration successful.");
+                
+                return Ok(await _appointmentService.DeleteAppointment(appointmentID););
             }
             catch (Exception ex)
             {

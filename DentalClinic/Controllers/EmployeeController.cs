@@ -42,8 +42,7 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                int totalEmployees = await _employeeService.GetTotalEmployeeCountAsync();
-                return Ok(totalEmployees);
+                return Ok(await _employeeService.GetTotalEmployeeCountAsync(););
             }
             catch (Exception ex)
             {

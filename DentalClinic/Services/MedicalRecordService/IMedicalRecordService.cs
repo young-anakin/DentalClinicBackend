@@ -5,7 +5,7 @@ namespace DentalClinic.Services.MedicalRecordService
 {
     public interface IMedicalRecordService
     {
-        Task AddMedicalRecord(AddMedicalRecordDTO recordDTO);
+        Task<MedicalRecord> AddMedicalRecord(AddMedicalRecordDTO recordDTO);
         Task<List<MedicalRecord>> GetMedicalRecordforPatient(int patientID);
     }
 }

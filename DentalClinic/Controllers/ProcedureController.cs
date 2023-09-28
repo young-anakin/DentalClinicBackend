@@ -20,8 +20,8 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _procedureService.AddProcedure(procedureDTO);
-                return Ok("Procedure Succesfully Added");
+               
+                return Ok(await _procedureService.AddProcedure(procedureDTO));
             }
             catch (Exception ex)
             {
@@ -47,8 +47,7 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _procedureService.DeleteProcedure(procedure);
-                return Ok("Procedure Succesfully Deleted");
+                return Ok(await _procedureService.DeleteProcedure(procedure));
 
             }
             catch (Exception ex)

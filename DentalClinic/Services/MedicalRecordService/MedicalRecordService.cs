@@ -20,7 +20,7 @@ namespace DentalClinic.Services.MedicalRecordService
             _mapper = mapper;
             _toolsService = toolsService;
         }
-        public async Task AddMedicalRecord(AddMedicalRecordDTO recordDTO)
+        public async Task<MedicalRecord> AddMedicalRecord(AddMedicalRecordDTO recordDTO)
         {
             var record = _mapper.Map<MedicalRecord>(recordDTO);
             record.Patient = await _context.Patients
@@ -64,6 +64,7 @@ namespace DentalClinic.Services.MedicalRecordService
             record.Procedures = proceduresList;
             await _context.MedicalRecords.AddAsync(record);
             await _context.SaveChangesAsync();
+            return record;
         }
         public async Task<MedicalRecord> DeleteMedicalRecord(int MedicalRecordID)
         {
