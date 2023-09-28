@@ -16,7 +16,7 @@ namespace DentalClinic.Services.EmployeeService
             _context = context;
             _mapper = mapper;
         }
-        public async Task AddEmployee(AddEmployeeDTO employeeDTO)
+        public async Task<Employee> AddEmployee(AddEmployeeDTO employeeDTO)
         {
             //var employee = _mapper.Map<Employee>(employeeDTO);
 
@@ -52,7 +52,7 @@ namespace DentalClinic.Services.EmployeeService
 
 
             await _context.SaveChangesAsync();
-            //return employee;
+            return employee;
         }
         public async Task<int> GetTotalEmployeeCountAsync()
         {
@@ -63,6 +63,8 @@ namespace DentalClinic.Services.EmployeeService
         {
             var employees = await _context.Employees
                                     .Where(e=> e.IsCurrentlyActive == true)
+                                    .Include(e=>e.UserAccount)
+                                        .ThenInclude(ua=> ua.Role)
                                     .OrderByDescending(e => e.EmployeeId)
                                    .ToListAsync();
                                 
@@ -72,6 +74,8 @@ namespace DentalClinic.Services.EmployeeService
         public async Task<List<Employee>> GetAllEmployee()
         {
             var employees = await _context.Employees
+                                    .Include(e => e.UserAccount)
+                                        .ThenInclude(ua => ua.Role)
                                     .OrderByDescending(e => e.EmployeeId)
                                    .ToListAsync();
 
@@ -96,7 +100,10 @@ namespace DentalClinic.Services.EmployeeService
         public async Task<Employee> GetEmployeeById(int id)
         {
             var employee = await _context.Employees
-                            .FirstOrDefaultAsync(e => e.EmployeeId == id && e.IsCurrentlyActive == true)?? throw new KeyNotFoundException("Emp not found");
+                            .Include(e => e.UserAccount)
+                                   .ThenInclude(ua => ua.Role)
+                            .FirstOrDefaultAsync(e => e.EmployeeId == id && e.IsCurrentlyActive == true)
+                            ?? throw new KeyNotFoundException("Emp not found");
             return employee;
 
         }
@@ -123,6 +130,7 @@ namespace DentalClinic.Services.EmployeeService
             UserAccount.UserName = employeeDTO.UserName1;
             UserAccount.Password = employeeDTO.Password;
             UserAccount.Role = role;
+            employee.IsCurrentlyActive = employeeDTO.IsCurrentlyActive;
             employee.UserAccount = UserAccount;
 
 

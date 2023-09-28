@@ -4,6 +4,5 @@
     {
         public string City { get; set; }
 
-        public string CountryName { get; set; }
     }
 }

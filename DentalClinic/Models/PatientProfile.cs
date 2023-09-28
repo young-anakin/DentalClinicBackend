@@ -7,15 +7,15 @@ namespace DentalClinic.Models
     {
         [Key]
         [ForeignKey("Patient")]
-        public int patient_Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int Patient_Id { get; set; }
 
         public string MedicalHistory { get; set; } = string.Empty;
 
         public string Allergies { get; set; } = string.Empty;
 
-        public string previousConditions { get; set; } = string.Empty;
-
-        public string FamilyHistory { get; set; } = string.Empty;
+        public string Chronics { get; set; } = string.Empty;
 
         public Patient? Patient { get; set; }
     }

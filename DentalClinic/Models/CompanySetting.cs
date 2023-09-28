@@ -19,6 +19,8 @@ namespace DentalClinic.Models
 
         public decimal MaximumLoanAmount { get; set; }
 
+        public int AppointmentDuration { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime? UpdatedAt { get; set;} = DateTime.Now;

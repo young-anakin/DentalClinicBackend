@@ -59,7 +59,7 @@ namespace DentalClinic.Services.PatientService
                         .FirstOrDefaultAsync()
                         ?? throw new KeyNotFoundException("Patient Not Found");
             var PatientProfile = await _context.patientProfiles
-            .Where(p => p.patient_Id == patientDTO.PatientID)
+            .Where(p => p.Patient_Id == patientDTO.PatientID)
             .FirstOrDefaultAsync()
             ?? throw new KeyNotFoundException("Patient Not Found");
 

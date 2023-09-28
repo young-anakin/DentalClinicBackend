@@ -25,6 +25,16 @@ namespace DentalClinic.Services.PricingService
             return re;
 
         }
+        public async Task<List<PricingReason>> GetPricingReasonsList()
+        {
+            var pr = await _context.pricingReasons.ToListAsync()??throw new KeyNotFoundException("Reasons Not Found") ;
+            return pr;
+        }
+        public async Task<List<PricingDescription>> GetPricingDescriptions()
+        {
+            var pr = await _context.pricingDescriptions.ToListAsync() ?? throw new KeyNotFoundException("Descriptions Not Found");
+            return pr;
+        }
         public async Task<PricingDescription> AddPricingDescription(AddPricingDescriptionDTO pricingDescriptionDTO)
         {
             var re = _mapper.Map<PricingDescription>(pricingDescriptionDTO);

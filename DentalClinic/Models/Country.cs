@@ -9,7 +9,7 @@ namespace DentalClinic.Models
 
         public string CountryName { get; set; }  = string.Empty;
 
-        public List<City>? CityList { get; set; }  
+
 
 
     }

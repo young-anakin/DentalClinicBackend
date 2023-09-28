@@ -5,7 +5,7 @@ namespace DentalClinic.Services.EmployeeService
 {
     public interface IEmployeeService
     {
-        Task AddEmployee(AddEmployeeDTO employeeDTO);
+        Task<Employee> AddEmployee(AddEmployeeDTO employeeDTO);
         Task<Employee> DeleteEmployee(int id);
         Task<int> GetTotalEmployeeCountAsync();
         Task<Employee> GetEmployeeById(int id);

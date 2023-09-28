@@ -9,10 +9,6 @@ namespace DentalClinic.Models
 
         public string SubCityName { get; set;} = String.Empty;
 
-        public City? City { get; set; }
-
-        [ForeignKey("City")]
-        public int CityID { get; set; }
 
 
     }

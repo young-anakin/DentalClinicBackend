@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DentalClinic.Context;
 using DentalClinic.DTOs.AppointmentDTO;
+using DentalClinic.DTOs.AreaSettingDTO;
 using DentalClinic.DTOs.EmployeeDTO;
 using DentalClinic.DTOs.HealthProgressDTO;
 using DentalClinic.DTOs.MedicalRecordDTO;
@@ -42,7 +43,7 @@ namespace Secretary_Job_Mgmt.Utils
             CreateMap<UpdateRoleDTO, Role>();
             CreateMap<UpdateCompanySettingDTO, CompanySetting>();
             CreateMap<AddCompanySettingsDTO, CompanySetting>();
-
+            CreateMap<AddCountryDTO, Country>();
             //CreateMap<UpdateBlogPostDTO, BlogPost>();
 
             //// USER

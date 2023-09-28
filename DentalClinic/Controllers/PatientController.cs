@@ -38,7 +38,14 @@ namespace DentalClinic.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting.");
+                var errorMessage = "An error occurred while adding the Appointment.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         [HttpPut]

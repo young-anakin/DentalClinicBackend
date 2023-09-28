@@ -4,6 +4,7 @@ using DentalClinic.DTOs.SettingsDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.EmployeeService;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DentalClinic.Services.CompanySettingService
 {
@@ -16,23 +17,31 @@ namespace DentalClinic.Services.CompanySettingService
             _context = context;
             _mapper = mapper;
         }
-        public async Task<CompanySetting> AddCompanySettingService(AddCompanySettingsDTO companySettingsDTO)
+        //Update works by updating only 1 record that's in the database and changing it
+        public async Task<CompanySetting> AddCompanySetting(AddCompanySettingsDTO add)
         {
-            var compSetting = _mapper.Map<CompanySetting>(companySettingsDTO);
+            var num = await _context.CompanySettings.CountAsync();
+            if (num > 1)
+            {
+                throw new Exception("Company setting is already set, update the existing setting.");
+            }
+            var compSetting = _mapper.Map<CompanySetting>(add);
             _context.CompanySettings.Add(compSetting);
             await _context.SaveChangesAsync();
             return compSetting;
         }
-        public async Task<CompanySetting> UpdateCompanySetting(UpdateCompanySettingDTO companySettingDTO)
+        public async Task<CompanySetting> UpdateComapnySetting(UpdateCompanySettingDTO update)
         {
             var compSetting = await _context.CompanySettings
-                                    .Where(cs => cs.CompanySettingID == companySettingDTO.CompanySettingIDs)
-                                    .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company setting Not Found");
-            compSetting = _mapper.Map(companySettingDTO, compSetting);
-            _context.CompanySettings.Update(compSetting);
-            await _context.SaveChangesAsync();
-            return compSetting;
+                                    .OrderByDescending(u=> u.UpdatedAt)
+                                    .FirstOrDefaultAsync();
+
+                compSetting = _mapper.Map(update, compSetting);
+                _context.CompanySettings.Update(compSetting);
+                await _context.SaveChangesAsync();
+                return compSetting;
         }
+
 
         public async Task<CompanySetting> GetCompanySetting()
         {
@@ -42,6 +51,8 @@ namespace DentalClinic.Services.CompanySettingService
             return compSetting;
 
         }
+
+
     }
 }
 

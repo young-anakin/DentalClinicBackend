@@ -15,7 +15,7 @@ namespace DentalClinic.Controllers
         {
             _procedureService = procedureService;
         }
-        [HttpPost("api/AddProcedure")]
+        [HttpPost("AddProcedure")]
         public async Task<ActionResult> AddProcedure(AddProcedureDTO procedureDTO)
         {
             try

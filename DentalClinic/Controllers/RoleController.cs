@@ -34,7 +34,7 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
-        [HttpDelete("{Name}")]
+        [HttpDelete]
 
         public async Task<ActionResult> DeleteRole(string Name)
         {

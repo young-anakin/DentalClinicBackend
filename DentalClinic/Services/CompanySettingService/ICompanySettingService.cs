@@ -5,8 +5,8 @@ namespace DentalClinic.Services.CompanySettingService
 {
     public interface ICompanySettingService
     {
-        Task<CompanySetting> AddCompanySettingService(AddCompanySettingsDTO companySettingsDTO);
+        Task<CompanySetting> AddCompanySetting(AddCompanySettingsDTO add);
         Task<CompanySetting> GetCompanySetting();
-        Task<CompanySetting> UpdateCompanySetting(UpdateCompanySettingDTO companySettingDTO);
+        Task<CompanySetting> UpdateComapnySetting(UpdateCompanySettingDTO update);
     }
 }

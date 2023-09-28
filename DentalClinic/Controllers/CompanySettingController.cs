@@ -15,14 +15,14 @@ namespace DentalClinic.Controllers
         {
             _companySettingService = companySettingService;
         }
-        //Add a new Employee 
+        //Add a new Employee
         [HttpPost]
         public async Task<ActionResult> SetCompanySetting(AddCompanySettingsDTO companySettingsDTO)
         {
             try
             {
-                
-                return Ok(await _companySettingService.AddCompanySettingService(companySettingsDTO));
+
+                return Ok(await _companySettingService.AddCompanySetting(companySettingsDTO));
             }
             catch (Exception ex)
             {
@@ -37,12 +37,12 @@ namespace DentalClinic.Controllers
             }
         }
         [HttpPut]
-        public async Task<ActionResult> UpdateCompanySetting(UpdateCompanySettingDTO companySettingsDTO)
+        public async Task<ActionResult> UpdateCompanySetting(UpdateCompanySettingDTO b)
         {
             try
             {
 
-                return Ok(await _companySettingService.UpdateCompanySetting(companySettingsDTO));
+                return Ok(await _companySettingService.UpdateComapnySetting(b));
             }
             catch (Exception ex)
             {

@@ -2,8 +2,6 @@
 {
     public class UpdateCompanySettingDTO
     {
-        public int CompanySettingIDs { get; set; }
-
         public string CompanyName { get; set; } = string.Empty;
 
         public string FileName { get; set; } = string.Empty;

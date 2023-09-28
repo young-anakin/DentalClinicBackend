@@ -7,5 +7,7 @@ namespace DentalClinic.Services.PricingService
     {
         Task<PricingDescription> AddPricingDescription(AddPricingDescriptionDTO pricingDescriptionDTO);
         Task<PricingReason> AddPricingReason(AddPricingReasonDTO pricingReasonDTO);
+        Task<List<PricingDescription>> GetPricingDescriptions();
+        Task<List<PricingReason>> GetPricingReasonsList();
     }
 }

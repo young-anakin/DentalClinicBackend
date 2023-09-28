@@ -22,13 +22,18 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                await _employeeService.AddEmployee(employeeDTO);
-                return Ok("Registration successful.");
+                return Ok(await _employeeService.AddEmployee(employeeDTO));
             }
-            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the employee.");
+                var errorMessage = "An error occurred while adding the employee.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         //Get total Number of Employees 
@@ -42,9 +47,14 @@ namespace DentalClinic.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception for debugging purposes
-                // You can also return a meaningful error response
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the total employee count.");
+                var errorMessage = "An error occurred while returning the employee.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         //Get all the employees 
@@ -55,9 +65,16 @@ namespace DentalClinic.Controllers
             {
                 return Ok( await _employeeService.GetAllEmployee());
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while returning all the employees.");
+                var errorMessage = "An error occurred while returning the employees.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         [HttpGet("GetAllEMployeeWhoAreHired")]
@@ -67,9 +84,16 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _employeeService.GetAllHiredEmployee());
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while returning all the employees.");
+                var errorMessage = "An error occurred while returning the employee.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         //Get a specific employee by ID
@@ -82,7 +106,14 @@ namespace DentalClinic.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred while returning employee with id {id}");
+                var errorMessage = "An error occurred while returning the employee.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         //Update employee information
@@ -99,7 +130,14 @@ namespace DentalClinic.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting an employee.");
+                var errorMessage = "An error occurred while Deleting the employee.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
         [HttpPut]
@@ -122,6 +160,7 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
+
 
 
         private ActionResult ParseException(Exception ex)

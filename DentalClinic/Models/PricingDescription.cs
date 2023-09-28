@@ -6,9 +6,10 @@ namespace DentalClinic.Models
     public class PricingDescription
     {
         [Key]
+        [System.Text.Json.Serialization.JsonIgnore]
         public int PricingDescriptionId { get; set; }
         public string pricingDescription { get; set; } = string.Empty;
-        [JsonIgnore]
-        public List<Procedure> Procedures { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public List<Procedure>? Procedures { get; set; }
     }
 }

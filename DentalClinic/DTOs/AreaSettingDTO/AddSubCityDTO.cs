@@ -3,5 +3,7 @@
     public class AddSubCityDTO
     {
         public string SubCity { get; set; }
+
+        
     }
 }

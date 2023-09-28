@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace DentalClinic.Models
 {
@@ -22,6 +24,7 @@ namespace DentalClinic.Models
 
         public bool CanManageUserPrivalage { get; set; } = false;
 
+        [System.Text.Json.Serialization.JsonIgnore]
         public List<UserAccount> UserAccounts { get; set; }
     }
 }

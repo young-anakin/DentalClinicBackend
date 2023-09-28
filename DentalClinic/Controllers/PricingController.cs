@@ -14,7 +14,7 @@ namespace DentalClinic.Controllers
         {
             _pricingService = pricingService;
         }
-        [HttpPost("api/AddPricingReason")]
+        [HttpPost("AddPricingReason")]
         public async Task<ActionResult> AddPricingReason(AddPricingReasonDTO pricingReasonDTO)
         {
             try
@@ -28,7 +28,8 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the pricing reason.");
             }
         }
-        [HttpPost("api/AddPricingDescription")]
+
+        [HttpPost("AddPricingDescription")]
         public async Task<ActionResult> AddPricingDescription(AddPricingDescriptionDTO descriptionDTO)
         {
             try
@@ -40,6 +41,34 @@ namespace DentalClinic.Controllers
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the Pricing Description.");
+            }
+        }
+        [HttpGet("Pricing Reasons")]
+        public async Task<ActionResult> GetPricingReasons()
+        {
+            try
+            {
+                await _pricingService.GetPricingReasonsList();
+                return Ok("Registration successful.");
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while returning the Pricing Reasons.");
+            }
+        }
+        [HttpGet("Pricing Description")]
+        public async Task<ActionResult> GetPricingDescription()
+        {
+            try
+            {
+                await _pricingService.GetPricingDescriptions();
+                return Ok("Registration successful.");
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while returning the Pricing Description.");
             }
         }
 
