@@ -37,7 +37,7 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
-        [HttpGet("GetMedicalRecordForEmployee")]
+        [HttpGet("GetMedicalRecordForPatient")]
         public async Task<ActionResult> GetMedicalRecordForPatient(int patientID)
         {
             try

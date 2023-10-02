@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DTOs.EmployeeDTO;
+using DentalClinic.DTOs.LogInDTO;
 using DentalClinic.Models;
 
 namespace DentalClinic.Services.EmployeeService
@@ -12,5 +13,7 @@ namespace DentalClinic.Services.EmployeeService
         Task<Employee> UpdateEmployee(UpdateEmployeeDTO employeeDTO);
         Task<List<Employee>> GetAllEmployee();
         Task<List<Employee>> GetAllHiredEmployee();
+        Task<string> Login(LoginDTO login);
+        Task<string> RestorePassword(int User_id);
     }
 }

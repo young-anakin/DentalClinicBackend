@@ -1,11 +1,14 @@
 ﻿using DentalClinic.DTOs.HealthProgressDTO;
 using DentalClinic.Services.HealthProgressService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class HealthProgresssController : ControllerBase
     {
         private readonly IHealthProgressService _healthProgressService;

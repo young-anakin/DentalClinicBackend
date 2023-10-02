@@ -2,12 +2,15 @@
 using DentalClinic.DTOs.SettingsDTO;
 using DentalClinic.Services.AppointmentService;
 using DentalClinic.Services.CompanySettingService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class CompanySettingController : Controller
     {
         private readonly ICompanySettingService _companySettingService;

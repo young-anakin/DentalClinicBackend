@@ -192,3 +192,7 @@ C:\Users\user\Source\Repos\Dental-web-system\DentalClinic\obj\Debug\net6.0\refin
 C:\Users\user\Source\Repos\Dental-web-system\DentalClinic\obj\Debug\net6.0\DentalClinic.pdb
 C:\Users\user\Source\Repos\Dental-web-system\DentalClinic\obj\Debug\net6.0\DentalClinic.genruntimeconfig.cache
 C:\Users\user\Source\Repos\Dental-web-system\DentalClinic\obj\Debug\net6.0\ref\DentalClinic.dll
+C:\Users\user\source\repos\Dental-web-system\DentalClinic\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\user\source\repos\Dental-web-system\DentalClinic\bin\Debug\net6.0\Scrutor.dll
+C:\Users\user\source\repos\Dental-web-system\DentalClinic\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\user\source\repos\Dental-web-system\DentalClinic\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll

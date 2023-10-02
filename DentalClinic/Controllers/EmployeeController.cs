@@ -1,12 +1,15 @@
 ﻿using DentalClinic.DTOs.EmployeeDTO;
+using DentalClinic.DTOs.LogInDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.EmployeeService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
 
 
     public class EmployeeController : Controller
@@ -22,11 +25,32 @@ namespace DentalClinic.Controllers
         {
             try
             {
+
                 return Ok(await _employeeService.AddEmployee(employeeDTO));
             }
             catch (Exception ex)
             {
                 var errorMessage = "An error occurred while adding the employee.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+            }
+        }
+        //Restore Password
+        [HttpPut("RestorePassword")]
+        public async Task<ActionResult> RestorePassword(int UserID)
+        {
+            try
+            {
+                return Ok(await _employeeService.RestorePassword(UserID));
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "An error occurred while restoring the password.";
 
                 if (ex.InnerException != null)
                 {
@@ -42,7 +66,7 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                return Ok(await _employeeService.GetTotalEmployeeCountAsync(););
+                return Ok(await _employeeService.GetTotalEmployeeCountAsync());
             }
             catch (Exception ex)
             {
@@ -56,6 +80,7 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
             }
         }
+
         //Get all the employees 
         [HttpGet("GetAllEMployee")]
         public async Task<ActionResult> GetEmployees()

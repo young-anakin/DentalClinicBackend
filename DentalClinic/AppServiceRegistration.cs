@@ -9,6 +9,7 @@ using DentalClinic.Services.PricingService;
 using DentalClinic.Services.ProcedureService;
 using DentalClinic.Services.RoleService;
 using DentalClinic.Services.Tools;
+using DentalClinic.Services.User;
 using System.ComponentModel.Design;
 
 namespace DentalClinic
@@ -29,7 +30,7 @@ namespace DentalClinic
             services.AddScoped<ICompanySettingService, CompanySettingService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IAreaSettingService, AreaSettingService>();
-
+            services.AddScoped<IUserService, UserService>();
 
         }
 

@@ -9,9 +9,9 @@ namespace DentalClinic.Models
         [Key]
         public int UserAccountId { get; set; }
         public string UserName { get; set; } = null!;
-        public string Password { get; set; } = null!;
 
-
+        public byte[] PasswordHash { get; set; } 
+        public byte[] PasswordSalt { get; set; }
         //public DateTime DateTime { get; set; } = DateTime.UtcNow;
 
         public int EmployeeId { get; set; } // Foreign key to Employee

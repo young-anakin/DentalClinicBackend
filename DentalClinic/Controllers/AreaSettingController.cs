@@ -2,28 +2,33 @@
 using DentalClinic.DTOs.SettingsDTO;
 using DentalClinic.Services.AreaSettingService;
 using DentalClinic.Services.CompanySettingService;
+using DentalClinic.Services.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class AreaSettingController : Controller
     {
 
 
         private readonly IAreaSettingService _areaSettingService;
-        public AreaSettingController(IAreaSettingService areaSettingService)
+        private readonly UserService _userService;
+        public AreaSettingController(IAreaSettingService areaSettingService /*DentalClinic.Services.User.UserService userService*/ )
         {
             _areaSettingService = areaSettingService;
+            //_userService = userService;
         }
         [HttpPost("Country")]
         public async Task<ActionResult> SetCountry(AddCountryDTO countryDTO)
         {
             try
             {
-
-                return Ok(await _areaSettingService.SetCountry(countryDTO));
+                       return Ok(await _areaSettingService.SetCountry(countryDTO));
             }
             catch (Exception ex)
             {
@@ -43,8 +48,7 @@ namespace DentalClinic.Controllers
         {
             try
             {
-
-                return Ok(await _areaSettingService.SetCity(cityDTO));
+                    return Ok(await _areaSettingService.SetCity(cityDTO));
             }
             catch (Exception ex)
             {

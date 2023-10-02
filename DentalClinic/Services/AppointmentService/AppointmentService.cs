@@ -20,7 +20,7 @@ namespace DentalClinic.Services.AppointmentService
             _toolsService = toolsService;
         }
 
-        public async Task AddAppointment(AddAppointmentDTO appointmentDTO)
+        public async Task<Appointment> AddAppointment(AddAppointmentDTO appointmentDTO)
         {
             //var appointment = _mapper.Map<Appointment>(appointmentDTO);
             var patient = await _context.Patients.Where(a => a.PatientId == appointmentDTO.PatientID).FirstOrDefaultAsync();
@@ -43,7 +43,7 @@ namespace DentalClinic.Services.AppointmentService
             await _context.Appointments.AddAsync(appointment);
 
             await _context.SaveChangesAsync();
-
+            return appointment;
         }
         public async Task<List<Appointment>> GetAllAppointments()
         {

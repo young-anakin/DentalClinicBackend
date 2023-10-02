@@ -4,6 +4,8 @@ using DentalClinic.Models;
 using DentalClinic.DTOs.EmployeeDTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using DentalClinic.Services.Tools;
+using DentalClinic.DTOs.LogInDTO;
 
 namespace DentalClinic.Services.EmployeeService
 {
@@ -11,10 +13,12 @@ namespace DentalClinic.Services.EmployeeService
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-        public EmployeeService(DataContext context, IMapper mapper)
+        private readonly IToolsService _toolsService;
+        public EmployeeService(DataContext context, IMapper mapper, IToolsService toolsService)
         {
             _context = context;
             _mapper = mapper;
+            _toolsService = toolsService;
         }
         public async Task<Employee> AddEmployee(AddEmployeeDTO employeeDTO)
         {
@@ -28,14 +32,16 @@ namespace DentalClinic.Services.EmployeeService
                 // Handle the case where the role does not exist
                 throw new ApplicationException($"Role '{employeeDTO.RoleName}' not found.");
             }
-
+            
 
             var userAccount = new UserAccount
             {
                 UserName = employeeDTO.UserName,
-                Password = employeeDTO.Password,
                 Role = role
             };
+            _toolsService.CreatePasswordHash(employeeDTO.Password, out byte[] PH, out byte[] PS);
+            userAccount.PasswordHash = PH;
+            userAccount.PasswordSalt = PS;
 
             var employee = new Employee
             {
@@ -59,6 +65,19 @@ namespace DentalClinic.Services.EmployeeService
             int totalCount = await _context.Employees.CountAsync();
             return totalCount;
         }
+        public async Task<string> RestorePassword(int User_id)
+        {
+            var employee = await _context.UserAccounts
+                        .Where(e => e.UserAccountId == User_id)
+                        .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee Not Found");
+            _toolsService.CreatePasswordHash("Password123", out byte[] PH, out byte[] PS);
+            employee.PasswordHash = PH;
+            employee.PasswordSalt = PS;
+            _context.UserAccounts.Update(employee);
+            await _context.SaveChangesAsync();
+            return "Password Succesfully changed to Password123";
+
+        }
         public async Task<List<Employee>> GetAllHiredEmployee()
         {
             var employees = await _context.Employees
@@ -67,7 +86,7 @@ namespace DentalClinic.Services.EmployeeService
                                         .ThenInclude(ua=> ua.Role)
                                     .OrderByDescending(e => e.EmployeeId)
                                    .ToListAsync();
-                                
+
             return employees;
                              
         }
@@ -128,7 +147,7 @@ namespace DentalClinic.Services.EmployeeService
                                 .Where(ua => ua.UserAccountId == employeeDTO.EmployeeID)
                                 .FirstOrDefaultAsync()??throw new KeyNotFoundException("User Account Not found!");
             UserAccount.UserName = employeeDTO.UserName1;
-            UserAccount.Password = employeeDTO.Password;
+            //UserAccount.Password = employeeDTO.Password;
             UserAccount.Role = role;
             employee.IsCurrentlyActive = employeeDTO.IsCurrentlyActive;
             employee.UserAccount = UserAccount;
@@ -139,6 +158,24 @@ namespace DentalClinic.Services.EmployeeService
 
             await _context.SaveChangesAsync();
             return employee;
+        }
+        public async Task<string> Login(LoginDTO login)
+        {
+            var user = await _context.UserAccounts
+                                         .Where(u=> u.UserName == login.UserName)
+                                         .Include(u=> u.Role)
+                                         .FirstOrDefaultAsync()?? throw new KeyNotFoundException("User Name Not found");
+            var employee = await _context.Employees
+                                         .Where(e => e.EmployeeId == user.EmployeeId)
+                                         .Include(u => u.UserAccount)
+                                            .ThenInclude(r => r.Role)
+                                        .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee not found");
+            if (!_toolsService.VerifyPasswordHash(login.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                throw new UnauthorizedAccessException("Invalid password");
+            }
+            string token = _toolsService.CreateToken(user, employee);
+            return token;
         }
 
 

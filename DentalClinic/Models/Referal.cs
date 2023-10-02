@@ -5,23 +5,23 @@
     {
         public class Referal
         {
-            [Key]
-            public int ReferalID { get; set; }
-            [ForeignKey("Employee")]
-            public int ReferingDoctor { get; set; }
-        
-
-            [ForeignKey("MedicalRecord")]
-            public int MedicalRecordeID { get; set; }
-            public string ReferedDoctor { get; set; } = string.Empty;
-
-            public DateTime? ReferalDate { get; set; } = DateTime.Now;
-
-            public string ReasonForReferal { get; set; } = string.Empty;
-
-            public Employee? Employee { get; set; }
-
-            public MedicalRecord? MedicalRecord { get; set; }
+        [Key]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int ReferalID { get; set; }
+        [ForeignKey("Employee")]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int ReferingDoctor { get; set; }
+        [ForeignKey("MedicalRecord")]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int MedicalRecordeID { get; set; }
+        public string ReferedDoctor { get; set; } = string.Empty;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public DateTime? ReferalDate { get; set; } = DateTime.Now;
+        public string ReasonForReferal { get; set; } = string.Empty;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Employee? Employee { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public MedicalRecord? MedicalRecord { get; set; }
 
 
         }

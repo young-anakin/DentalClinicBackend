@@ -3,12 +3,14 @@ using DentalClinic.DTOs.EmployeeDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.AppointmentService;
 using DentalClinic.Services.EmployeeService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
@@ -16,28 +18,28 @@ namespace DentalClinic.Controllers
         {
             _appointmentService = appointmentService;
         }
-        //Add a new Employee 
+        //add a new employee
         [HttpPost]
-        public async Task<ActionResult> SetAppointmnet(AddAppointmentDTO appointmentDTO)
+        public async Task<ActionResult> setappointmnet(AddAppointmentDTO appointmentdto)
         {
             try
             {
-                
-                return Ok(await _appointmentService.AddAppointment(appointmentDTO););
+
+                return Ok(await _appointmentService.AddAppointment(appointmentdto));
             }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Appointment.";
+                var errormessage = "an error occurred while adding the appointment.";
 
                 if (ex.InnerException != null)
                 {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                    errormessage += $" inner exception: {ex.InnerException.Message}";
                 }
 
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, errormessage);
             }
         }
-        [HttpGet("GetAllEmployees")]
+        [HttpGet("GetAllAppointmentsforEmployees")]
         public async Task<ActionResult> GetAllEmployees()
         {
             try
@@ -51,7 +53,7 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Appointment.");
             }
         }
-        [HttpGet("GetSpecificEmployeeApp")]
+        [HttpGet("GetAppointmentforSpecificEmployee")]
         public async Task<ActionResult> GetAppforSpecificEmp(int empID)
         {
             try
@@ -70,8 +72,7 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                
-                return Ok(await _appointmentService.DeleteAppointment(appointmentID););
+                return Ok(await _appointmentService.DeleteAppointment(appointmentID));
             }
             catch (Exception ex)
             {
