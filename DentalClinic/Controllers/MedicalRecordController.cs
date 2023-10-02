@@ -27,7 +27,7 @@ namespace DentalClinic.Controllers
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Health Progress.";
+                var errorMessage = "An error occurred while adding the Medical Record.";
 
                 if (ex.InnerException != null)
                 {
@@ -42,12 +42,34 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                return Ok(await _recordService.GetMedicalRecordforPatient(patientID));
+                return Ok(await _recordService.GetMedicalRecordById(patientID));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Health Progress.";
+                var errorMessage = "An error occurred while returning the medical Record.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+            }
+
+        }
+        [HttpGet("GetMedicalRecords")]
+        public async Task<ActionResult> GetMedicalRecords()
+        {
+            try
+            {
+                return Ok(await _recordService.GetAllMedicalRecords());
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));
+    
+            catch (Exception ex)
+            {
+              var errorMessage = "An error occurred while adding returning the records.";
 
                 if (ex.InnerException != null)
                 {

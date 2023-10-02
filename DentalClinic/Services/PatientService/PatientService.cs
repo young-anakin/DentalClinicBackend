@@ -41,9 +41,9 @@ namespace DentalClinic.Services.PatientService
                 // Step 2: Delete associated referrals
                 if(patient.MedicalRecords != null) 
                 {
-                    var referralIds =  patient.MedicalRecords.SelectMany(mr => mr.Referals.Select(r => r.ReferalID)).ToList();
-                    var referrals =  _context.Referals.Where(r => referralIds.Contains(r.ReferalID));
-                    _context.Referals.RemoveRange(referrals);
+                    //var referralIds =  patient.MedicalRecords.SelectMany(mr => mr.Referals.Select(r => r.ReferalID)).ToList();
+                    //var referrals =  _context.Referals.Where(r => referralIds.Contains(r.ReferalID));
+                    //_context.Referals.RemoveRange(referrals);
                     _context.MedicalRecords.RemoveRange(patient.MedicalRecords);
                 }
 

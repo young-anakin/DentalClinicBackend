@@ -30,38 +30,58 @@ namespace DentalClinic.Services.MedicalRecordService
                         .Where(e => e.EmployeeId == recordDTO.TreatedByID)
                         .FirstOrDefaultAsync();
             record.TreatedBy = TreatmentBY;
-            string[] separatedStrings = _toolsService.ReturnArrayofCommaSeparatedStrings(recordDTO.ReferalsList);
+            //string[] separatedStrings = _toolsService.ReturnArrayofCommaSeparatedStrings(recordDTO.ReferalsList);
 
-            List<Referal> referalList = new List<Referal>();
-
-            foreach (string str in separatedStrings)
-            {
-                Referal referalItem = new Referal();
-                referalItem.ReasonForReferal = str;
+            //List<Referal> referalList = new List<Referal>();
 
 
-                referalItem.Employee = TreatmentBY;
-                referalItem.ReferedDoctor = recordDTO.ReferedDoctor;
-                referalList.Add(referalItem);
-            }
-            record.Referals = referalList;
             List<Procedure> proceduresList = new List<Procedure>();
             int[] Procedures;
 
             Procedures = recordDTO.ProceduresIDs;
-            foreach (int var in Procedures)
+            //foreach (int var in Procedures)
+            //{
+            //    Procedure? procedureItem = new Procedure();
+            //    procedureItem = await _context.Procedures
+            //                                    .Where(pr => pr.ProcedureID == var)
+            //                                    .FirstOrDefaultAsync();
+            //    if (procedureItem != null)
+            //    {
+            //        proceduresList.Add(procedureItem);
+            //    }
+            //}
+            decimal totalPrice = 0;
+            for (int i = 0; i < (recordDTO.Quantity.Length); i++)
             {
+                int procedureId = Procedures[i];
+                int quantity = recordDTO.Quantity[i];
                 Procedure? procedureItem = new Procedure();
+                
                 procedureItem = await _context.Procedures
-                                                .Where(pr => pr.ProcedureID == var)
-                                                .FirstOrDefaultAsync();
+                                                       .Where(pr => pr.ProcedureID == procedureId)
+                                                       .FirstOrDefaultAsync();
+
                 if (procedureItem != null)
                 {
                     proceduresList.Add(procedureItem);
-                }
 
+                    // Multiply the price with the quantity
+                   totalPrice = totalPrice + (decimal)(procedureItem.Price * quantity);
+
+                    // Do something with totalPrice if needed.
+                }
             }
+            if (record.DiscountPercent != 0)
+            {
+                totalPrice = (decimal)(record.DiscountPercent) / 100 * totalPrice;
+            }
+            else
+            {
+                 totalPrice = totalPrice;
+            }
+            record.DiscountPercent = recordDTO.DiscountPercent;
             record.Procedures = proceduresList;
+            record.TotalAmount = totalPrice ; 
             await _context.MedicalRecords.AddAsync(record);
             await _context.SaveChangesAsync();
             return record;
@@ -90,23 +110,74 @@ namespace DentalClinic.Services.MedicalRecordService
         //    record.TreatedBy = TreatmentBY;
 
         //}
-        public async Task<List<MedicalRecord>> GetMedicalRecordforPatient(int patientID)
+        //public async Task<List<MedicalRecord>> GetMedicalRecordforPatient(int patientID)
+        //{
+        //    var record = await _context.MedicalRecords
+        //                .Where(Mr => Mr.PatientId == patientID)
+        //                .Include(Mr => Mr.Procedures)
+        //                .ToListAsync();
+        //    if (record != null)
+        //    {
+        //        return record;
+        //    }
+
+        //    return new List<MedicalRecord>();
+
+
+
+        //}
+        public async Task<List<DisplayMedicalRecordDTO>> GetAllMedicalRecords()
         {
-            var record = await _context.MedicalRecords
-                        .Where(Mr => Mr.PatientId == patientID)
-                        .Include(Mr => Mr.Procedures)
-                        .Include(Mr => Mr.Referals)
-                        .ToListAsync();
-            if (record != null)
+            var records = await _context.MedicalRecords.ToListAsync();
+
+            var recordDTOs = records.Select(r => new DisplayMedicalRecordDTO
             {
-                return record;
+                Medical_RecordID = r.Medical_RecordID,
+                PatientId = r.PatientId,
+                TreatedById = r.TreatedById.HasValue ? r.TreatedById.Value : 0,
+                TreatedByName = r.TreatedBy?.EmployeeName ?? "",
+                PrescribedMedicinesandNotes = r.PrescribedMedicinesandNotes,
+                ReferalsList = r.ReferalList,
+                DiscountPercent = r.DiscountPercent,
+                TotalAmount = r.TotalAmount,
+                date = r.Date ?? DateTime.MinValue,
+            }).ToList().OrderByDescending(r => r.date).ToList();
+
+            return recordDTOs;
+        }
+
+        public async Task<List<DisplayMedicalRecordDTO>> GetMedicalRecordById(int id)
+        {
+            var records = await _context.MedicalRecords
+                                 .Where(pp => pp.PatientId == id)
+                                 .ToListAsync();
+                                 
+
+            if (records != null)
+            {
+                var recordDTOs = records.Select(r => new DisplayMedicalRecordDTO
+                {
+                    Medical_RecordID = r.Medical_RecordID,
+                    PatientId = r.PatientId,
+                    TreatedById = r.TreatedById.HasValue ? r.TreatedById.Value : 0,
+                    TreatedByName = r.TreatedBy?.EmployeeName ?? "",
+                    PrescribedMedicinesandNotes = r.PrescribedMedicinesandNotes,
+                    ReferalsList = r.ReferalList,
+                    DiscountPercent = r.DiscountPercent,
+                    TotalAmount = r.TotalAmount,
+                    date = r.Date ?? DateTime.MinValue,
+                }).ToList().OrderByDescending(r => r.date).ToList();
+
+                return recordDTOs;
             }
-
-            return new List<MedicalRecord>();
-
-
-                         
+            else
+            {
+                return null;
+            }
         }
     }
 
+
 }
+
+

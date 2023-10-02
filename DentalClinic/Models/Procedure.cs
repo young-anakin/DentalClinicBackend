@@ -22,5 +22,7 @@ namespace DentalClinic.Models
 
         public decimal ? Price { get; set; }
 
+
+
     }
 }

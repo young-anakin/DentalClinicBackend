@@ -48,6 +48,8 @@ namespace DentalClinic.Services.AreaSettingService
             {
                 CityName = cityDTO.City
             };
+            await _context.Cities.AddAsync(city);
+            await _context.SaveChangesAsync();
             return city;
         }
         public async Task<List<City>> GetCities(string CountryName)

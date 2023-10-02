@@ -9,7 +9,6 @@ namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
 
 
     public class EmployeeController : Controller

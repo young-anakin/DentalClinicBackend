@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231002222856_PaymentTypeAdded")]
+    partial class PaymentTypeAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,14 +239,18 @@ namespace DentalClinic.Migrations
                     b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PrescribedMedicinesandNotes")
+                    b.Property<string>("LabTests")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReferalList")
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PrescribedMedicines")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -252,6 +259,10 @@ namespace DentalClinic.Migrations
 
                     b.Property<int?>("TreatedById")
                         .HasColumnType("int");
+
+                    b.Property<string>("TreatmentDetails")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Medical_RecordID");
 
@@ -702,7 +713,7 @@ namespace DentalClinic.Migrations
             modelBuilder.Entity("DentalClinic.Models.Referal", b =>
                 {
                     b.HasOne("DentalClinic.Models.MedicalRecord", "MedicalRecord")
-                        .WithMany()
+                        .WithMany("Referals")
                         .HasForeignKey("MedicalRecordeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -755,6 +766,8 @@ namespace DentalClinic.Migrations
             modelBuilder.Entity("DentalClinic.Models.MedicalRecord", b =>
                 {
                     b.Navigation("Procedures");
+
+                    b.Navigation("Referals");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Patient", b =>

@@ -37,6 +37,10 @@ namespace DentalClinic.Context
 
         public DbSet<CompanySetting> CompanySettings { get; set; }
 
+        public DbSet<PaymentType> paymentTypes { get; set; }
+
+        //public DbSet<ProcedureQuantity> ProcedureQuantity { get; set; }
+
 
 
 

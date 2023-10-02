@@ -13,23 +13,25 @@ namespace DentalClinic.Models
 
         public DateTime? Date { get; set; } = DateTime.Now;
 
-        public string LabTests { get; set; } = string.Empty;
+        //public string LabTests { get; set; } = string.Empty;
 
-        public string PrescribedMedicines { get; set; } = string.Empty;
-
-        public string TreatmentDetails { get; set; } = string.Empty;
-
-        public string Notes { get; set; } = string.Empty;
+        public string PrescribedMedicinesandNotes { get; set; } = string.Empty;
+        [System.Text.Json.Serialization.JsonIgnore]
         public Patient? Patient { get; set; }
-
-        public List<Referal>? Referals { get; set; } = new();
+        //[System.Text.Json.Serialization.JsonIgnore]
+        public string ReferalList { get; set; } = string.Empty;
+        [System.Text.Json.Serialization.JsonIgnore]
 
         public List<Procedure>? Procedures { get; set; } = new();
 
         [ForeignKey("TreatedBy")]
         public int? TreatedById { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
 
         public Employee? TreatedBy { get; set; }
+        
+        public int DiscountPercent { get; set; }
 
+        public decimal TotalAmount { get; set; }
     }
 }

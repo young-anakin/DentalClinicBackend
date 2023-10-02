@@ -5,6 +5,7 @@ using DentalClinic.Services.EmployeeService;
 using DentalClinic.Services.HealthProgressService;
 using DentalClinic.Services.MedicalRecordService;
 using DentalClinic.Services.PatientService;
+using DentalClinic.Services.PaymentTypeService;
 using DentalClinic.Services.PricingService;
 using DentalClinic.Services.ProcedureService;
 using DentalClinic.Services.RoleService;
@@ -31,6 +32,7 @@ namespace DentalClinic
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IAreaSettingService, AreaSettingService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPaymentTypeService, PaymentTypeService>();
 
         }
 
