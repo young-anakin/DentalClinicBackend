@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231003133249_isPaidAddedtoMedicalRecord2")]
-    partial class isPaidAddedtoMedicalRecord2
+    [Migration("20231003154028_ageAddedtoPatient")]
+    partial class ageAddedtoPatient
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,13 @@ namespace DentalClinic.Migrations
                     b.Property<bool>("AllDay")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("AppointmentDate")
+                    b.Property<DateTime>("AppointmentEndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("AppointmentSetDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("AppointmentStartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DentistID")
@@ -282,6 +288,9 @@ namespace DentalClinic.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .IsRequired()

@@ -21,6 +21,14 @@ namespace DentalClinic.Services.PatientService
         public async Task<Patient> AddPatient(AddPatientDTO patientDTO)
         {
             var patient = _mapper.Map<Patient>(patientDTO);
+            if (patientDTO.Age == 0)
+            {
+                patient.Age = _toolsService.CalculateAge(patientDTO.DateOfBirth);
+            }
+            else
+            {
+                patient.DateOfBirth = _toolsService.CalculateDOB(patient.Age);
+            }
             var patientProfile = _mapper.Map<PatientProfile>(patientDTO);
             patient.Profile = patientProfile;
             _context.Patients.Add(patient);

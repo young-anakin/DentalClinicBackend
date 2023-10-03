@@ -11,6 +11,8 @@ namespace DentalClinic.Models
 
         public DateTime DateOfBirth { get; set; }
 
+        public int Age { get; set; }
+
         [RegularExpression(@"([0-9]){9}$", ErrorMessage = "Invalid Phone Number")]
         public string Phone { get; set; } = null!;
         public string Gender { get; set; } = string.Empty;

@@ -23,18 +23,18 @@ namespace DentalClinic.Services.AppointmentService
         public async Task<Appointment> AddAppointment(AddAppointmentDTO appointmentDTO)
         {
             //var appointment = _mapper.Map<Appointment>(appointmentDTO);
-            var patient = await _context.Patients.Where(a => a.PatientId == appointmentDTO.PatientID).FirstOrDefaultAsync();
-            var Dentist = await _context.Employees.Where(e => e.EmployeeId == appointmentDTO.DentistID).FirstOrDefaultAsync();
-            var ActionBY = await _context.Employees.Where(e => e.EmployeeId == appointmentDTO.ActionByID).FirstOrDefaultAsync();
-            if (patient == null)
-            {
-                throw new ApplicationException($"Patient '{appointmentDTO.PatientID}' not found.");
-            }
+            var patient = await _context.Patients.Where(a => a.PatientId == appointmentDTO.PatientID).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Patient Not Found");
+            var Dentist = await _context.Employees.Where(e => e.EmployeeId == appointmentDTO.DentistID).FirstOrDefaultAsync()??throw new KeyNotFoundException("Employee Not Found");
+            var ActionBY = await _context.Employees.Where(e => e.EmployeeId == appointmentDTO.ActionByID).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee Not Found");
+
             var appointment = new Appointment
             {
-                AppointmentDate = appointmentDTO.AppointmentDate,
+                AllDay = appointmentDTO.AllDay,
+                AppointmentSetDate = DateTime.Now,
+                AppointmentStartTime = appointmentDTO.AppointmentStartTime,
+                AppointmentEndTime = appointmentDTO.AppointmentEndTime,
                 ActionName = appointmentDTO.ActionName,
-
+                
             };
             appointment.Patient = patient;
             appointment.ActionBy = ActionBY;
@@ -48,7 +48,24 @@ namespace DentalClinic.Services.AppointmentService
         public async Task<List<Appointment>> GetAllAppointments()
         {
             var appointments = await _context.Appointments
-                                        .OrderByDescending(appointment => appointment.AppointmentDate)
+                                        .OrderByDescending(appointment => appointment.AppointmentStartTime)
+                                        .Select(appointment => new Appointment
+                                        {
+                                            AppointmentId = appointment.AppointmentId,
+                                            AllDay = appointment.AllDay,
+                                            AppointmentStartTime = appointment.AllDay
+                                            ? appointment.AppointmentStartTime.Date
+                                            : appointment.AppointmentStartTime,
+                                            AppointmentEndTime = appointment.AllDay
+                                            ? appointment.AppointmentEndTime.Date
+                                            : appointment.AppointmentEndTime,
+                                            ActionName = appointment.ActionName,
+                                            PatientID = appointment.PatientID,
+                                            DentistID = appointment.DentistID,
+                                            AppointmentSetDate = appointment.AppointmentSetDate,
+                                            ActionBy = appointment.ActionBy,
+
+                                        })
                                         .ToListAsync();
 
             return appointments;
@@ -56,8 +73,32 @@ namespace DentalClinic.Services.AppointmentService
         public async Task<List<Appointment>> GetAppointmentByEmployee(int EmployeeID)
         {
             var appointments = await _context.Appointments
-                .Where(appointment => appointment.ActionByID == EmployeeID)
-                .OrderByDescending(appointment => appointment.AppointmentDate)
+                                        .Where(ap => ap.DentistID == EmployeeID)
+                                        .Select(appointment => new Appointment
+                                        {
+                                            AppointmentId = appointment.AppointmentId,
+                                            AllDay = appointment.AllDay,
+                                            AppointmentStartTime = appointment.AllDay
+                                            ? appointment.AppointmentStartTime.Date
+                                            : appointment.AppointmentStartTime,
+                                            AppointmentEndTime = appointment.AllDay
+                                            ? appointment.AppointmentEndTime.Date
+                                            : appointment.AppointmentEndTime,
+                                            ActionName = appointment.ActionName,
+                                            PatientID = appointment.PatientID,
+                                            DentistID = appointment.DentistID,
+                                            AppointmentSetDate = appointment.AppointmentSetDate,
+                                            ActionBy = appointment.ActionBy,
+
+                                        })
+                                        .ToListAsync();
+            return appointments;
+        }
+        public async Task<List<Appointment>> GetAppointmentsForEmployee(int patientID)
+        {
+            var appointments = await _context.Appointments
+                .Where(appointment => appointment.ActionByID == patientID)
+                .OrderByDescending(appointment => appointment.AppointmentStartTime)
                 .ToListAsync();
 
             return appointments;

@@ -13,11 +13,14 @@ namespace DentalClinic.Models
         [ForeignKey("Dentist")]
         public int? DentistID { get; set; }
         public Employee? Dentist { get; set; } 
-        public DateTime AppointmentDate { get; set; }
+        public DateTime AppointmentSetDate { get; set; } = DateTime.Now;
+        public DateTime AppointmentStartTime { get; set; }
+        public DateTime AppointmentEndTime { get; set;}
         [ForeignKey("ActionBy")]
         public int? ActionByID { get; set; }
+
         public Employee? ActionBy { get; set; } 
         public string ActionName { get; set; } = string.Empty;
-        public Boolean AllDay { get; set; }
+        public bool AllDay { get; set; }
     }
 }

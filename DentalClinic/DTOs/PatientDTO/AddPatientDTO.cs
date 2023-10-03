@@ -23,6 +23,7 @@ namespace DentalClinic.DTOs.PatientDTO
         public string Allergies { get; set; } = string.Empty;
 
         public string Chronics { get; set; } = string.Empty;
+        public int Age { get; set; }
 
     }
 }

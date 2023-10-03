@@ -46,6 +46,14 @@ namespace DentalClinic.Services.Tools
 
             return age;
         }
+        public DateTime CalculateDOB(int age)
+        {
+            DateTime currentDate = DateTime.Today;
+            int year = currentDate.Year - age;
+            DateTime dob = new DateTime(year, 1, 1);
+            return dob;
+        }
+
         public void CreatePasswordHash(string Password, out byte[] PasswordHash, out byte[] PasswordSalt)
         {
             using (var hmac = new HMACSHA512())
