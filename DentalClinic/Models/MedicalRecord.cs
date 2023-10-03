@@ -31,7 +31,7 @@ namespace DentalClinic.Models
         public Employee? TreatedBy { get; set; }
         
         public int DiscountPercent { get; set; }
-
         public decimal TotalAmount { get; set; }
+        public bool IsPaid { get; set; }
     }
 }
