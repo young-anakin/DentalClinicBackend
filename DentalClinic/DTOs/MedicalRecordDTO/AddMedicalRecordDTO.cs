@@ -11,7 +11,7 @@ namespace DentalClinic.DTOs.MedicalRecordDTO
 
         public string PrescribedMedicinesandNotes { get; set; } = string.Empty;
 
-        public string ReferalsList { get; set; } = string.Empty;
+        public string ReferalList { get; set; } = string.Empty;
 
         public int[]? ProceduresIDs { get; set; }
 

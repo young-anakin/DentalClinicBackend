@@ -43,5 +43,36 @@ namespace DentalClinic.Services.PricingService
             return re;
 
         }
+        public async Task<PricingDescription> DeletePricingDescription(int id)
+        {
+            var pr = await _context.pricingDescriptions.Where(pr => pr.PricingDescriptionId == id).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Pricing Description Not found");
+            _context.pricingDescriptions.Remove(pr);
+            await _context.SaveChangesAsync();
+            return pr;
+        }
+        public async Task<PricingReason> DeletePricingReason(int id)
+        {
+            var pr = await _context.pricingReasons.Where(pr => pr.PricingReasonID == id).FirstOrDefaultAsync()??throw new KeyNotFoundException("Pricing Reason Not found");
+            _context.pricingReasons.Remove(pr);
+            await _context.SaveChangesAsync();
+            return pr;
+        }
+        public async Task<PricingDescription> UpdatePricingDescription(UpdatePricingDescriptionDTO DTO)
+        {
+            var pd = await _context.pricingDescriptions.Where(pr => pr.PricingDescriptionId == DTO.Id).FirstOrDefaultAsync()?? throw new KeyNotFoundException("Pricing Description not Found");
+            pd = _mapper.Map(DTO, pd);
+            _context.pricingDescriptions.Update(pd);
+            await _context.SaveChangesAsync();
+            return pd;
+        }
+        public async Task<PricingReason> UpdatePricingReason(UpdatePricingReasonDTO DTO)
+        {
+            var pd = await _context.pricingReasons.Where(pr => pr.PricingReasonID == DTO.Id).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Pricing Reason not Found");
+            pd = _mapper.Map(DTO, pd);
+            _context.pricingReasons.Update(pd);
+            await _context.SaveChangesAsync();
+            return pd;
+
+        }
     }
 }

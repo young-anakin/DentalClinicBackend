@@ -73,7 +73,7 @@ namespace DentalClinic.Services.MedicalRecordService
             }
             if (record.DiscountPercent != 0)
             {
-                totalPrice = (decimal)(record.DiscountPercent) / 100 * totalPrice;
+                totalPrice = (totalPrice) - (decimal)(record.DiscountPercent) / 100 * totalPrice;
             }
             else
             {
@@ -129,7 +129,10 @@ namespace DentalClinic.Services.MedicalRecordService
         public async Task<List<DisplayMedicalRecordDTO>> GetAllMedicalRecords()
         {
             var records = await _context.MedicalRecords
-                                    .Include(r=> r.Procedures).ToListAsync();
+                                    .Include(r=> r.Procedures)
+                                    .Include(r => r.Procedures)
+                                    .Include(r => r.TreatedBy)
+                                    .ToListAsync();
 
             var recordDTOs = records.Select(r => new DisplayMedicalRecordDTO
             {
@@ -153,6 +156,7 @@ namespace DentalClinic.Services.MedicalRecordService
             var records = await _context.MedicalRecords
                                  .Where(pp => pp.PatientId == id)
                                  .Include(r=> r.Procedures)
+                                 .Include(r=> r.TreatedBy)
                                  .ToListAsync();
                                  
 

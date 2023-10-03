@@ -44,6 +44,8 @@ namespace Secretary_Job_Mgmt.Utils
             CreateMap<UpdateCompanySettingDTO, CompanySetting>();
             CreateMap<AddCompanySettingsDTO, CompanySetting>();
             CreateMap<AddCountryDTO, Country>();
+            CreateMap<UpdatePricingDescriptionDTO, PricingDescription>();
+            CreateMap<UpdatePricingReasonDTO, PricingReason>();
             //CreateMap<UpdateBlogPostDTO, BlogPost>();
 
             //// USER

@@ -71,7 +71,64 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while returning the Pricing Description.");
             }
         }
+        [HttpPut("PricingReason")]
 
+        public async Task<ActionResult> UpdatePricingReason(UpdatePricingReasonDTO DTO)
+        {
+            try
+            {
+
+                return Ok(await _pricingService.UpdatePricingReason(DTO));
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the Pricing reason.");
+            }
+        }
+        [HttpPut("PricingDescription")]
+
+        public async Task<ActionResult> UpdatePricingDescription(UpdatePricingDescriptionDTO DTO)
+        {
+            try
+            {
+
+                return Ok(await _pricingService.UpdatePricingDescription(DTO));
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the Pricing Description.");
+            }
+        }
+        [HttpDelete("PricingDescription")]
+        public async Task<ActionResult> DeletePricingDescription(int id)
+        {
+            try
+            {
+
+                return Ok(await _pricingService.DeletePricingDescription(id));
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the Pricing Description.");
+            }
+        }
+        [HttpDelete("PricingReason")]
+        public async Task<ActionResult> DeletePricingReason(int id)
+        {
+            try
+            {
+
+                return Ok(await _pricingService.DeletePricingReason(id));
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the Pricing Reason.");
+            }
+        }
 
     }
 }
