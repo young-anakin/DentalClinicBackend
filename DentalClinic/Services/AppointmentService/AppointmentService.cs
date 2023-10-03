@@ -22,10 +22,44 @@ namespace DentalClinic.Services.AppointmentService
 
         public async Task<Appointment> AddAppointment(AddAppointmentDTO appointmentDTO)
         {
-            //var appointment = _mapper.Map<Appointment>(appointmentDTO);
-            var patient = await _context.Patients.Where(a => a.PatientId == appointmentDTO.PatientID).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Patient Not Found");
-            var Dentist = await _context.Employees.Where(e => e.EmployeeId == appointmentDTO.DentistID).FirstOrDefaultAsync()??throw new KeyNotFoundException("Employee Not Found");
-            var ActionBY = await _context.Employees.Where(e => e.EmployeeId == appointmentDTO.ActionByID).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee Not Found");
+            var patient = await _context.Patients
+                .Where(a => a.PatientId == appointmentDTO.PatientID)
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Patient Not Found");
+
+            var Dentist = await _context.Employees
+                .Where(e => e.EmployeeId == appointmentDTO.DentistID)
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Dentist Not Found");
+
+            var ActionBY = await _context.Employees
+                .Where(e => e.EmployeeId == appointmentDTO.ActionByID)
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("ActionBy Not Found");
+
+            if (appointmentDTO.AppointmentStartTime < DateTime.Now)
+            {
+                throw new ArgumentException("Appointment start time cannot be in the past.");
+            }
+
+            // Check if Dentist already has an appointment at the specified time
+            bool dentistHasConflict = await _context.Appointments
+                .AnyAsync(a => a.Dentist.EmployeeId == appointmentDTO.DentistID &&
+                               a.AppointmentStartTime < appointmentDTO.AppointmentEndTime &&
+                               a.AppointmentEndTime > appointmentDTO.AppointmentStartTime);
+
+            if (dentistHasConflict)
+            {
+                throw new InvalidOperationException("Dentist already has an appointment at this time.");
+            }
+
+            // Check if ActionBy already has an appointment at the specified time
+            //bool actionByHasConflict = await _context.Appointments
+            //    .AnyAsync(a => a.ActionBy.EmployeeId == appointmentDTO.ActionByID &&
+            //                   a.AppointmentStartTime < appointmentDTO.AppointmentEndTime &&
+            //                   a.AppointmentEndTime > appointmentDTO.AppointmentStartTime);
+
+            //if (actionByHasConflict)
+            //{
+            //    throw new InvalidOperationException("ActionBy already has an appointment at this time.");
+            //}
 
             var appointment = new Appointment
             {
@@ -34,7 +68,6 @@ namespace DentalClinic.Services.AppointmentService
                 AppointmentStartTime = appointmentDTO.AppointmentStartTime,
                 AppointmentEndTime = appointmentDTO.AppointmentEndTime,
                 ActionName = appointmentDTO.ActionName,
-                
             };
             appointment.Patient = patient;
             appointment.ActionBy = ActionBY;
@@ -45,6 +78,7 @@ namespace DentalClinic.Services.AppointmentService
             await _context.SaveChangesAsync();
             return appointment;
         }
+
         public async Task<List<Appointment>> GetAllAppointments()
         {
             var appointments = await _context.Appointments
