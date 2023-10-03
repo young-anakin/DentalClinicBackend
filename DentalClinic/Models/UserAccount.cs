@@ -15,6 +15,7 @@ namespace DentalClinic.Models
         //public DateTime DateTime { get; set; } = DateTime.UtcNow;
 
         public int EmployeeId { get; set; } // Foreign key to Employee
+        [System.Text.Json.Serialization.JsonIgnore]
 
         public Employee Employee { get; set; } // Navigation property to Employee
         public DateTime CreatedAt { get ; set ; }

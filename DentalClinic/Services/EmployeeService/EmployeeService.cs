@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using DentalClinic.Services.Tools;
 using DentalClinic.DTOs.LogInDTO;
+using DentalClinic.DTOs.MedicalRecordDTO;
 
 namespace DentalClinic.Services.EmployeeService
 {
@@ -32,7 +33,7 @@ namespace DentalClinic.Services.EmployeeService
                 // Handle the case where the role does not exist
                 throw new ApplicationException($"Role '{employeeDTO.RoleName}' not found.");
             }
-            
+
 
             var userAccount = new UserAccount
             {
@@ -81,14 +82,14 @@ namespace DentalClinic.Services.EmployeeService
         public async Task<List<Employee>> GetAllHiredEmployee()
         {
             var employees = await _context.Employees
-                                    .Where(e=> e.IsCurrentlyActive == true)
-                                    .Include(e=>e.UserAccount)
-                                        .ThenInclude(ua=> ua.Role)
+                                    .Where(e => e.IsCurrentlyActive == true)
+                                    .Include(e => e.UserAccount)
+                                        .ThenInclude(ua => ua.Role)
                                     .OrderByDescending(e => e.EmployeeId)
                                    .ToListAsync();
 
             return employees;
-                             
+
         }
         public async Task<List<Employee>> GetAllEmployee()
         {
@@ -130,8 +131,8 @@ namespace DentalClinic.Services.EmployeeService
         {
             var employee = await _context.Employees
                                     .Where(e => e.EmployeeId == employeeDTO.EmployeeID)
-                                    .FirstOrDefaultAsync()??throw new KeyNotFoundException("Employee Not Found");
-                                                //var employee = _mapper.Map<Employee>(employeeDTO);
+                                    .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee Not Found");
+            //var employee = _mapper.Map<Employee>(employeeDTO);
 
             var role = await _context.Roles
                 .FirstOrDefaultAsync(r => r.RoleName == employeeDTO.RoleName);
@@ -145,7 +146,7 @@ namespace DentalClinic.Services.EmployeeService
             employee = _mapper.Map(employeeDTO, employee);
             var UserAccount = await _context.UserAccounts
                                 .Where(ua => ua.UserAccountId == employeeDTO.EmployeeID)
-                                .FirstOrDefaultAsync()??throw new KeyNotFoundException("User Account Not found!");
+                                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("User Account Not found!");
             UserAccount.UserName = employeeDTO.UserName1;
             //UserAccount.Password = employeeDTO.Password;
             UserAccount.Role = role;
@@ -154,32 +155,57 @@ namespace DentalClinic.Services.EmployeeService
 
 
 
-             _context.Employees.Update(employee);
+            _context.Employees.Update(employee);
 
             await _context.SaveChangesAsync();
             return employee;
         }
-        public async Task<string> Login(LoginDTO login)
+        public async Task<LoginEmployeeDisplayDTO> Login(LoginDTO login)
         {
             var user = await _context.UserAccounts
-                                         .Where(u=> u.UserName == login.UserName)
-                                         .Include(u=> u.Role)
-                                         .FirstOrDefaultAsync()?? throw new KeyNotFoundException("User Name Not found");
+                .Where(u => u.UserName == login.UserName)
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("User Name Not found");
+
             var employee = await _context.Employees
-                                         .Where(e => e.EmployeeId == user.EmployeeId)
-                                         .Include(u => u.UserAccount)
-                                            .ThenInclude(r => r.Role)
-                                        .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee not found");
+                .Where(e => e.EmployeeId == user.EmployeeId)
+                .Include(u => u.UserAccount)
+                    .ThenInclude(r => r.Role)
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee not found");
+
             if (!_toolsService.VerifyPasswordHash(login.Password, user.PasswordHash, user.PasswordSalt))
             {
                 throw new UnauthorizedAccessException("Invalid password");
             }
-            string token = _toolsService.CreateToken(user, employee);
-            return token;
+
+            var loginEmployeeDisplayDTO = new LoginEmployeeDisplayDTO
+            {
+                EmployeeId = employee.EmployeeId,
+                EmployeeName = employee.EmployeeName,
+                Email = employee.Email,
+                Phone = employee.Phone,
+                DateOfBirth = employee.DateOfBirth,
+                EmployeeGender = employee.EmployeeGender,
+                IsCurrentlyActive = employee.IsCurrentlyActive,
+                DateOfTermination = employee.DateOfTermination,
+                CreatedAt = employee.CreatedAt,
+                UpdateAt = employee.UpdateAt,
+
+                // Populate other properties based on your requirements
+                // MedicalRecordAdministered = employee.MedicalRecordAdministered,
+                // HealthProgresses = employee.HealthProgresses,
+                UserAccount = employee.UserAccount,
+                //role = employee.UserAccount.Role,
+                // PatientVisits = employee.PatientVisits,
+                // Referals = employee.Referals,
+                // Appointments = employee.Appointments,
+
+                Token = _toolsService.CreateToken(user, employee)
+            };
+
+            return loginEmployeeDisplayDTO;
+
+
         }
-
-
-
-
     }
 }

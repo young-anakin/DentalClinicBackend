@@ -1,4 +1,5 @@
-﻿using DentalClinic.DTOs.LogInDTO;
+﻿using DentalClinic.DTOs.EmployeeDTO;
+using DentalClinic.DTOs.LogInDTO;
 using DentalClinic.Services.EmployeeService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ namespace DentalClinic.Controllers
             _employeeService = employeeService;
         }
         [HttpPost("Login")]
-        public async Task<ActionResult<string>> Login(LoginDTO login)
+        public async Task<ActionResult> Login([FromBody]LoginDTO login)
         {
             try
             {

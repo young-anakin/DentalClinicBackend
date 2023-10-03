@@ -148,6 +148,8 @@ namespace DentalClinic.Services.MedicalRecordService
                 date = r.Date ?? DateTime.MinValue,
             }).ToList().OrderByDescending(r => r.date).ToList();
 
+
+
             return recordDTOs;
         }
 
