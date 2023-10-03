@@ -1,4 +1,6 @@
-﻿namespace DentalClinic.DTOs.MedicalRecordDTO
+﻿using DentalClinic.Models;
+
+namespace DentalClinic.DTOs.MedicalRecordDTO
 {
     public class DisplayMedicalRecordDTO
     {
@@ -8,7 +10,7 @@
         public string TreatedByName { get; set; } = string.Empty;
         public string PrescribedMedicinesandNotes { get; set; } = string.Empty;
         public string ReferalsList { get; set; } = string.Empty;
-
+        public List<Procedure>? Procedures { get; set; }
         public int DiscountPercent { get; set; }
 
         public decimal TotalAmount { get; set; }

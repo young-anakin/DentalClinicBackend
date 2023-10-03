@@ -20,7 +20,7 @@ namespace DentalClinic.Models
         public Patient? Patient { get; set; }
         //[System.Text.Json.Serialization.JsonIgnore]
         public string ReferalList { get; set; } = string.Empty;
-        [System.Text.Json.Serialization.JsonIgnore]
+        //[System.Text.Json.Serialization.JsonIgnore]
 
         public List<Procedure>? Procedures { get; set; } = new();
 

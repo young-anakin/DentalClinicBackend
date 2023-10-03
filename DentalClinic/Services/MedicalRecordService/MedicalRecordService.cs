@@ -128,7 +128,8 @@ namespace DentalClinic.Services.MedicalRecordService
         //}
         public async Task<List<DisplayMedicalRecordDTO>> GetAllMedicalRecords()
         {
-            var records = await _context.MedicalRecords.ToListAsync();
+            var records = await _context.MedicalRecords
+                                    .Include(r=> r.Procedures).ToListAsync();
 
             var recordDTOs = records.Select(r => new DisplayMedicalRecordDTO
             {
@@ -136,6 +137,7 @@ namespace DentalClinic.Services.MedicalRecordService
                 PatientId = r.PatientId,
                 TreatedById = r.TreatedById.HasValue ? r.TreatedById.Value : 0,
                 TreatedByName = r.TreatedBy?.EmployeeName ?? "",
+                Procedures = r.Procedures,
                 PrescribedMedicinesandNotes = r.PrescribedMedicinesandNotes,
                 ReferalsList = r.ReferalList,
                 DiscountPercent = r.DiscountPercent,
@@ -150,6 +152,7 @@ namespace DentalClinic.Services.MedicalRecordService
         {
             var records = await _context.MedicalRecords
                                  .Where(pp => pp.PatientId == id)
+                                 .Include(r=> r.Procedures)
                                  .ToListAsync();
                                  
 
@@ -163,6 +166,7 @@ namespace DentalClinic.Services.MedicalRecordService
                     TreatedByName = r.TreatedBy?.EmployeeName ?? "",
                     PrescribedMedicinesandNotes = r.PrescribedMedicinesandNotes,
                     ReferalsList = r.ReferalList,
+                    Procedures = r.Procedures,
                     DiscountPercent = r.DiscountPercent,
                     TotalAmount = r.TotalAmount,
                     date = r.Date ?? DateTime.MinValue,
