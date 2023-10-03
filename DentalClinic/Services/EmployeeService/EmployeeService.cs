@@ -160,6 +160,18 @@ namespace DentalClinic.Services.EmployeeService
             await _context.SaveChangesAsync();
             return employee;
         }
+        public async Task<string> ChangePassword(ChangePasswordDTO DTO)
+        {
+            var employee = await _context.UserAccounts
+            .Where(e => e.UserAccountId == DTO.User_Id)
+            .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee Not Found");
+            _toolsService.CreatePasswordHash(DTO.New_Password, out byte[] PH, out byte[] PS);
+            employee.PasswordHash = PH;
+            employee.PasswordSalt = PS;
+            _context.UserAccounts.Update(employee);
+            await _context.SaveChangesAsync();
+            return $"Password Successfully changed to {DTO.New_Password}";
+        }
         public async Task<LoginEmployeeDisplayDTO> Login(LoginDTO login)
         {
             var user = await _context.UserAccounts

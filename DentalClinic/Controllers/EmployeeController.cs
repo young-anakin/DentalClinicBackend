@@ -184,6 +184,27 @@ namespace DentalClinic.Controllers
             }
         }
 
+        [HttpPut("Change Password")]
+        public async Task<ActionResult> changePassword(ChangePasswordDTO pwDTO)
+        {
+            try
+            {
+                return Ok(await _employeeService.ChangePassword(pwDTO));
+
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "An error occurred while changing the password.";
+
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+            }
+        }
+
 
 
         private ActionResult ParseException(Exception ex)
