@@ -24,7 +24,7 @@ namespace DentalClinic.Services.MedicalRecordService
         {
             var record = _mapper.Map<MedicalRecord>(recordDTO);
             record.Patient = await _context.Patients
-                        .Where(pa => pa.PatientId == recordDTO.PatientIdNo)
+                        .Where(pa => pa.PatientId == recordDTO.PatientId)
                         .FirstOrDefaultAsync();
             var TreatmentBY = await _context.Employees
                         .Where(e => e.EmployeeId == recordDTO.TreatedByID)
