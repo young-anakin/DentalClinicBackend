@@ -6,7 +6,7 @@ namespace DentalClinic.DTOs.MedicalRecordDTO
 {
     public class AddMedicalRecordDTO
     {
-        public int PatientIdNo { get; set; }
+        public int PatientId { get; set; }
         public int TreatedByID { get; set; } 
 
         public string PrescribedMedicinesandNotes { get; set; } = string.Empty;
