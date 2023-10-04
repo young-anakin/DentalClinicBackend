@@ -51,6 +51,7 @@ namespace DentalClinic.Services.EmployeeService
                 Phone = employeeDTO.Phone,
                 DateOfBirth = employeeDTO.DateOfBirth,
                 EmployeeGender = employeeDTO.EmployeeGender,
+                IsCurrentlyActive = employeeDTO.IsCurrentlyActive,
                 CreatedAt = employeeDTO.CreatedAt,
             };
             employee.UserAccount = userAccount;
