@@ -91,11 +91,11 @@ namespace DentalClinic.Services.EmployeeService
             {
                 var recordDTOs = employees.Select(r => new DisplayEmployeeDTO
                 {
-                    EmployeeID = r.EmployeeId,
+                    EmployeeId = r.EmployeeId,
                     EmployeeName = r.EmployeeName,
                     Gender = r.EmployeeGender,
                     Phone = r.Phone,
-                    isActive = r.IsCurrentlyActive,
+                    IsCurrentlyActive = r.IsCurrentlyActive,
                     DateofBirth = r.DateOfBirth,
                     Email = r.Email,
                     CreatedAt = r.CreatedAt,
@@ -123,11 +123,11 @@ namespace DentalClinic.Services.EmployeeService
             {
                 var recordDTOs = employees.Select(r => new DisplayEmployeeDTO
                 {
-                    EmployeeID = r.EmployeeId,
+                    EmployeeId = r.EmployeeId,
                     EmployeeName = r.EmployeeName,
                     Gender = r.EmployeeGender,
                     Phone = r.Phone,
-                    isActive = r.IsCurrentlyActive,
+                    IsCurrentlyActive = r.IsCurrentlyActive,
                     DateofBirth = r.DateOfBirth,
                     Email = r.Email,
                     CreatedAt = r.CreatedAt,
