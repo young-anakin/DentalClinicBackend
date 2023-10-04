@@ -83,42 +83,11 @@ namespace DentalClinic.Services.EmployeeService
         public async Task<List<DisplayEmployeeDTO>> GetAllHiredEmployee()
         {
             var employees = await _context.Employees
-                                    .Where(e => e.IsCurrentlyActive == true)
-                                    .Include(e => e.UserAccount)
-                                        .ThenInclude(ua => ua.Role)
-                                    .OrderByDescending(e => e.EmployeeId)
-                                   .ToListAsync();
-            if (employees != null)
-            {
-                var recordDTOs = employees.Select(r => new DisplayEmployeeDTO
-                {
-                    EmployeeId = r.EmployeeId,
-                    EmployeeName = r.EmployeeName,
-                    EmployeeGender  = r.EmployeeGender,
-                    Phone = r.Phone,
-                    IsCurrentlyActive = r.IsCurrentlyActive,
-                    DateOfBirth = r.DateOfBirth,
-                    Email = r.Email,
-                    CreatedAt = r.CreatedAt,
-                    UserName = r.UserAccount.UserName,
-                    RoleName = r.UserAccount.Role.RoleName,
-                }).ToList().OrderByDescending(r => r.EmployeeName).ToList();
-
-                return recordDTOs;
-            }
-            else
-            {
-                return null;
-            }
-
-        }
-        public async Task<List<DisplayEmployeeDTO>> GetAllEmployee()
-        {
-            var employees = await _context.Employees
-                                    .Include(e => e.UserAccount)
-                                        .ThenInclude(ua => ua.Role)
-                                    .OrderByDescending(e => e.EmployeeId)
-                                   .ToListAsync();
+                                        .Where(e => e.IsCurrentlyActive == true)
+                                        .Include(e => e.UserAccount)
+                                            .ThenInclude(ua => ua.Role)
+                                        .OrderByDescending(e => e.EmployeeId)
+                                        .ToListAsync();
 
             if (employees != null)
             {
@@ -132,9 +101,12 @@ namespace DentalClinic.Services.EmployeeService
                     DateOfBirth = r.DateOfBirth,
                     Email = r.Email,
                     CreatedAt = r.CreatedAt,
-                    UserName = r.UserAccount.UserName,
-                    RoleName = r.UserAccount.Role.RoleName,
-                }).ToList().OrderByDescending(r => r.EmployeeName).ToList();
+                    UserName = r.UserAccount != null ? r.UserAccount.UserName : "DefaultUserName",
+                    RoleName = r.UserAccount != null && r.UserAccount.Role != null ? r.UserAccount.Role.RoleName : "DefaultRoleName",
+                })
+                .ToList()
+                .OrderByDescending(r => r.EmployeeName)
+                .ToList();
 
                 return recordDTOs;
             }
@@ -143,6 +115,42 @@ namespace DentalClinic.Services.EmployeeService
                 return null;
             }
         }
+
+        public async Task<List<DisplayEmployeeDTO>> GetAllEmployee()
+        {
+            var employees = await _context.Employees
+                                        .Include(e => e.UserAccount)
+                                            .ThenInclude(ua => ua.Role)
+                                        .OrderByDescending(e => e.EmployeeId)
+                                        .ToListAsync();
+
+            if (employees != null)
+            {
+                var recordDTOs = employees.Select(r => new DisplayEmployeeDTO
+                {
+                    EmployeeId = r.EmployeeId,
+                    EmployeeName = r.EmployeeName,
+                    EmployeeGender = r.EmployeeGender,
+                    Phone = r.Phone,
+                    IsCurrentlyActive = r.IsCurrentlyActive,
+                    DateOfBirth = r.DateOfBirth,
+                    Email = r.Email,
+                    CreatedAt = r.CreatedAt,
+                    UserName = r.UserAccount != null ? r.UserAccount.UserName : "DefaultUserName",
+                    RoleName = r.UserAccount != null && r.UserAccount.Role != null ? r.UserAccount.Role.RoleName : "DefaultRoleName",
+                })
+                .ToList()
+                .OrderByDescending(r => r.EmployeeName)
+                .ToList();
+
+                return recordDTOs;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public async Task<Employee> DeleteEmployee(int id)
         {
             var employee = await _context.Employees
