@@ -467,40 +467,6 @@ namespace DentalClinic.Migrations
                     b.ToTable("Procedures");
                 });
 
-            modelBuilder.Entity("DentalClinic.Models.Referal", b =>
-                {
-                    b.Property<int>("ReferalID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReferalID"));
-
-                    b.Property<int>("MedicalRecordeID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReasonForReferal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReferalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReferedDoctor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ReferingDoctor")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReferalID");
-
-                    b.HasIndex("MedicalRecordeID");
-
-                    b.HasIndex("ReferingDoctor");
-
-                    b.ToTable("Referals");
-                });
-
             modelBuilder.Entity("DentalClinic.Models.Role", b =>
                 {
                     b.Property<int>("RoleID")
@@ -714,25 +680,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("PricingReason");
                 });
 
-            modelBuilder.Entity("DentalClinic.Models.Referal", b =>
-                {
-                    b.HasOne("DentalClinic.Models.MedicalRecord", "MedicalRecord")
-                        .WithMany()
-                        .HasForeignKey("MedicalRecordeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinic.Models.Employee", "Employee")
-                        .WithMany("Referals")
-                        .HasForeignKey("ReferingDoctor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("MedicalRecord");
-                });
-
             modelBuilder.Entity("DentalClinic.Models.UserAccount", b =>
                 {
                     b.HasOne("DentalClinic.Models.Employee", "Employee")
@@ -761,8 +708,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("MedicalRecordAdministered");
 
                     b.Navigation("PatientVisits");
-
-                    b.Navigation("Referals");
 
                     b.Navigation("UserAccount");
                 });

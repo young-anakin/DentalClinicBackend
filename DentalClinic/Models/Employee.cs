@@ -34,7 +34,7 @@ namespace DentalClinic.Models
 
        public List<PatientVisit>? PatientVisits { get; set; }
 
-        public List<Referal>? Referals { get; set; }
+        //public List<Referal>? Referals { get; set; }
 
         public List<Appointment>? Appointments { get; set; }
     }

@@ -25,7 +25,7 @@ namespace DentalClinic.Context
 
         public DbSet<PatientVisit> patientVisits { get; set; }
 
-        public DbSet<Referal> Referals { get; set; }
+        //public DbSet<Referal> Referals { get; set; }
 
         public DbSet<HealthProgress> HealthProgresses { get; set; }
 
@@ -81,7 +81,12 @@ namespace DentalClinic.Context
                 .HasOne(a => a.Dentist)
                 .WithMany()
                 .HasForeignKey(a => a.DentistID)
-                .OnDelete(DeleteBehavior.SetNull); // Set foreign key to null on delete
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<MedicalRecord>()
+                .HasOne(mr => mr.Patient)
+                .WithMany(p => p.MedicalRecords)
+                .HasForeignKey(mr => mr.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);// Set foreign key to null on delete
 
 
         }

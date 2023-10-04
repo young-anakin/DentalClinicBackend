@@ -50,6 +50,7 @@ namespace DentalClinic.Services.MedicalRecordService
             //        proceduresList.Add(procedureItem);
             //    }
             //}
+
             decimal totalPrice = 0;
             for (int i = 0; i < (recordDTO.Quantity.Length); i++)
             {
