@@ -177,7 +177,7 @@ namespace DentalClinic.Services.EmployeeService
 
             var role = await _context.Roles
                 .FirstOrDefaultAsync(r => r.RoleName == employeeDTO.RoleName);
-            employee.UpdateAt = employeeDTO.UpdatedAt;
+     
 
             if (role == null)
             {
@@ -185,8 +185,10 @@ namespace DentalClinic.Services.EmployeeService
                 throw new ApplicationException($"Role '{employeeDTO.RoleName}' not found.");
             }
             employee = _mapper.Map(employeeDTO, employee);
+            employee.UpdateAt = employeeDTO.UpdatedAt;
+            employee.IsCurrentlyActive = employeeDTO.IsCurrentlyActive;
             var UserAccount = await _context.UserAccounts
-                                .Where(ua => ua.UserAccountId == employeeDTO.EmployeeID)
+                                .Where(ua => ua.EmployeeId == employeeDTO.EmployeeID)
                                 .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("User Account Not found!");
             UserAccount.UserName = employeeDTO.UserName1;
             //UserAccount.Password = employeeDTO.Password;
