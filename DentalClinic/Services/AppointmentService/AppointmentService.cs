@@ -22,6 +22,7 @@ namespace DentalClinic.Services.AppointmentService
 
         public async Task<Appointment> AddAppointment(AddAppointmentDTO appointmentDTO)
         {
+
             var patient = await _context.Patients
                 .Where(a => a.PatientId == appointmentDTO.PatientID)
                 .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Patient Not Found");
@@ -38,7 +39,11 @@ namespace DentalClinic.Services.AppointmentService
             {
                 throw new ArgumentException("Appointment start time cannot be in the past.");
             }
+            if (appointmentDTO.AppointmentEndTime < appointmentDTO.AppointmentStartTime)
+            {
+                throw new ArgumentException("Appointment end time cannot be in the past of Appointment Start time.");
 
+            }
             // Check if Dentist already has an appointment at the specified time
             bool dentistHasConflict = await _context.Appointments
                 .AnyAsync(a => a.Dentist.EmployeeId == appointmentDTO.DentistID &&

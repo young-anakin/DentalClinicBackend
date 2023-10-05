@@ -24,20 +24,25 @@ namespace DentalClinic.Controllers
         {
             try
             {
-
                 return Ok(await _appointmentService.AddAppointment(appointmentdto));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
             }
             catch (Exception ex)
             {
-                var errormessage = "an error occurred while adding the appointment.";
-
-                if (ex.InnerException != null)
-                {
-                    errormessage += $" inner exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errormessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
+
         }
         [HttpGet("GetAllAppointmentsforEmployees")]
         public async Task<ActionResult> GetAllEmployees()
