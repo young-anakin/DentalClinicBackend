@@ -87,8 +87,6 @@ namespace DentalClinic.Context
                 .WithMany(p => p.MedicalRecords)
                 .HasForeignKey(mr => mr.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);// Set foreign key to null on delete
-
-
         }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
