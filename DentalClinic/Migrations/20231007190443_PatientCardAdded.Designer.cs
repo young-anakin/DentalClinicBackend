@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231007190443_PatientCardAdded")]
+    partial class PatientCardAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -403,49 +406,6 @@ namespace DentalClinic.Migrations
                     b.ToTable("patientVisits");
                 });
 
-            modelBuilder.Entity("DentalClinic.Models.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("IssuedByID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PatientID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PaymentTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("Tax")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IssuedByID");
-
-                    b.HasIndex("PatientID");
-
-                    b.HasIndex("PaymentTypeID");
-
-                    b.ToTable("Payments");
-                });
-
             modelBuilder.Entity("DentalClinic.Models.PaymentType", b =>
                 {
                     b.Property<int>("Id")
@@ -733,33 +693,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("DentalClinic.Models.Payment", b =>
-                {
-                    b.HasOne("DentalClinic.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("IssuedByID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinic.Models.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentalClinic.Models.PaymentType", "PaymentType")
-                        .WithMany("Payments")
-                        .HasForeignKey("PaymentTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Patient");
-
-                    b.Navigation("PaymentType");
-                });
-
             modelBuilder.Entity("DentalClinic.Models.Procedure", b =>
                 {
                     b.HasOne("DentalClinic.Models.MedicalRecord", null)
@@ -833,11 +766,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("PatientVisits");
 
                     b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.PaymentType", b =>
-                {
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.PricingDescription", b =>

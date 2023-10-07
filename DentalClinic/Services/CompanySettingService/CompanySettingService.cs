@@ -21,7 +21,7 @@ namespace DentalClinic.Services.CompanySettingService
         public async Task<CompanySetting> AddCompanySetting(AddCompanySettingsDTO add)
         {
             var num = await _context.CompanySettings.CountAsync();
-            if (num > 1)
+            if (num >= 1)
             {
                 throw new Exception("Company setting is already set, update the existing setting.");
             }

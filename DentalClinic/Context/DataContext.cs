@@ -39,6 +39,10 @@ namespace DentalClinic.Context
 
         public DbSet<PaymentType> paymentTypes { get; set; }
 
+        public DbSet<PatientCard> PatientCards { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+
         //public DbSet<ProcedureQuantity> ProcedureQuantity { get; set; }
 
 

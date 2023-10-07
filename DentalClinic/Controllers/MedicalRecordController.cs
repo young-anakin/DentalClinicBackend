@@ -25,16 +25,21 @@ namespace DentalClinic.Controllers
                 return Ok(await _recordService.AddMedicalRecord(medicalRecordDTO));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Medical Record.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpGet("GetMedicalRecordForPatient")]
@@ -45,16 +50,21 @@ namespace DentalClinic.Controllers
                 return Ok(await _recordService.GetMedicalRecordById(patientID));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while returning the medical Record.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
         }
@@ -66,17 +76,22 @@ namespace DentalClinic.Controllers
                 return Ok(await _recordService.GetAllMedicalRecords());
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));
-    
+
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-              var errorMessage = "An error occurred while adding returning the records.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
         }

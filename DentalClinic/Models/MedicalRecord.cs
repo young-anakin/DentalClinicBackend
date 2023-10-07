@@ -22,7 +22,7 @@ namespace DentalClinic.Models
         public string ReferalList { get; set; } = string.Empty;
         //[System.Text.Json.Serialization.JsonIgnore]
 
-        public List<Procedure>? Procedures { get; set; } = new();
+        public List<Procedure>? Procedures { get; set; }
 
         [ForeignKey("TreatedBy")]
         public int? TreatedById { get; set; }

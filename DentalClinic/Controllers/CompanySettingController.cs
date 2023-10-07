@@ -9,7 +9,7 @@ namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
 
     public class CompanySettingController : Controller
     {
@@ -18,7 +18,7 @@ namespace DentalClinic.Controllers
         {
             _companySettingService = companySettingService;
         }
-        //Add a new Employee
+        //Add Company Setting
         [HttpPost]
         public async Task<ActionResult> SetCompanySetting(AddCompanySettingsDTO companySettingsDTO)
         {
@@ -27,18 +27,24 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _companySettingService.AddCompanySetting(companySettingsDTO));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Update Company setting
         [HttpPut]
         public async Task<ActionResult> UpdateCompanySetting(UpdateCompanySettingDTO b)
         {
@@ -47,18 +53,24 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _companySettingService.UpdateComapnySetting(b));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while updating the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+    //Return Company Setting
         [HttpGet("RecentCompanySetting")]
         public async Task<ActionResult> GetCompanySetting()
         {
@@ -67,16 +79,21 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _companySettingService.GetCompanySetting());
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while updating the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 

@@ -23,19 +23,65 @@ namespace DentalClinic.Services.MedicalRecordService
         public async Task<MedicalRecord> AddMedicalRecord(AddMedicalRecordDTO recordDTO)
         {
             var record = _mapper.Map<MedicalRecord>(recordDTO);
+            int cardExpireAfter = 14;
+            decimal totalPrice = 0;
+            List<Procedure> proceduresList = new List<Procedure>();
+            var companySettings = await _context.CompanySettings
+                    .FirstOrDefaultAsync();
+
+            if (companySettings != null)
+            {
+                cardExpireAfter = companySettings.CardExpireAfter;
+            }
             record.Patient = await _context.Patients
                         .Where(pa => pa.PatientId == recordDTO.PatientId)
-                        .FirstOrDefaultAsync();
+                        .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Patient Not Found!!!");
             var TreatmentBY = await _context.Employees
                         .Where(e => e.EmployeeId == recordDTO.TreatedByID)
+                        .FirstOrDefaultAsync()?? throw new KeyNotFoundException("Employee Not Found!!!");
+            var patientCard = await _context.PatientCards
+                        .Where(e => e.PatientID == recordDTO.PatientId)
                         .FirstOrDefaultAsync();
+            if (patientCard == null)
+            {
+                var pc = new PatientCard
+                {
+                    PatientID = record.Patient.PatientId,
+                    CreatedAT = DateTime.Now,
+                };
+                await _context.PatientCards.AddAsync(pc);
+                Procedure cardProcedure = await _context.Procedures
+                        .Where(pr => pr.ProcedureName == "card")  // Replace with actual ID
+                        .FirstOrDefaultAsync()??throw new KeyNotFoundException("card Procedure not found!!!");
+
+                if (cardProcedure != null)
+                {
+                    proceduresList.Add(cardProcedure);
+                    totalPrice += cardProcedure.Price.Value; // Assuming Price is a decimal property
+                }
+            }
+            else if (patientCard != null && patientCard.CreatedAT < DateTime.Now.AddDays(-cardExpireAfter))
+            {
+
+                patientCard.CreatedAT = DateTime.Now;
+                _context.PatientCards.Update(patientCard);
+                Procedure cardProcedure = await _context.Procedures
+                       .Where(pr => pr.ProcedureName == "card")  // Replace with actual ID
+                       .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("card Procedure not found!!!");
+                if (cardProcedure != null)
+                {
+                    proceduresList.Add(cardProcedure);
+                    totalPrice += cardProcedure.Price.Value; // Assuming Price is a decimal property
+                }
+
+            }
             record.TreatedBy = TreatmentBY;
             //string[] separatedStrings = _toolsService.ReturnArrayofCommaSeparatedStrings(recordDTO.ReferalsList);
 
             //List<Referal> referalList = new List<Referal>();
 
 
-            List<Procedure> proceduresList = new List<Procedure>();
+
             int[] Procedures;
 
             Procedures = recordDTO.ProceduresIDs;
@@ -51,7 +97,7 @@ namespace DentalClinic.Services.MedicalRecordService
             //    }
             //}
 
-            decimal totalPrice = 0;
+
             for (int i = 0; i < (recordDTO.Quantity.Length); i++)
             {
                 int procedureId = Procedures[i];
