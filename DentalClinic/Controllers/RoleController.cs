@@ -22,16 +22,21 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _roleService.AddRole(roleDTO));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while creating the role.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpDelete]
@@ -42,16 +47,21 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _roleService.DeleteRole(Name));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while deleting the role.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpGet]
@@ -61,16 +71,21 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _roleService.GetRoles());
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while returning the role.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -82,16 +97,21 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _roleService.UpdateRole(roleDTO));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while Updating the role.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 

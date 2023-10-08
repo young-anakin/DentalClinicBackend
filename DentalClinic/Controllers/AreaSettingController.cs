@@ -30,17 +30,21 @@ namespace DentalClinic.Controllers
             {
                        return Ok(await _areaSettingService.SetCountry(countryDTO));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpPost("City")]
@@ -50,17 +54,21 @@ namespace DentalClinic.Controllers
             {
                     return Ok(await _areaSettingService.SetCity(cityDTO));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpPost("SubCity")]
@@ -71,17 +79,21 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _areaSettingService.SetSubCity(subCityDTO));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpDelete("Country")]
@@ -92,17 +104,21 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _areaSettingService.RemoveCountry(CI));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpDelete("City")]
@@ -113,17 +129,21 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _areaSettingService.RemoveCity(CI));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpDelete("SubCity")]
@@ -134,17 +154,21 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _areaSettingService.RemoveSubCity(SI));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpGet("Country")]
@@ -155,17 +179,21 @@ namespace DentalClinic.Controllers
 
                 return Ok(await _areaSettingService.GetCountries());
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         [HttpGet("City")]
@@ -196,17 +224,21 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _areaSettingService.GetCities(cityName));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Setting.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
-
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

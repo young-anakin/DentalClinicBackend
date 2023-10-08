@@ -67,10 +67,10 @@ namespace DentalClinic.Services.EmployeeService
             int totalCount = await _context.Employees.CountAsync();
             return totalCount;
         }
-        public async Task<string> RestorePassword(int User_id)
+        public async Task<string> RestorePassword(RestorePasswordDTO DTO)
         {
             var employee = await _context.UserAccounts
-                        .Where(e => e.UserAccountId == User_id)
+                        .Where(e => e.UserAccountId == DTO.UserAccountID)
                         .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee Not Found");
             _toolsService.CreatePasswordHash("Password123", out byte[] PH, out byte[] PS);
             employee.PasswordHash = PH;
@@ -216,6 +216,11 @@ namespace DentalClinic.Services.EmployeeService
             var employee = await _context.UserAccounts
             .Where(e => e.UserAccountId == DTO.User_Id)
             .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Employee Not Found");
+            var OldPassword = DTO.OldPassword;
+            if (!_toolsService.VerifyPasswordHash(OldPassword, employee.PasswordHash, employee.PasswordSalt))
+            {
+                throw new UnauthorizedAccessException("Old Password Invalid!");
+            }
             _toolsService.CreatePasswordHash(DTO.New_Password, out byte[] PH, out byte[] PS);
             employee.PasswordHash = PH;
             employee.PasswordSalt = PS;

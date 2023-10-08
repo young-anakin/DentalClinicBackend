@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\DentalClinic",
+    "\\DentalClinic\\Context"
   ],
+  "SelectedNode": "\\DentalClinic\\Context\\DataContext.cs",
   "PreviewInSolutionExplorer": false
 }

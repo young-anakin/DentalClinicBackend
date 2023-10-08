@@ -14,7 +14,7 @@ namespace DentalClinic.Services.EmployeeService
         Task<List<DisplayEmployeeDTO>> GetAllEmployee();
         Task<List<DisplayEmployeeDTO>> GetAllHiredEmployee();
         Task<LoginEmployeeDisplayDTO> Login(LoginDTO login);
-        Task<string> RestorePassword(int User_id);
+        Task<string> RestorePassword(RestorePasswordDTO DTO);
         Task<string> ChangePassword(ChangePasswordDTO DTO);
     }
 }
