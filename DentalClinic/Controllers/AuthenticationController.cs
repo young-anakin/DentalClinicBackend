@@ -1,5 +1,6 @@
 ﻿using DentalClinic.DTOs.EmployeeDTO;
 using DentalClinic.DTOs.LogInDTO;
+using DentalClinic.Models;
 using DentalClinic.Services.EmployeeService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,15 +22,19 @@ namespace DentalClinic.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); // User Name Not found
+                return NotFound(new ErrorResponse { Message = ex.Message });
             }
-            catch (UnauthorizedAccessException ex)
+            catch (ArgumentException ex)
             {
-                return Unauthorized(ex.Message); // Invalid password
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message); // Handle other exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
     }

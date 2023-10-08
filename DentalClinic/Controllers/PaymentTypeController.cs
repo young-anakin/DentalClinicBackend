@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DTOs.PatientDTO;
+using DentalClinic.Models;
 using DentalClinic.Services.PatientService;
 using DentalClinic.Services.PaymentTypeService;
 using Microsoft.AspNetCore.Mvc;
@@ -25,19 +26,19 @@ namespace DentalClinic.Controllers
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+                return NotFound(new ErrorResponse { Message = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message); // Appointment start time in the past
+                return BadRequest(new ErrorResponse { Message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+                return Conflict(new ErrorResponse { Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
         [HttpGet]
@@ -51,19 +52,19 @@ namespace DentalClinic.Controllers
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+                return NotFound(new ErrorResponse { Message = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message); // Appointment start time in the past
+                return BadRequest(new ErrorResponse { Message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+                return Conflict(new ErrorResponse { Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
         [HttpDelete]
@@ -77,19 +78,19 @@ namespace DentalClinic.Controllers
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+                return NotFound(new ErrorResponse { Message = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message); // Appointment start time in the past
+                return BadRequest(new ErrorResponse { Message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+                return Conflict(new ErrorResponse { Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
 

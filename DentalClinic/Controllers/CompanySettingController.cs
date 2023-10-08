@@ -1,5 +1,6 @@
 ﻿using DentalClinic.DTOs.AppointmentDTO;
 using DentalClinic.DTOs.SettingsDTO;
+using DentalClinic.Models;
 using DentalClinic.Services.AppointmentService;
 using DentalClinic.Services.CompanySettingService;
 using Microsoft.AspNetCore.Authorization;
@@ -81,19 +82,19 @@ namespace DentalClinic.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+                return NotFound(new ErrorResponse { Message = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message); // Appointment start time in the past
+                return BadRequest(new ErrorResponse { Message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+                return Conflict(new ErrorResponse { Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DTOs.HealthProgressDTO;
+using DentalClinic.Models;
 using DentalClinic.Services.HealthProgressService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,16 +26,21 @@ namespace DentalClinic.Controllers
                
                 return Ok(await _healthProgressService.AddHealthProgressToEmployee(healthProgressDTO));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while adding the Health Progress.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
 
@@ -47,9 +53,21 @@ namespace DentalClinic.Controllers
                 
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Health Progress.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
 
         }
@@ -62,9 +80,21 @@ namespace DentalClinic.Controllers
 
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Health Progress.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
 
         }

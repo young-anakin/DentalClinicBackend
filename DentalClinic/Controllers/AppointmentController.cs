@@ -28,19 +28,19 @@ namespace DentalClinic.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+                return NotFound(new ErrorResponse { Message = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message); // Appointment start time in the past
+                return BadRequest(new ErrorResponse { Message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+                return Conflict(new ErrorResponse { Message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
 
         }
@@ -53,9 +53,21 @@ namespace DentalClinic.Controllers
 
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Appointment.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
         [HttpGet("GetAppointmentforSpecificEmployee")]
@@ -67,9 +79,21 @@ namespace DentalClinic.Controllers
 
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the Appointment.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
         [HttpDelete]
@@ -79,16 +103,21 @@ namespace DentalClinic.Controllers
             {
                 return Ok(await _appointmentService.DeleteAppointment(appointmentID));
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while Deleting the Appointment.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
 
@@ -99,17 +128,22 @@ namespace DentalClinic.Controllers
             {
 
                 return Ok(await _appointmentService.UpdateAppointment(appointmentDTO));
-            }   
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
             catch (Exception ex)
             {
-                var errorMessage = "An error occurred while Updating the Appointment.";
-
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" Inner Exception: {ex.InnerException.Message}";
-                }
-
-                return StatusCode(StatusCodes.Status500InternalServerError, errorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
     }
