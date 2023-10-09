@@ -573,6 +573,37 @@ namespace DentalClinic.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("DentalClinic.Models.SMSSetting", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("AppointmentSetSMS")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LoanExpireSMS")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PatientRegistrationSMS")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SMSApi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SMSSettings");
+                });
+
             modelBuilder.Entity("DentalClinic.Models.SubCity", b =>
                 {
                     b.Property<int>("SubCityID")

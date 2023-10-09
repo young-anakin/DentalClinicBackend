@@ -10,6 +10,7 @@ using DentalClinic.DTOs.Pricing;
 using DentalClinic.DTOs.ProcedureDTO;
 using DentalClinic.DTOs.RoleDTO;
 using DentalClinic.DTOs.SettingsDTO;
+using DentalClinic.DTOs.SMSSettingDTO;
 using DentalClinic.Models;
 
 namespace Secretary_Job_Mgmt.Utils
@@ -46,6 +47,8 @@ namespace Secretary_Job_Mgmt.Utils
             CreateMap<AddCountryDTO, Country>();
             CreateMap<UpdatePricingDescriptionDTO, PricingDescription>();
             CreateMap<UpdatePricingReasonDTO, PricingReason>();
+            CreateMap<SMSSettingAddDTO, SMSSetting>();
+            CreateMap<SMSSettingUpdateDTO, SMSSetting>();
             //CreateMap<UpdateBlogPostDTO, BlogPost>();
 
             //// USER

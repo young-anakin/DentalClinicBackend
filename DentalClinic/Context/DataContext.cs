@@ -43,6 +43,8 @@ namespace DentalClinic.Context
 
         public DbSet<Payment> Payments { get; set; }
 
+        public DbSet<SMSSetting> SMSSettings { get; set; }
+
         //public DbSet<ProcedureQuantity> ProcedureQuantity { get; set; }
 
 
