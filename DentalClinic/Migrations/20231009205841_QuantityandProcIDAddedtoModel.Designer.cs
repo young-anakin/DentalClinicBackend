@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231009205841_QuantityandProcIDAddedtoModel")]
+    partial class QuantityandProcIDAddedtoModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,9 +248,6 @@ namespace DentalClinic.Migrations
                     b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsCard")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
@@ -269,9 +269,6 @@ namespace DentalClinic.Migrations
                     b.Property<string>("ReferalList")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("SubTotalAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");

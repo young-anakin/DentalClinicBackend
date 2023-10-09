@@ -21,6 +21,7 @@ namespace DentalClinic.Models
         [ForeignKey("PaymentType")]
         public int PaymentTypeID { get; set; }
         public PaymentType? PaymentType { get; set; }
+
         public DateTime PaymentDate { get; set; }
     }
 }

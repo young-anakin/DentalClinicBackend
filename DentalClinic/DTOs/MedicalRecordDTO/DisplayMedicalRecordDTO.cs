@@ -14,7 +14,14 @@ namespace DentalClinic.DTOs.MedicalRecordDTO
         public int DiscountPercent { get; set; }
 
         public decimal TotalAmount { get; set; }
+        public bool isCard { get; set; }
+        public bool IsPaid { get; set; } = false;
 
+        public int[]? ProceduresIDs { get; set; }
+
+        public int[]? Quantity { get; set; }
+
+        public decimal SubTotalAmount { get; set; }
         public DateTime date { get; set; }
     }
 }

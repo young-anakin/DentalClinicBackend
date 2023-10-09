@@ -4,16 +4,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DentalClinic.DTOs.PaymentDTO
 {
-    public class ReceiptDetailDTO
+    public class GetMDforPaymentDTO
     {
-            public int Id { get; set; }
+            public int PatientId { get; set; }
             public decimal Discount { get; set; }
-            public string PatientName { get; set; } = string.Empty;
             public decimal SubTotal { get; set; }
             public string IssuedBy{ get; set; } = string.Empty;
             public decimal Total { get; set; }
-            public string PaymentType { get; set; } = string.Empty;
-            public DateTime PaymentDate { get; set; }
-        }
+            public DateTime MedicalRecordDate { get; set; }
+
+            public int[] ProcedureIDs { get; set; }
+            public int[] Quantity { get; set; }
+            public bool isCard { get; set; }
     }
+}
 

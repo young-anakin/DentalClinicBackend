@@ -47,7 +47,7 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                return Ok(await _patientService.DisplayPaymentReceipt(id));
+                return Ok(await _patientService.GetMedicalRecordsforPayment(id));
             }
             catch (KeyNotFoundException ex)
             {

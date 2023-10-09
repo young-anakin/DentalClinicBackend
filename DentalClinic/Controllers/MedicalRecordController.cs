@@ -72,6 +72,8 @@ namespace DentalClinic.Controllers
         [HttpGet("GetMedicalRecords")]
         public async Task<ActionResult> GetMedicalRecords()
         {
+            return Ok(await _recordService.GetAllMedicalRecords());
+
             try
             {
                 return Ok(await _recordService.GetAllMedicalRecords());

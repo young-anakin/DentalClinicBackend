@@ -5,6 +5,7 @@ using DentalClinic.DTOs.PaymentDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.Tools;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace DentalClinic.Services.PaymentService
 {
@@ -31,9 +32,10 @@ namespace DentalClinic.Services.PaymentService
                 IssuedByID = (int)record.TreatedById,
                 PaymentTypeID = DTO.PaymentType,
                 PatientID = record.PatientId,
-                Total = record.TotalAmount,
+                
                 SubTotal = record.TotalAmount + record.DiscountPercent / 100 * record.TotalAmount,
-                Discount = record.DiscountPercent / 100 * record.TotalAmount,
+                Total = record.TotalAmount,
+                Discount = record.DiscountPercent,
                 PaymentDate = DateTime.Now,
 
             };
@@ -43,23 +45,29 @@ namespace DentalClinic.Services.PaymentService
             await _context.SaveChangesAsync();
             return payment;
         }
-        public async Task<ReceiptDetailDTO> DisplayPaymentReceipt(int id)
+        public async Task<GetMDforPaymentDTO> GetMedicalRecordsforPayment(int id)
         {
-            var record = await _context.Payments
-                                                   .Where(a => a.Id == id)
+            var record = await _context.MedicalRecords
+                                                   .Where(a => a.PatientId == id )
+                                                   .Where(a=> a.IsPaid == false)
                                                    .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found");
+            int[] proceduresArray = JsonSerializer.Deserialize<int[]>(record.ProcedureIDs);
+            int[] quantityArray = JsonSerializer.Deserialize<int[]>(record.Quantities);
 
-            var display = new ReceiptDetailDTO
+            var display = new GetMDforPaymentDTO
             {
-                Id = record.Id,
-                Discount = record.Discount,
-                IssuedBy = record.Employee.EmployeeName,
-                PaymentDate = record.PaymentDate,
-                SubTotal = record.SubTotal,
-                Total = record.Total,
-                PaymentType = record.PaymentType.PaymentName,
-                PatientName = record.Patient.PatientFullName,
+                PatientId = record.PatientId,
+                Discount = record.DiscountPercent,
+                IssuedBy = record.TreatedBy?.EmployeeName, // Adding a null-conditional operator here
+                MedicalRecordDate = (DateTime)record.Date,
+                SubTotal = record.SubTotalAmount,
+                Total = record.TotalAmount,
+                ProcedureIDs = proceduresArray,
+                Quantity = quantityArray,
+                isCard = record.IsCard,
+                
             };
+
             return display;
 
         }

@@ -33,5 +33,14 @@ namespace DentalClinic.Models
         public int DiscountPercent { get; set; }
         public decimal TotalAmount { get; set; }
         public bool IsPaid { get; set; } = false; 
+
+        public string ProcedureIDs { set; get; } = string.Empty;
+
+        public string Quantities { get; set; } = string.Empty;
+
+        public decimal SubTotalAmount { get; set; }
+
+        public bool IsCard { get; set; } = false;
+
     }
 }
