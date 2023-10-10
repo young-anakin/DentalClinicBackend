@@ -11,7 +11,7 @@ namespace DentalClinic.DTOs.PaymentDTO
             public decimal SubTotal { get; set; }
 
             public int MedicalRecordID { get; set; }
-            public string IssuedBy{ get; set; } = string.Empty;
+            public int IssuedBy{ get; set; } 
             public decimal Total { get; set; }
             public DateTime MedicalRecordDate { get; set; }
 

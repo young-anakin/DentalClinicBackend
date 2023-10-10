@@ -8,6 +8,7 @@ namespace DentalClinic.Services.MedicalRecordService
         Task<MedicalRecord> AddMedicalRecord(AddMedicalRecordDTO recordDTO);
         Task<List<DisplayMedicalRecordDTO>> GetAllMedicalRecords();
         Task<List<DisplayMedicalRecordDTO>> GetMedicalRecordById(int id);
+        Task<MedicalRecord> UpdateMedicalRecord(UpdateMedicalRecordDTO MrDto);
 
         //Task<List<MedicalRecord>> GetMedicalRecordforPatient(int patientID);
     }

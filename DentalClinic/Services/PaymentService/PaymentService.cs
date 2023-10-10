@@ -63,7 +63,7 @@ namespace DentalClinic.Services.PaymentService
                 PatientId = record.PatientId,
                 MedicalRecordID = record.Medical_RecordID,
                 Discount = record.DiscountPercent,
-                IssuedBy = record.TreatedBy?.EmployeeName, // Adding a null-conditional operator here
+                IssuedBy = (int)record.TreatedById, // Adding a null-conditional operator here
                 MedicalRecordDate = (DateTime)record.Date,
                 SubTotal = record.SubTotalAmount,
                 Total = record.TotalAmount,

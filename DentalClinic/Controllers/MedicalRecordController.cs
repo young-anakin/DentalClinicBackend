@@ -69,6 +69,34 @@ namespace DentalClinic.Controllers
             }
 
         }
+        [HttpPut]
+        public async Task<ActionResult> UpdateMedicalRecord(UpdateMedicalRecordDTO DTO)
+        {
+            return Ok(await _recordService.UpdateMedicalRecord(DTO));
+
+            try
+            {
+                return Ok(await _recordService.UpdateMedicalRecord(DTO));
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+
+        }
         [HttpGet("GetMedicalRecords")]
         public async Task<ActionResult> GetMedicalRecords()
         {

@@ -224,16 +224,25 @@ namespace DentalClinic.Services.MedicalRecordService
             return recordDTOs;
         }
 
-        //public async Task<MedicalRecord> UpdateMedicalRecord(UpdateMedicalRecordDTO MrDto)
-        //{
-        //    var records = await _context.MedicalRecords
-        //             .Where(pp => pp.PatientId == MrDto.MedicalRecordID)
-        //             .Include(r => r.Procedures)
-        //             .Include(r => r.TreatedBy)
-        //             .FirstOrDefaultAsync();
-        //    records.ProcedureIDs = 
+        public async Task<MedicalRecord> UpdateMedicalRecord(UpdateMedicalRecordDTO MrDto)
+        {
+            var records = await _context.MedicalRecords
+                     .Where(pp => pp.Medical_RecordID == MrDto.MedicalRecordID)
+                     .Include(r => r.Procedures)
+                     .Include(r => r.TreatedBy)
+                     .FirstOrDefaultAsync();
+            var procedures = string.IsNullOrEmpty(records.ProcedureIDs)? new int[] { 0 }: JsonSerializer.Deserialize<int[]>(records.ProcedureIDs);
+            var quantities = string.IsNullOrEmpty(records.Quantities) ? new int[] { 0 } : JsonSerializer.Deserialize<int[]>(records.Quantities);
 
-        //}
+            var mergedProcedures = procedures.Concat(MrDto.ProceduresNew).ToArray();
+            var mergedQuantities = quantities.Concat(MrDto.QuantitiesNew).ToArray();
+
+            records.ProcedureIDs = JsonSerializer.Serialize(mergedProcedures);
+            records.Quantities = JsonSerializer.Serialize(mergedQuantities);
+            _context.MedicalRecords.Update(records);
+            await _context.SaveChangesAsync();
+            return records;
+        }
 
         public async Task<List<DisplayMedicalRecordDTO>> GetMedicalRecordById(int id)
         {
