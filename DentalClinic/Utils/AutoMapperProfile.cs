@@ -50,6 +50,7 @@ namespace Secretary_Job_Mgmt.Utils
             CreateMap<SMSSettingAddDTO, SMSSetting>();
             CreateMap<SMSSettingUpdateDTO, SMSSetting>();
             CreateMap<UpdateMedicalRecordDTO, MedicalRecord>();
+            
             //CreateMap<UpdateBlogPostDTO, BlogPost>();
 
             //// USER

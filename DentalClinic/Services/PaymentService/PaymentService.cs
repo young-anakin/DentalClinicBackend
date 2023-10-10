@@ -27,6 +27,12 @@ namespace DentalClinic.Services.PaymentService
                                         .Where(a => a.Medical_RecordID == DTO.MedicalRecordID)
                                         .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found");
 
+            var procedureIDS = DTO.ProcedureIDs;
+            var Quantities = DTO.Quantity;
+
+            record.Quantities = JsonSerializer.Serialize(Quantities); 
+            record.ProcedureIDs = JsonSerializer.Serialize(procedureIDS);
+
             var payment = new Payment
             {
                 IssuedByID = DTO.IssuedByID,

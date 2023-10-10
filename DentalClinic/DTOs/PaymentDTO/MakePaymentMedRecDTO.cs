@@ -8,6 +8,9 @@
 
         public int IssuedByID { get; set; }
 
+        public int[] ProcedureIDs { get; set; }
+        public int[] Quantity { get; set; }
+
         public int PatientID { get; set; }
 
         public decimal SubTotal { get; set; }
