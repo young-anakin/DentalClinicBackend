@@ -248,8 +248,13 @@ namespace DentalClinic.Services.MedicalRecordService
                     TotalAmount = r.TotalAmount,
                     date = r.Date ?? DateTime.MinValue,
                     SubTotalAmount = r.SubTotalAmount,
-                    ProceduresIDs = JsonSerializer.Deserialize<int[]>(r.ProcedureIDs),
-                    Quantity = JsonSerializer.Deserialize<int[]>(r.Quantities),
+                    ProceduresIDs = string.IsNullOrEmpty(r.ProcedureIDs)
+    ? new int[] { 0 }
+    : JsonSerializer.Deserialize<int[]>(r.ProcedureIDs),
+
+                    Quantity = string.IsNullOrEmpty(r.Quantities)
+    ? new int[] { 0 }
+    : JsonSerializer.Deserialize<int[]>(r.Quantities),
                     IsPaid = r.IsPaid,
                     isCard = r.IsCard,
                 }).ToList().OrderByDescending(r => r.date).ToList();
