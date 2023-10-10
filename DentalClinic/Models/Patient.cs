@@ -36,5 +36,7 @@ namespace DentalClinic.Models
 
         public PatientCard? PatientCard { get; set; }
 
+        public List<Credit>? Credits { get; set; }
+
     }
 }

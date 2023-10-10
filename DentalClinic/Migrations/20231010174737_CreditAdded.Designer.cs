@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231010174737_CreditAdded")]
+    partial class CreditAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,9 +153,6 @@ namespace DentalClinic.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CreditID"));
 
-                    b.Property<int>("IssuedBy")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Paid")
                         .HasColumnType("decimal(18,2)");
 
@@ -166,8 +166,6 @@ namespace DentalClinic.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("CreditID");
-
-                    b.HasIndex("IssuedBy");
 
                     b.HasIndex("PatientID");
 
@@ -735,19 +733,11 @@ namespace DentalClinic.Migrations
 
             modelBuilder.Entity("DentalClinic.Models.Credit", b =>
                 {
-                    b.HasOne("DentalClinic.Models.Employee", "Employee")
-                        .WithMany("credits")
-                        .HasForeignKey("IssuedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DentalClinic.Models.Patient", "Patient")
                         .WithMany("Credits")
                         .HasForeignKey("PatientID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Employee");
 
                     b.Navigation("Patient");
                 });
@@ -909,8 +899,6 @@ namespace DentalClinic.Migrations
                     b.Navigation("PatientVisits");
 
                     b.Navigation("UserAccount");
-
-                    b.Navigation("credits");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.MedicalRecord", b =>

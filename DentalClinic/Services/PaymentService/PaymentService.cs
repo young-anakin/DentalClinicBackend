@@ -29,14 +29,14 @@ namespace DentalClinic.Services.PaymentService
 
             var payment = new Payment
             {
-                IssuedByID = (int)record.TreatedById,
+                IssuedByID = DTO.IssuedByID,
                 PaymentTypeID = DTO.PaymentType,
-                PatientID = record.PatientId,
+                PatientID = DTO.PatientID,
                 
-                SubTotal = record.TotalAmount + record.DiscountPercent / 100 * record.TotalAmount,
-                Total = record.TotalAmount,
-                Discount = record.DiscountPercent,
-                PaymentDate = DateTime.Now,
+                SubTotal = DTO.Total + DTO.Discount / 100 * DTO.Total,
+                Total = DTO.Total,
+                Discount = DTO.Discount,
+                PaymentDate = DTO.DateTime,
 
             };
             record.IsPaid = true;
