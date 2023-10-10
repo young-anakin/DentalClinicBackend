@@ -50,9 +50,20 @@ namespace DentalClinic.Services.PaymentService
             var record = await _context.MedicalRecords
                                                    .Where(a => a.PatientId == id )
                                                    .Where(a=> a.IsPaid == false)
-                                                   .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found");
-            int[] proceduresArray = JsonSerializer.Deserialize<int[]>(record.ProcedureIDs);
-            int[] quantityArray = JsonSerializer.Deserialize<int[]>(record.Quantities);
+                                                   .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found, or Medical Record has been paid for");
+
+
+            int[] proceduresArray = 
+            string.IsNullOrEmpty(record.ProcedureIDs)? new int[] { 0 }: JsonSerializer.Deserialize<int[]>(record.ProcedureIDs);
+            int[] quantityArray = 
+            string.IsNullOrEmpty(record.Quantities) ? new int[] { 0 } : JsonSerializer.Deserialize<int[]>(record.Quantities);
+
+
+
+
+
+
+
 
             var display = new GetMDforPaymentDTO
             {
