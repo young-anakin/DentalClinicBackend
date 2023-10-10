@@ -224,6 +224,17 @@ namespace DentalClinic.Services.MedicalRecordService
             return recordDTOs;
         }
 
+        //public async Task<MedicalRecord> UpdateMedicalRecord(UpdateMedicalRecordDTO MrDto)
+        //{
+        //    var records = await _context.MedicalRecords
+        //             .Where(pp => pp.PatientId == MrDto.MedicalRecordID)
+        //             .Include(r => r.Procedures)
+        //             .Include(r => r.TreatedBy)
+        //             .FirstOrDefaultAsync();
+        //    records.ProcedureIDs = 
+
+        //}
+
         public async Task<List<DisplayMedicalRecordDTO>> GetMedicalRecordById(int id)
         {
             var records = await _context.MedicalRecords

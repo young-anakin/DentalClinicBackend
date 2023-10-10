@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DTOs.PatientDTO;
+using DentalClinic.DTOs.PaymentDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.PatientService;
 using DentalClinic.Services.PaymentTypeService;
@@ -16,12 +17,12 @@ namespace DentalClinic.Controllers
             _paymentTypeService = paymentTypeService;
         }
         [HttpPost]
-        public async Task<ActionResult> AddPaymentType(string str)
+        public async Task<ActionResult> AddPaymentType([FromBody]AddPaymentTypeDTO DTO)
         {
             try
             {
 
-                return Ok(await _paymentTypeService.AddPaymentType(str));
+                return Ok(await _paymentTypeService.AddPaymentType(DTO));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)

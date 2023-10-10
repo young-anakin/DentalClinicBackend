@@ -3,21 +3,19 @@
     public class UpdateMedicalRecordDTO
     {
         public int MedicalRecordID { get; set; }
-        public int PatientIdNo { get; set; }
-        public int TreatedByID { get; set; }
+        
+        public int[]? Procedures { get; set; }
 
-        public string LabTests { get; set; } = string.Empty;
+        public int[]? Quantities { get; set; }
 
-        public string PrescribedMedicines { get; set; } = string.Empty;
+        public int DiscountPercent { get; set; }
+        public decimal TotalAmount { get; set; }
+        public bool IsPaid { get; set; } = false;
 
-        public string TreatmentDetails { get; set; } = string.Empty;
+        public string ProcedureIDs { set; get; } = string.Empty;
 
-        public string Notes { get; set; } = string.Empty;
+        //public string Quantities { get; set; } = string.Empty;
 
-        public string ReferalsList { get; set; } = string.Empty;
-
-        public string ReferedDoctor { get; set; } = string.Empty;
-
-        public int[]? ProceduresIDs { get; set; }
+        public decimal SubTotalAmount { get; set; }
     }
 }

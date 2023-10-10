@@ -58,16 +58,10 @@ namespace DentalClinic.Services.PaymentService
             int[] quantityArray = 
             string.IsNullOrEmpty(record.Quantities) ? new int[] { 0 } : JsonSerializer.Deserialize<int[]>(record.Quantities);
 
-
-
-
-
-
-
-
             var display = new GetMDforPaymentDTO
             {
                 PatientId = record.PatientId,
+                MedicalRecordID = record.Medical_RecordID,
                 Discount = record.DiscountPercent,
                 IssuedBy = record.TreatedBy?.EmployeeName, // Adding a null-conditional operator here
                 MedicalRecordDate = (DateTime)record.Date,
@@ -75,13 +69,13 @@ namespace DentalClinic.Services.PaymentService
                 Total = record.TotalAmount,
                 ProcedureIDs = proceduresArray,
                 Quantity = quantityArray,
-                isCard = record.IsCard,
-                
+                isCard = record.IsCard,   
             };
 
             return display;
 
         }
+        
 
     }
 }

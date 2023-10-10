@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DentalClinic.Context;
+using DentalClinic.DTOs.PaymentDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.Tools;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +18,12 @@ namespace DentalClinic.Services.PaymentTypeService
             _mapper = mapper;
             _toolsService = toolsService;
         }
-        public async Task<PaymentType> AddPaymentType(string name)
+        public async Task<PaymentType> AddPaymentType(AddPaymentTypeDTO DTO)
         {
 
             var type = new PaymentType
             {
-                PaymentName = name
+                PaymentName = DTO.Name
             };
             await _context.paymentTypes.AddAsync(type);
             await _context.SaveChangesAsync();
