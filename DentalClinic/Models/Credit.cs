@@ -17,6 +17,8 @@ namespace DentalClinic.Models
         public decimal Paid { get; set; }
         public decimal UnPaid { get; set; }
 
+
+
         public DateTime ChargeDate { get; set; }
     }
 }
