@@ -63,7 +63,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("PatientID");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.City", b =>
@@ -80,7 +80,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("CityId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.CompanySetting", b =>
@@ -122,7 +122,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("CompanySettingID");
 
-                    b.ToTable("CompanySettings");
+                    b.ToTable("CompanySettings", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Country", b =>
@@ -139,7 +139,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("CountryID");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Credit", b =>
@@ -174,7 +174,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("PatientID");
 
-                    b.ToTable("Credits");
+                    b.ToTable("Credits", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.CreditPaymentRecord", b =>
@@ -208,7 +208,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("PaymentType");
 
-                    b.ToTable("CreditPaymentRecords");
+                    b.ToTable("CreditPaymentRecords", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Employee", b =>
@@ -252,7 +252,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("EmployeeId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.HealthProgress", b =>
@@ -297,7 +297,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("PatientID");
 
-                    b.ToTable("HealthProgresses");
+                    b.ToTable("HealthProgresses", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.MedicalRecord", b =>
@@ -354,7 +354,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("TreatedById");
 
-                    b.ToTable("MedicalRecords");
+                    b.ToTable("MedicalRecords", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.MobileBanking", b =>
@@ -370,7 +370,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("MobileBankingID");
 
-                    b.ToTable("MobileBanking");
+                    b.ToTable("MobileBanking", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Patient", b =>
@@ -417,7 +417,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("PatientId");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.PatientCard", b =>
@@ -439,7 +439,7 @@ namespace DentalClinic.Migrations
                     b.HasIndex("PatientID")
                         .IsUnique();
 
-                    b.ToTable("PatientCards");
+                    b.ToTable("PatientCards", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.PatientProfile", b =>
@@ -461,7 +461,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("Patient_Id");
 
-                    b.ToTable("patientProfiles");
+                    b.ToTable("patientProfiles", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.PatientVisit", b =>
@@ -499,7 +499,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("patientVisits");
+                    b.ToTable("patientVisits", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Payment", b =>
@@ -550,7 +550,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("PaymentTypeID");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.PaymentType", b =>
@@ -567,7 +567,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("paymentTypes");
+                    b.ToTable("paymentTypes", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.PricingDescription", b =>
@@ -584,7 +584,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("PricingDescriptionId");
 
-                    b.ToTable("pricingDescriptions");
+                    b.ToTable("pricingDescriptions", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.PricingReason", b =>
@@ -601,7 +601,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("PricingReasonID");
 
-                    b.ToTable("pricingReasons");
+                    b.ToTable("pricingReasons", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Procedure", b =>
@@ -636,7 +636,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("PricingReasonID");
 
-                    b.ToTable("Procedures");
+                    b.ToTable("Procedures", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Role", b =>
@@ -677,7 +677,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("RoleID");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.SMSSetting", b =>
@@ -708,7 +708,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("SMSSettings");
+                    b.ToTable("SMSSettings", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.SubCity", b =>
@@ -725,7 +725,7 @@ namespace DentalClinic.Migrations
 
                     b.HasKey("SubCityID");
 
-                    b.ToTable("SubCities");
+                    b.ToTable("SubCities", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.UserAccount", b =>
@@ -767,7 +767,7 @@ namespace DentalClinic.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserAccounts");
+                    b.ToTable("UserAccounts", (string)null);
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Appointment", b =>

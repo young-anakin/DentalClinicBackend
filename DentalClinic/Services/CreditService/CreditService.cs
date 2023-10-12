@@ -70,14 +70,36 @@ namespace DentalClinic.Services.CreditService
                             .FirstOrDefaultAsync()??throw new KeyNotFoundException("Patient hasn't been Credited with any charges.");
             return credit;
         }
-        public async Task<List<CreditPaymentRecord>> CreditHistoryForPatient(int DTO)
+        public async Task<List<DisplayCreditHistoryDTO>> CreditHistoryForPatient(int DTO)
         {
-            var credit = await _context.CreditPaymentRecords.
-                            Where(p => p.PatientID == DTO)
-                            .OrderByDescending(p => p.CreateAt)
-                            .ToListAsync() ?? throw new KeyNotFoundException("Patient hasn't been Credited with any charges.");
-            return credit;
+            var creditRecords = await _context.CreditPaymentRecords
+                .Where(p => p.PatientID == DTO)
+                .Include(p => p.Patient)
+                .Include(p => p.Employee)
+                .OrderByDescending(p => p.CreateAt)
+                .ToListAsync() ?? throw new KeyNotFoundException("Patient hasn't been Credited with any charges.");
+
+            var displayDTOs = new List<DisplayCreditHistoryDTO>();
+
+            foreach (var record in creditRecords)
+            {
+                var displayDTO = new DisplayCreditHistoryDTO
+                {
+                    ID = record.ID,
+                    Paid = record.Paid,
+                    CreateAt = record.CreateAt,
+                    PaymentType = record.PaymentType,
+                    PatientName = record.Patient?.PatientFullName,
+                    IssuedBy = record.Employee?.EmployeeName
+                };
+
+                displayDTOs.Add(displayDTO);
+            }
+
+            return displayDTOs;
         }
+
+
 
     }
 }

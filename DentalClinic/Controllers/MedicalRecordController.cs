@@ -20,6 +20,8 @@ namespace DentalClinic.Controllers
         [HttpPost]
         public async Task<ActionResult> AddMedicalRecord(AddMedicalRecordDTO medicalRecordDTO)
         {
+            return Ok(await _recordService.AddMedicalRecord(medicalRecordDTO));
+
             try
             {
                 

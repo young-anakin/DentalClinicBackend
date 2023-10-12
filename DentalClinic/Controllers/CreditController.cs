@@ -69,6 +69,8 @@ namespace DentalClinic.Controllers
         [HttpGet("HistoryForPatient")]
         public async Task<ActionResult> GetCreditHistoryforPatient(int patientID)
         {
+            return Ok(await _creditService.CreditHistoryForPatient(patientID));
+
             try
             {
                 return Ok(await _creditService.CreditHistoryForPatient(patientID));

@@ -122,7 +122,7 @@ namespace DentalClinic.Services.MedicalRecordService
                     proceduresList.Add(procedureItem);
 
                     // Multiply the price with the quantity
-                   totalPrice = totalPrice + (decimal)(procedureItem.Price * quantity);
+                   totalPrice = totalPrice + (decimal)(procedureItem.Price );
 
                     // Do something with totalPrice if needed.
                 }
