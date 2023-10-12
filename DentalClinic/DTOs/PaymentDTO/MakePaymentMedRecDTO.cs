@@ -20,5 +20,7 @@
         public int Discount { get; set; }
 
         public DateTime DateTime { get; set; } = DateTime.Now;
+
+        public bool IsCredit { get; set; }
     }
 }

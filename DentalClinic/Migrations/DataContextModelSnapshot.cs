@@ -323,6 +323,22 @@ namespace DentalClinic.Migrations
                     b.ToTable("MedicalRecords");
                 });
 
+            modelBuilder.Entity("DentalClinic.Models.MobileBanking", b =>
+                {
+                    b.Property<int>("MobileBankingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MobileBankingID"));
+
+                    b.Property<string>("MobileBankingName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MobileBankingID");
+
+                    b.ToTable("MobileBanking");
+                });
+
             modelBuilder.Entity("DentalClinic.Models.Patient", b =>
                 {
                     b.Property<int>("PatientId")
@@ -463,7 +479,13 @@ namespace DentalClinic.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("IsCredit")
+                        .HasColumnType("bit");
+
                     b.Property<int>("IssuedByID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MobileBankingID")
                         .HasColumnType("int");
 
                     b.Property<int>("PatientID")
@@ -472,7 +494,7 @@ namespace DentalClinic.Migrations
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PaymentTypeID")
+                    b.Property<int?>("PaymentTypeID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("SubTotal")
@@ -487,6 +509,8 @@ namespace DentalClinic.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IssuedByID");
+
+                    b.HasIndex("MobileBankingID");
 
                     b.HasIndex("PatientID");
 
@@ -840,6 +864,10 @@ namespace DentalClinic.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DentalClinic.Models.MobileBanking", "mobileBanking")
+                        .WithMany("Payments")
+                        .HasForeignKey("MobileBankingID");
+
                     b.HasOne("DentalClinic.Models.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientID")
@@ -848,15 +876,15 @@ namespace DentalClinic.Migrations
 
                     b.HasOne("DentalClinic.Models.PaymentType", "PaymentType")
                         .WithMany("Payments")
-                        .HasForeignKey("PaymentTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PaymentTypeID");
 
                     b.Navigation("Employee");
 
                     b.Navigation("Patient");
 
                     b.Navigation("PaymentType");
+
+                    b.Navigation("mobileBanking");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Procedure", b =>
@@ -919,6 +947,11 @@ namespace DentalClinic.Migrations
             modelBuilder.Entity("DentalClinic.Models.MedicalRecord", b =>
                 {
                     b.Navigation("Procedures");
+                });
+
+            modelBuilder.Entity("DentalClinic.Models.MobileBanking", b =>
+                {
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.Patient", b =>

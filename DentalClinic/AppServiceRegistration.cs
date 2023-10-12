@@ -6,6 +6,7 @@ using DentalClinic.Services.CreditService;
 using DentalClinic.Services.EmployeeService;
 using DentalClinic.Services.HealthProgressService;
 using DentalClinic.Services.MedicalRecordService;
+using DentalClinic.Services.MobileBankingService;
 using DentalClinic.Services.PatientService;
 using DentalClinic.Services.PaymentService;
 using DentalClinic.Services.PaymentTypeService;
@@ -40,6 +41,7 @@ namespace DentalClinic
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<ISMSSettingService, SMSSettingService>();
             services.AddScoped<ICreditService, CreditService>();
+            services.AddScoped<IMobileBankingService, MobileBankingService>();
         }
 
     }

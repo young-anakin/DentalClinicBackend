@@ -27,6 +27,11 @@ namespace DentalClinic.Services.PaymentService
                                         .Where(a => a.Medical_RecordID == DTO.MedicalRecordID)
                                         .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found");
 
+            //if (DTO.IsCredit == true)
+            //{
+            //    var rm = 
+            //}
+
             var procedureIDS = DTO.ProcedureIDs;
             var Quantities = DTO.Quantity;
 
@@ -43,6 +48,7 @@ namespace DentalClinic.Services.PaymentService
                 Total = DTO.Total,
                 Discount = DTO.Discount,
                 PaymentDate = DTO.DateTime,
+                IsCredit = DTO.IsCredit,
 
             };
             record.IsPaid = true;

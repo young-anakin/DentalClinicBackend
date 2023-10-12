@@ -47,6 +47,7 @@ namespace DentalClinic.Context
 
         public DbSet<Credit> Credits { get; set; }
 
+        public DbSet<MobileBanking> MobileBanking { get; set; } 
         //public DbSet<ProcedureQuantity> ProcedureQuantity { get; set; }
 
 

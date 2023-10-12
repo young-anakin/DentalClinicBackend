@@ -11,7 +11,6 @@ namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
 
     public class AreaSettingController : Controller
     {

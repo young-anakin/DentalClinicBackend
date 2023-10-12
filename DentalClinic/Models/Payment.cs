@@ -19,9 +19,15 @@ namespace DentalClinic.Models
         public Employee? Employee { get; set; }
         public decimal Total { get; set; }
         [ForeignKey("PaymentType")]
-        public int PaymentTypeID { get; set; }
+        public int? PaymentTypeID { get; set; }
         public PaymentType? PaymentType { get; set; }
 
         public DateTime PaymentDate { get; set; }
+
+        public bool IsCredit { get; set; } = false;
+
+        public MobileBanking? mobileBanking { get; set; }
+         
+        }
     }
-}
+
