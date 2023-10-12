@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DTOs.CreditDTO;
+using DentalClinic.DTOs.MobileBankingDTO;
 using DentalClinic.Models;
 
 namespace DentalClinic.Services.CreditService
@@ -6,7 +7,7 @@ namespace DentalClinic.Services.CreditService
     public interface ICreditService
     {
         Task<Credit> ChargeCredit(ChargeCreditDTO DTO);
-        Task<List<Credit>> CreditHistoryForPatient(int id);
-        Task<Credit> RecentCreditInfo(int id);
+        Task<List<CreditPaymentRecord>> CreditHistoryForPatient(int DTO);
+        Task<Credit> CurrentCreditInfo(int DTO);
     }
 }

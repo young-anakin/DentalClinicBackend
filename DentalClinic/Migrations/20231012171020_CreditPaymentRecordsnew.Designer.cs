@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231012171020_CreditPaymentRecordsnew")]
+    partial class CreditPaymentRecordsnew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,25 +191,15 @@ namespace DentalClinic.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IssuedBy")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Paid")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("PatientID")
                         .HasColumnType("int");
 
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
-                    b.HasIndex("IssuedBy");
-
                     b.HasIndex("PatientID");
-
-                    b.HasIndex("PaymentType");
 
                     b.ToTable("CreditPaymentRecords");
                 });
@@ -815,29 +808,13 @@ namespace DentalClinic.Migrations
 
             modelBuilder.Entity("DentalClinic.Models.CreditPaymentRecord", b =>
                 {
-                    b.HasOne("DentalClinic.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("IssuedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DentalClinic.Models.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DentalClinic.Models.PaymentType", "PaymentTypes")
-                        .WithMany("CreditPaymentRecord")
-                        .HasForeignKey("PaymentType")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
                     b.Navigation("Patient");
-
-                    b.Navigation("PaymentTypes");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.HealthProgress", b =>
@@ -1034,8 +1011,6 @@ namespace DentalClinic.Migrations
 
             modelBuilder.Entity("DentalClinic.Models.PaymentType", b =>
                 {
-                    b.Navigation("CreditPaymentRecord");
-
                     b.Navigation("Payments");
                 });
 

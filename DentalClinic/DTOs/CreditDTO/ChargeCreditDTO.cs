@@ -9,6 +9,7 @@ namespace DentalClinic.DTOs.CreditDTO
         public decimal CreditAmount { get; set; }
         public int IssuedBy { get; set; }
 
+        public int PaymentType { get; set; }
         public DateTime DateTime { get; set; }
     }
 }

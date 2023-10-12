@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DentalClinic.Context;
 using DentalClinic.DTOs.CreditDTO;
+using DentalClinic.DTOs.MobileBankingDTO;
 using DentalClinic.DTOs.SettingsDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.CompanySettingService;
@@ -21,59 +22,59 @@ namespace DentalClinic.Services.CreditService
         //Update works by updating only 1 record that's in the database and changing it
         public async Task<Credit> ChargeCredit(ChargeCreditDTO DTO)
         {
-            var compSet = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company settings not set!!!");
-
-            if (DTO.CreditAmount > compSet.MaximumLoanAmount)
-            {
-                throw new InvalidOperationException("Credit exceeds Maximum loan amount alloted");
-            }
-            var cr = await _context.Credits.
-                        Where(p => p.PatientID == DTO.PatientID).
-                        OrderByDescending(p => p.ChargeDate).
-                        FirstOrDefaultAsync();
-
-            var Credit = new Credit
+            var cr = await _context.Credits.Where(p => p.PatientID == DTO.PatientID).FirstOrDefaultAsync();
+            CreditPaymentRecord CPR = new CreditPaymentRecord
             {
                 PatientID = DTO.PatientID,
-                TotalCreditAmount = DTO.CreditAmount,
+                Paid = DTO.CreditAmount,
+                CreateAt = DateTime.Now,
                 IssuedBy = DTO.IssuedBy,
-                ChargeDate = DTO.DateTime,
-                Paid = 0,
-                UnPaid = 0
-            };
+                PaymentType = DTO.PaymentType
 
-            if (cr != null)
+            };
+            if (cr == null)
             {
-                // Case 1: Update existing Credit record
-                if (cr.TotalCreditAmount + DTO.CreditAmount > compSet.MaximumLoanAmount)
+                Credit credit = new Credit
                 {
-                    throw new InvalidOperationException("Credit exceeds Maximum loan amount alloted");
-                }
-                Credit.TotalCreditAmount = cr.TotalCreditAmount + DTO.CreditAmount;
-                Credit.Paid = cr.Paid;
-                Credit.UnPaid = cr.UnPaid;
+                    PatientID = DTO.PatientID,
+                    TotalCreditAmount = DTO.CreditAmount,
+                    UnPaid =0,
+                    Paid = DTO.CreditAmount,
+                    IssuedBy = DTO.IssuedBy,
+                    ChargeDate = DateTime.Now
+                    
+                };
+
+
+                _context.Credits.Add(credit);
+                _context.CreditPaymentRecords.Add(CPR);
+                await _context.SaveChangesAsync();
+                return credit;
             }
 
-           
 
-            _context.Credits.Add(Credit);
+            cr.TotalCreditAmount = cr.TotalCreditAmount + DTO.CreditAmount;
+            cr.Paid = cr.Paid + DTO.CreditAmount;
+            cr.UnPaid = cr.UnPaid - DTO.CreditAmount;
+
+            _context.Credits.Update(cr);
+            _context.CreditPaymentRecords.Add(CPR);
             await _context.SaveChangesAsync();
-            return Credit;
-
+            return cr;
         }
-        public async Task<Credit> RecentCreditInfo(int id)
+        public async Task<Credit> CurrentCreditInfo(int DTO)
         {
             var credit = await _context.Credits.
-                            Where(p=> p.PatientID == id)
+                            Where(p=> p.PatientID == DTO)
                             .OrderByDescending(p=>p.ChargeDate)
                             .FirstOrDefaultAsync()??throw new KeyNotFoundException("Patient hasn't been Credited with any charges.");
             return credit;
         }
-        public async Task<List<Credit>> CreditHistoryForPatient(int id)
+        public async Task<List<CreditPaymentRecord>> CreditHistoryForPatient(int DTO)
         {
-            var credit = await _context.Credits.
-                            Where(p => p.PatientID == id)
-                            .OrderByDescending(p => p.ChargeDate)
+            var credit = await _context.CreditPaymentRecords.
+                            Where(p => p.PatientID == DTO)
+                            .OrderByDescending(p => p.CreateAt)
                             .ToListAsync() ?? throw new KeyNotFoundException("Patient hasn't been Credited with any charges.");
             return credit;
         }

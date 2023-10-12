@@ -27,10 +27,49 @@ namespace DentalClinic.Services.PaymentService
                                         .Where(a => a.Medical_RecordID == DTO.MedicalRecordID)
                                         .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found");
 
-            //if (DTO.IsCredit == true)
-            //{
-            //    var rm = 
-            //}
+            if (DTO.IsCredit == true)
+            {
+                var compSet = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company settings not set!!!");
+
+                if (DTO.Total > compSet.MaximumLoanAmount)
+                {
+                    throw new InvalidOperationException("Credit exceeds Maximum loan amount alloted");
+                }
+                var cr = await _context.Credits.
+                            Where(p => p.PatientID == DTO.PatientID).
+                            OrderByDescending(p => p.ChargeDate).
+                            FirstOrDefaultAsync();
+
+                var Credit = new Credit
+                {
+                    PatientID = DTO.PatientID,
+                    TotalCreditAmount = 0 - DTO.Total,
+                    IssuedBy = DTO.IssuedByID,
+                    ChargeDate = DTO.DateTime,
+                    Paid = 0,
+                    UnPaid = DTO.Total
+                };
+
+                if (cr != null)
+                {
+                    // Case 1: Update existing Credit record
+                    if (cr.UnPaid + DTO.Total > compSet.MaximumLoanAmount)
+                    {
+                        throw new InvalidOperationException("Credit exceeds Maximum loan amount alloted");
+                    }
+                    cr.TotalCreditAmount = cr.TotalCreditAmount - DTO.Total;
+                    cr.UnPaid = cr.UnPaid + DTO.Total;
+                    _context.Credits.Update(cr);
+
+                }
+                else
+                {
+                    _context.Credits.Add(Credit);
+                }
+
+
+
+            }
 
             var procedureIDS = DTO.ProcedureIDs;
             var Quantities = DTO.Quantity;

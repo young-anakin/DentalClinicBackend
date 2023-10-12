@@ -47,7 +47,7 @@ namespace DentalClinic.Controllers
         {
             try
             {
-                return Ok(await _creditService.RecentCreditInfo(patientID));
+                return Ok(await _creditService.CurrentCreditInfo(patientID));
             }
             catch (KeyNotFoundException ex)
             {
