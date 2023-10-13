@@ -113,6 +113,7 @@ namespace DentalClinic.Services.AppointmentService
         {
             var appointments = await _context.Appointments
                                         .Where(ap => ap.DentistID == EmployeeID)
+                                        .OrderByDescending(ap => ap.AppointmentStartTime)
                                         .Select(appointment => new Appointment
                                         {
                                             AppointmentId = appointment.AppointmentId,

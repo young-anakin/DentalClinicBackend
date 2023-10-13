@@ -21,6 +21,7 @@ namespace DentalClinic.Services.PatientService
         public async Task<Patient> AddPatient(AddPatientDTO patientDTO)
         {
             var patient = _mapper.Map<Patient>(patientDTO);
+            patient.CreatedAt = DateTime.Now;
             if (patientDTO.Age == 0)
             {
                 patient.Age = _toolsService.CalculateAge(patientDTO.DateOfBirth);
@@ -69,6 +70,7 @@ namespace DentalClinic.Services.PatientService
                         .Include(p=>p.Profile)
                         .FirstOrDefaultAsync()
                         ?? throw new KeyNotFoundException("Patient Not Found");
+            patient.UpdatedAt = DateTime.Now;
             var PatientProfile = await _context.patientProfiles
             .Where(p => p.Patient_Id == patientDTO.PatientID)
             .FirstOrDefaultAsync()
@@ -85,7 +87,8 @@ namespace DentalClinic.Services.PatientService
         }
         public async Task<List<DisplayPatientDTO>> GetAllPatients()
         {
-        var patients = await _context.Patients.ToListAsync();
+        var patients = await _context.Patients.OrderByDescending(c=> c.CreatedAt)
+                .ToListAsync();
             // Create a list of PatientDTO with calculated ages
             var patientDTOs = patients.Select(p => new DisplayPatientDTO
             {

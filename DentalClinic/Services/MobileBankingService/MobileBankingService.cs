@@ -39,7 +39,9 @@ namespace DentalClinic.Services.MobileBankingService
         }
         public async Task<List<MobileBanking>> GetAllMobileBankings()
         {
-            var MB = await _context.MobileBanking.ToListAsync();
+            var MB = await _context.MobileBanking
+                .OrderByDescending(c=> c.MobileBankingName)
+                .ToListAsync();
             return MB;
         }
         public async Task<MobileBanking> UpdateMobileBanking(UpdateMobileBankingDTO DTO)

@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DTOs.AppointmentDTO;
+using DentalClinic.DTOs.MobileBankingDTO;
 using DentalClinic.DTOs.PaymentDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.AppointmentService;
@@ -48,6 +49,56 @@ namespace DentalClinic.Controllers
             try
             {
                 return Ok(await _patientService.GetMedicalRecordsforPayment(id));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+
+        }
+        [HttpGet("PaymentLogForPatient")]
+        public async Task<ActionResult> PaymentLogForPatient(int DTO)
+        {
+            try
+            {
+                return Ok(await _patientService.PaymentLogForPatient(DTO));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+
+        }
+        [HttpGet("PaymentLogForAll")]
+        public async Task<ActionResult> PaymentLogForAll()
+        {
+            try
+            {
+                return Ok(await _patientService.PaymentLogForAll());
             }
             catch (KeyNotFoundException ex)
             {

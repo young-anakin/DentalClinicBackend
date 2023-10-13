@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DentalClinic.Context;
 using DentalClinic.DTOs.AppointmentDTO;
+using DentalClinic.DTOs.MobileBankingDTO;
 using DentalClinic.DTOs.PaymentDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.Tools;
@@ -25,7 +26,11 @@ namespace DentalClinic.Services.PaymentService
         {
             var record = await _context.MedicalRecords
                                         .Where(a => a.Medical_RecordID == DTO.MedicalRecordID)
-                                        .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found");
+                                        .FirstOrDefaultAsync();
+            if (record == null)
+            {
+
+            }
 
             if (DTO.IsCredit == true)
             {
@@ -99,6 +104,7 @@ namespace DentalClinic.Services.PaymentService
         public async Task<GetMDforPaymentDTO> GetMedicalRecordsforPayment(int id)
         {
             var record = await _context.MedicalRecords
+                                                   .OrderByDescending(a => a.Date)
                                                    .Where(a => a.PatientId == id )
                                                    .Where(a=> a.IsPaid == false)
                                                    .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Medical Record Not Found, or Medical Record has been paid for");
@@ -125,6 +131,20 @@ namespace DentalClinic.Services.PaymentService
 
             return display;
 
+        }
+        public async Task<List<Payment>> PaymentLogForPatient(int DTO)
+        {
+            var PaymentRecord = await _context.Payments.Where(p=> p.PatientID == DTO)
+                                                        .OrderByDescending(p=> p.PaymentDate)
+                                                        .ToListAsync();
+            return PaymentRecord;
+        }
+        public async Task<List<Payment>> PaymentLogForAll()
+        {
+            var PaymentRecord = await _context.Payments
+                                            .OrderByDescending(p => p.PaymentDate)
+                                            .ToListAsync();
+            return PaymentRecord;
         }
         
 

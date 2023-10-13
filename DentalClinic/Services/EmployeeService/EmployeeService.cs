@@ -86,7 +86,7 @@ namespace DentalClinic.Services.EmployeeService
                                         .Where(e => e.IsCurrentlyActive == true)
                                         .Include(e => e.UserAccount)
                                             .ThenInclude(ua => ua.Role)
-                                        .OrderByDescending(e => e.EmployeeId)
+                                        .OrderByDescending(e => e.CreatedAt)
                                         .ToListAsync();
 
             if (employees != null)
@@ -121,7 +121,7 @@ namespace DentalClinic.Services.EmployeeService
             var employees = await _context.Employees
                                         .Include(e => e.UserAccount)
                                             .ThenInclude(ua => ua.Role)
-                                        .OrderByDescending(e => e.EmployeeId)
+                                        .OrderByDescending(e => e.CreatedAt)
                                         .ToListAsync();
 
             if (employees != null)

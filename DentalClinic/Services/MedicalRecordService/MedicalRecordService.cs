@@ -189,6 +189,7 @@ namespace DentalClinic.Services.MedicalRecordService
                                     .Include(r => r.Procedures)
                                     .Include(r => r.Procedures)
                                     .Include(r => r.TreatedBy)
+                                    .OrderByDescending(r => r.Date)
                                     .ToListAsync();
 
             var recordDTOs = records.Select(r => new DisplayMedicalRecordDTO
