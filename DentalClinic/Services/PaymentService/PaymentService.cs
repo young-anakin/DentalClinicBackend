@@ -215,6 +215,12 @@ namespace DentalClinic.Services.PaymentService
                                                         .ToListAsync();
             return PaymentRecord;
         }
+        public async Task<Payment> PaymentHistoryDetails(int DTO)
+        {
+            var PaymentRecord = await _context.Payments.Where(p => p.Id == DTO)
+                                                       .FirstOrDefaultAsync()??throw new KeyNotFoundException("Payment Record Not Found");
+            return PaymentRecord;
+        }
         public async Task<List<Payment>> PaymentLogForAll()
         {
             var PaymentRecord = await _context.Payments
@@ -222,6 +228,7 @@ namespace DentalClinic.Services.PaymentService
                                             .ToListAsync();
             return PaymentRecord;
         }
+
         
 
     }

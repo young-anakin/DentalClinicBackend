@@ -8,6 +8,7 @@ namespace DentalClinic.Services.PaymentService
     {
         Task<Payment> AddPaymentfromMedicalRecord(MakePaymentMedRecDTO DTO);
         Task<GetMDforPaymentDTO> GetMedicalRecordsforPayment(int id);
+        Task<Payment> PaymentHistoryDetails(int DTO);
         Task<List<Payment>> PaymentLogForAll();
         Task<List<Payment>> PaymentLogForPatient(int DTO);
     }

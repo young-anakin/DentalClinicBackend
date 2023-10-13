@@ -93,6 +93,31 @@ namespace DentalClinic.Controllers
             }
 
         }
+        [HttpGet("PaymentHistory")]
+        public async Task<ActionResult> PaymentHistory(int DTO)
+        {
+            try
+            {
+                return Ok(await _patientService.PaymentHistoryDetails(DTO));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+
+        }
         [HttpGet("PaymentLogForAll")]
         public async Task<ActionResult> PaymentLogForAll()
         {
