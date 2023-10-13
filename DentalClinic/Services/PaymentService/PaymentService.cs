@@ -29,6 +29,86 @@ namespace DentalClinic.Services.PaymentService
                                         .FirstOrDefaultAsync();
             if (record == null)
             {
+                var flag = false;
+                var card = await _context.Procedures.Where(p => p.ProcedureName == "card" || p.ProcedureName == "Card" || p.ProcedureName == "CARD").FirstOrDefaultAsync();
+                var arr = DTO.ProcedureIDs;
+                if (arr.Contains(card.ProcedureID))
+                {
+                    flag = true;
+                }
+                var newMedicalRecord = new MedicalRecord
+                {
+                    Date = DateTime.Now,
+                    PatientId  = DTO.PatientID,
+                    TreatedById = DTO.IssuedByID,
+                    DiscountPercent = DTO.Discount,
+                    TotalAmount = DTO.Total,
+                    ProcedureIDs = JsonSerializer.Serialize(DTO.ProcedureIDs),
+                    Quantities = JsonSerializer.Serialize(DTO.Quantity),
+                    SubTotalAmount = DTO.SubTotal,
+                    IsPaid = true,
+                    IsCard = flag                    
+                };
+
+
+                if (DTO.IsCredit == true)
+                {
+                    var compSet = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company settings not set!!!");
+
+                    if (DTO.Total > compSet.MaximumLoanAmount)
+                    {
+                        throw new InvalidOperationException("Credit exceeds Maximum loan amount alloted");
+                    }
+                    var cr = await _context.Credits.
+                                Where(p => p.PatientID == DTO.PatientID).
+                                OrderByDescending(p => p.ChargeDate).
+                                FirstOrDefaultAsync();
+
+                    var Credit = new Credit
+                    {
+                        PatientID = DTO.PatientID,
+                        TotalCreditAmount = 0 - DTO.Total,
+                        IssuedBy = DTO.IssuedByID,
+                        ChargeDate = DTO.DateTime,
+                        Paid = 0,
+                        UnPaid = DTO.Total
+                    };
+
+                    if (cr != null)
+                    {
+                        // Case 1: Update existing Credit record
+                        if (cr.UnPaid + DTO.Total > compSet.MaximumLoanAmount)
+                        {
+                            throw new InvalidOperationException("Credit exceeds Maximum loan amount alloted");
+                        }
+                        cr.TotalCreditAmount = cr.TotalCreditAmount - DTO.Total;
+                        cr.UnPaid = cr.UnPaid + DTO.Total;
+                        _context.Credits.Update(cr);
+
+                    }
+                    else
+                    {
+                        _context.Credits.Add(Credit);
+                    }
+                }
+
+
+
+                var newPayment = new Payment
+                {
+                    IssuedByID = DTO.IssuedByID,
+                    PaymentTypeID = DTO.PaymentType,
+                    PatientID = DTO.PatientID,
+                    SubTotal = DTO.Total + DTO.Discount / 100 * DTO.Total,
+                    Total = DTO.Total,
+                    Discount = DTO.Discount,
+                    PaymentDate = DTO.DateTime,
+                    IsCredit = DTO.IsCredit,
+                };
+                _context.MedicalRecords.Add(newMedicalRecord);
+                _context.Payments.Add(newPayment);
+                await _context.SaveChangesAsync();
+                return newPayment;
 
             }
 
@@ -72,8 +152,6 @@ namespace DentalClinic.Services.PaymentService
                     _context.Credits.Add(Credit);
                 }
 
-
-
             }
 
             var procedureIDS = DTO.ProcedureIDs;
@@ -87,13 +165,11 @@ namespace DentalClinic.Services.PaymentService
                 IssuedByID = DTO.IssuedByID,
                 PaymentTypeID = DTO.PaymentType,
                 PatientID = DTO.PatientID,
-                
                 SubTotal = DTO.Total + DTO.Discount / 100 * DTO.Total,
                 Total = DTO.Total,
                 Discount = DTO.Discount,
                 PaymentDate = DTO.DateTime,
                 IsCredit = DTO.IsCredit,
-
             };
             record.IsPaid = true;
             _context.MedicalRecords.Update(record);
