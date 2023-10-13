@@ -197,12 +197,12 @@ namespace DentalClinic.Controllers
             }
         }
         [HttpGet("City")]
-        public async Task<ActionResult> GetCities(string CountryName)
+        public async Task<ActionResult> GetCities()
         {
             try
             {
 
-                return Ok(await _areaSettingService.GetCities(CountryName));
+                return Ok(await _areaSettingService.GetCities());
             }
             catch (KeyNotFoundException ex)
             {
@@ -222,11 +222,11 @@ namespace DentalClinic.Controllers
             }
         }
         [HttpGet("SubCity")]
-        public async Task<ActionResult> GetSubCities(String cityName)
+        public async Task<ActionResult> GetSubCities()
         {
             try
             {
-                return Ok(await _areaSettingService.GetCities(cityName));
+                return Ok(await _areaSettingService.GetSubCities());
             }
             catch (KeyNotFoundException ex)
             {

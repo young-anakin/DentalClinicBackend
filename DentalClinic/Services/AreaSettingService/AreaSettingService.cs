@@ -52,11 +52,11 @@ namespace DentalClinic.Services.AreaSettingService
             await _context.SaveChangesAsync();
             return city;
         }
-        public async Task<List<City>> GetCities(string CountryName)
+        public async Task<List<City>> GetCities()
         {
             var Cities = await _context.Cities
                                         .OrderByDescending(c => c.CityName)
-                                        .ToListAsync() ?? throw new KeyNotFoundException("Country Not FOund");
+                                        .ToListAsync() ?? throw new KeyNotFoundException("Cities Not Found");
             return Cities;
         }
         public async Task<City> RemoveCity(int cityID)
@@ -90,7 +90,7 @@ namespace DentalClinic.Services.AreaSettingService
             return city;
 
         }
-        public async Task<List<SubCity>> GetSubCities(string cityName)
+        public async Task<List<SubCity>> GetSubCities()
         {
             var subcity = await _context.SubCities
                                         .OrderByDescending(c => c.SubCityName)

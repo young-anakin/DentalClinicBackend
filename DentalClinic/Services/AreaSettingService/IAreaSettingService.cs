@@ -5,9 +5,9 @@ namespace DentalClinic.Services.AreaSettingService
 {
     public interface IAreaSettingService
     {
-        Task<List<City>> GetCities(string CountryName);
+        Task<List<City>> GetCities();
         Task<List<Country>> GetCountries();
-        Task<List<SubCity>> GetSubCities(string cityName);
+        Task<List<SubCity>> GetSubCities();
         Task<City> RemoveCity(int cityName);
         Task<Country> RemoveCountry(int CN);
         Task<SubCity> RemoveSubCity(int subCityName);
