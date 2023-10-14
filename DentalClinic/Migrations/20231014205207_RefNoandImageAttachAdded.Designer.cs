@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231014205207_RefNoandImageAttachAdded")]
+    partial class RefNoandImageAttachAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -528,9 +531,6 @@ namespace DentalClinic.Migrations
                     b.Property<int>("IssuedByID")
                         .HasColumnType("int");
 
-                    b.Property<string>("MobileBanking")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("MobileBankingID")
                         .HasColumnType("int");
 
@@ -940,7 +940,7 @@ namespace DentalClinic.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DentalClinic.Models.MobileBanking", null)
+                    b.HasOne("DentalClinic.Models.MobileBanking", "MobileBanking")
                         .WithMany("Payments")
                         .HasForeignKey("MobileBankingID");
 
@@ -955,6 +955,8 @@ namespace DentalClinic.Migrations
                         .HasForeignKey("PaymentTypeID");
 
                     b.Navigation("Employee");
+
+                    b.Navigation("MobileBanking");
 
                     b.Navigation("Patient");
 

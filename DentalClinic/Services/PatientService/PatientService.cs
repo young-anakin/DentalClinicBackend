@@ -94,7 +94,10 @@ namespace DentalClinic.Services.PatientService
         {
             DateTime date = new DateTime(2000, 1, 1);
             var patients = await _context.Patients.OrderByDescending(c=> c.UpdatedAt)
+                .Include(p=> p.PatientCard)
                 .ToListAsync();
+            var compSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Found!");
+            var cardExpireAfter = compSettings.CardExpireAfter;
             // Create a list of PatientDTO with calculated ages
             var patientDTOs = patients.Select(p => new DisplayPatientDTO
             {
@@ -108,7 +111,9 @@ namespace DentalClinic.Services.PatientService
                 Subcity = p.Subcity,
                 Address = p.Address,
                 CreatedAt = p.CreatedAt,
-                UpdatedAt = p.UpdatedAt ?? date
+                UpdatedAt = p.UpdatedAt ?? date,
+                CardNeeded =  p.PatientCard == null || p.PatientCard.CreatedAT < DateTime.Now.AddDays(-cardExpireAfter)
+
 
 
             }).ToList();
@@ -116,12 +121,30 @@ namespace DentalClinic.Services.PatientService
         }
         public async Task<DisplayPatientDTO> GetSpecificPatient(int ID)
         {
+            DateTime date = new DateTime(2000, 1, 1);
+            var compSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Found!");
+            var cardExpireAfter = compSettings.CardExpireAfter;
             var patients = await _context.Patients.
                                                  Where(pp => pp.PatientId == ID)
                                                 .FirstOrDefaultAsync();
+            var patientCard = await _context.PatientCards.Where(p => p.PatientID == ID).FirstOrDefaultAsync();
+            var boolcheck = false;
+            if (patientCard == null)
+            {
+                boolcheck = true;
+            }
+            else if (patientCard.CreatedAT < DateTime.Now.AddDays(-cardExpireAfter))
+            {
+                boolcheck = true;
+            }
             var PatientProfile = await _context.patientProfiles
                                                 .Where(pp=> pp.Patient_Id == ID)
                                                 .FirstOrDefaultAsync();
+            
+            var procedure = await _context.Procedures.Where(p=> p.ProcedureName == "card" || p.ProcedureName == "Card" || p.ProcedureName == "CARD")
+                .FirstOrDefaultAsync(); 
+
+            
             var patientDTO = new DisplayPatientDTO
             {
                 PatientId = patients.PatientId,
@@ -136,7 +159,12 @@ namespace DentalClinic.Services.PatientService
                 MedicalHistory = PatientProfile.MedicalHistory,
                 Chronics = PatientProfile.Chronics,
                 Allergies = PatientProfile.Allergies,
+                CreatedAt = patients.CreatedAt,
+                UpdatedAt = patients.UpdatedAt ?? date,
+                CardNeeded = boolcheck,
+
             };
+            
             return patientDTO;
         }
 

@@ -52,6 +52,7 @@ namespace DentalClinic.Services.PaymentService
                 };
 
 
+
                 if (DTO.IsCredit == true)
                 {
                     var compSet = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company settings not set!!!");
@@ -105,6 +106,9 @@ namespace DentalClinic.Services.PaymentService
                     Discount = DTO.Discount,
                     PaymentDate = DTO.DateTime,
                     IsCredit = DTO.IsCredit,
+                    ReferenceNumber = DTO.ReferenceNumber,
+                    ImageAttachment = DTO.ImageAttachment,
+                    MobileBanking = DTO.MobileBanking
                 };
                 _context.MedicalRecords.Add(newMedicalRecord);
                 _context.Payments.Add(newPayment);
@@ -154,14 +158,21 @@ namespace DentalClinic.Services.PaymentService
                 }
 
             }
-
             var procedureIDS = DTO.ProcedureIDs;
             var Quantities = DTO.Quantity;
+            var cards = await _context.Procedures.Where(p => p.ProcedureName == "card" || p.ProcedureName == "Card" || p.ProcedureName == "CARD").FirstOrDefaultAsync();
+            if (record.IsCard == true)
+            {
+                int[] val = { cards.ProcedureID };
+                int[] qua = { 1 };
+                procedureIDS = val.Concat(procedureIDS).ToArray();
+                Quantities =  qua.Concat(Quantities).ToArray();
+            }
+
+
 
             record.Quantities = JsonSerializer.Serialize(Quantities); 
             record.ProcedureIDs = JsonSerializer.Serialize(procedureIDS);
-
-
             var payment = new Payment
             {
                 IssuedByID = DTO.IssuedByID,
@@ -172,6 +183,9 @@ namespace DentalClinic.Services.PaymentService
                 Discount = DTO.Discount,
                 PaymentDate = DTO.DateTime,
                 IsCredit = DTO.IsCredit,
+                ReferenceNumber = DTO.ReferenceNumber,
+                ImageAttachment = DTO.ImageAttachment,
+                MobileBanking = DTO.MobileBanking
             };
             record.IsPaid = true;
             _context.MedicalRecords.Update(record);

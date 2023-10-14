@@ -1,4 +1,6 @@
-﻿namespace DentalClinic.DTOs.PatientDTO
+﻿using DentalClinic.Models;
+
+namespace DentalClinic.DTOs.PatientDTO
 {
     public class DisplayPatientDTO
     {
@@ -18,5 +20,9 @@
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+        public bool CardNeeded { get; set; }
+
+        public Procedure? Procedure { get; set; }
     }
 }

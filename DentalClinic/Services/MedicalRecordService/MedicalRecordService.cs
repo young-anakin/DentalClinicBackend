@@ -56,7 +56,7 @@ namespace DentalClinic.Services.MedicalRecordService
                 };
                 await _context.PatientCards.AddAsync(pc);
                 Procedure cardProcedure = await _context.Procedures
-                        .Where(pr => pr.ProcedureName == "card")  // Replace with actual ID
+                        .Where(pr => pr.ProcedureName == "card" || pr.ProcedureName == "CARD" || pr.ProcedureName == "Card")  // Replace with actual ID
                         .FirstOrDefaultAsync()??throw new KeyNotFoundException("card Procedure must be added to Treatments!!!");
 
                 if (cardProcedure != null)

@@ -22,5 +22,11 @@
         public DateTime DateTime { get; set; } = DateTime.Now;
 
         public bool IsCredit { get; set; }
+
+        public string? ReferenceNumber { get; set; }
+
+        public string? MobileBanking { get; set; }
+
+        public string? ImageAttachment { get; set; }
     }
 }

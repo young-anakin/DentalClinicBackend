@@ -26,7 +26,11 @@ namespace DentalClinic.Models
 
         public bool IsCredit { get; set; } = false;
 
-        public MobileBanking? mobileBanking { get; set; }
+        public string? MobileBanking { get; set; }
+
+        public string? ReferenceNumber { get; set; }
+
+        public string? ImageAttachment { get; set; }
          
         }
     }
