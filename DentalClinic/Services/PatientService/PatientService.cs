@@ -4,6 +4,7 @@ using DentalClinic.Models;
 using DentalClinic.DTOs.PatientDTO;
 using Microsoft.EntityFrameworkCore;
 using DentalClinic.Services.Tools;
+using DentalClinic.Migrations;
 
 namespace DentalClinic.Services.PatientService
 {
@@ -22,6 +23,9 @@ namespace DentalClinic.Services.PatientService
         {
             var patient = _mapper.Map<Patient>(patientDTO);
             patient.CreatedAt = DateTime.Now;
+            DateTime date = new DateTime(2000, 1, 1);
+
+            patient.UpdatedAt = date;
             if (patientDTO.Age == 0)
             {
                 patient.Age = _toolsService.CalculateAge(patientDTO.DateOfBirth);
@@ -44,6 +48,7 @@ namespace DentalClinic.Services.PatientService
                                                  .Include(p=>p.Appointments)
                                                  .Include(p => p.Profile)
                                                  .Include(p=>p.MedicalRecords)
+                                                 .Include(p=> p.Credits)
                                                 .FirstOrDefaultAsync();
             if (patient != null)
             {
@@ -87,7 +92,8 @@ namespace DentalClinic.Services.PatientService
         }
         public async Task<List<DisplayPatientDTO>> GetAllPatients()
         {
-        var patients = await _context.Patients.OrderByDescending(c=> c.CreatedAt)
+            DateTime date = new DateTime(2000, 1, 1);
+            var patients = await _context.Patients.OrderByDescending(c=> c.UpdatedAt)
                 .ToListAsync();
             // Create a list of PatientDTO with calculated ages
             var patientDTOs = patients.Select(p => new DisplayPatientDTO
@@ -100,7 +106,11 @@ namespace DentalClinic.Services.PatientService
                 Country = p.Country,
                 City = p.City,
                 Subcity = p.Subcity,
-                Address = p.Address
+                Address = p.Address,
+                CreatedAt = p.CreatedAt,
+                UpdatedAt = p.UpdatedAt ?? date
+
+
             }).ToList();
             return patientDTOs;
         }

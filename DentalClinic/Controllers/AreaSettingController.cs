@@ -47,6 +47,7 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
+
         [HttpPost("City")]
         public async Task<ActionResult> SetCity(AddCityDTO cityDTO)
         {
@@ -227,6 +228,78 @@ namespace DentalClinic.Controllers
             try
             {
                 return Ok(await _areaSettingService.GetSubCities());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPut("SubCity")]
+        public async Task<ActionResult> UpdateSubCity(UpdateAreaSettingDTO DTO)
+        {
+            try
+            {
+                return Ok(await _areaSettingService.UpdateSubCity(DTO));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPut("City")]
+        public async Task<ActionResult> UpdateCity(UpdateAreaSettingDTO DTO)
+        {
+            try
+            {
+                return Ok(await _areaSettingService.UpdateCity(DTO));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message); // Patient/Dentist/ActionBy Not Found
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message); // Appointment start time in the past
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message); // Dentist or ActionBy already has an appointment
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPut("Country")]
+        public async Task<ActionResult> UpdateCountry(UpdateAreaSettingDTO DTO)
+        {
+            try
+            {
+                return Ok(await _areaSettingService.UpdateCountry(DTO));
             }
             catch (KeyNotFoundException ex)
             {

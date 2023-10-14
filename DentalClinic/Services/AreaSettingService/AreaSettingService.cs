@@ -41,6 +41,14 @@ namespace DentalClinic.Services.AreaSettingService
                                         .ToListAsync();
             return LiofCountries;
         }
+        public async Task<Country> UpdateCountry(UpdateAreaSettingDTO DTO)
+        {
+            var country = await _context.Countries.Where(c=> c.CountryID == DTO.AreaID).FirstOrDefaultAsync()?? throw new KeyNotFoundException("Country Not Found");
+            country.CountryName = DTO.AreaName;
+            _context.Countries.Update(country);
+            await _context.SaveChangesAsync();
+            return country;
+        }
         public async Task<City> SetCity(AddCityDTO cityDTO)
         {
 
@@ -65,6 +73,14 @@ namespace DentalClinic.Services.AreaSettingService
                             .Where(c => c.CityId == cityID)
                             .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Country Not Found!");
             _context.Cities.Remove(city);
+            await _context.SaveChangesAsync();
+            return city;
+        }
+        public async Task<City> UpdateCity(UpdateAreaSettingDTO DTO)
+        {
+            var city = await _context.Cities.Where(c => c.CityId == DTO.AreaID).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("City Not Found");
+            city.CityName = DTO.AreaName;
+            _context.Cities.Update(city);
             await _context.SaveChangesAsync();
             return city;
         }
@@ -97,6 +113,14 @@ namespace DentalClinic.Services.AreaSettingService
                                         .ToListAsync();
             return subcity;
 
+        }
+        public async Task<SubCity> UpdateSubCity(UpdateAreaSettingDTO DTO)
+        {
+            var subCity = await _context.SubCities.Where(c => c.SubCityID == DTO.AreaID).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("City Not Found");
+            subCity.SubCityName = DTO.AreaName;
+            _context.SubCities.Update(subCity);
+            await _context.SaveChangesAsync();
+            return subCity;
         }
 
 

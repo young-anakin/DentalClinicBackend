@@ -14,5 +14,8 @@ namespace DentalClinic.Services.AreaSettingService
         Task<City> SetCity(AddCityDTO cityDTO);
         Task<Country> SetCountry(AddCountryDTO countryDTO);
         Task<SubCity> SetSubCity(AddSubCityDTO subCityDTO);
+        Task<City> UpdateCity(UpdateAreaSettingDTO DTO);
+        Task<Country> UpdateCountry(UpdateAreaSettingDTO DTO);
+        Task<SubCity> UpdateSubCity(UpdateAreaSettingDTO DTO);
     }
 }

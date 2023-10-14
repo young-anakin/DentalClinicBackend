@@ -24,6 +24,9 @@ namespace DentalClinic.Services.MedicalRecordService
         public async Task<MedicalRecord> AddMedicalRecord(AddMedicalRecordDTO recordDTO)
         {
             var record = _mapper.Map<MedicalRecord>(recordDTO);
+            var patient = await _context.Patients.Where(p => p.PatientId == recordDTO.PatientId).FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Patient Not Found");
+            patient.UpdatedAt = DateTime.Now;
+            _context.Patients.Update(patient);
             int cardExpireAfter = 14;
             decimal totalPrice = 0;
             List<Procedure> proceduresList = new List<Procedure>();

@@ -27,6 +27,7 @@ namespace DentalClinic.Services.PaymentService
             var record = await _context.MedicalRecords
                                         .Where(a => a.Medical_RecordID == DTO.MedicalRecordID)
                                         .FirstOrDefaultAsync();
+
             if (record == null)
             {
                 var flag = false;
@@ -159,6 +160,7 @@ namespace DentalClinic.Services.PaymentService
 
             record.Quantities = JsonSerializer.Serialize(Quantities); 
             record.ProcedureIDs = JsonSerializer.Serialize(procedureIDS);
+
 
             var payment = new Payment
             {
