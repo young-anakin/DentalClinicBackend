@@ -78,6 +78,21 @@ namespace DentalClinic.Services.AppointmentService
             appointment.ActionBy = ActionBY;
             appointment.Dentist = Dentist;
 
+            var appointmentLog = new AppointmentLog
+            {
+                AppointmentId = appointment.AppointmentId,
+                PatientName = appointment.Patient.PatientFullName,
+                DentistName = appointment.Dentist.EmployeeName,
+                AppointmentSetDate = appointment.AppointmentSetDate,
+                AppointmentStartTime = appointment.AppointmentStartTime,
+                AppointmentEndTime = appointment.AppointmentEndTime,
+                ActionByName = appointment.ActionBy.EmployeeName,
+                AllDay = appointment.AllDay,
+                ActionName = appointment.ActionName,
+                LogDate = DateTime.Now
+            };
+            _context.AppointmentLogs.Add(appointmentLog);
+
             await _context.Appointments.AddAsync(appointment);
 
             await _context.SaveChangesAsync();
@@ -143,11 +158,30 @@ namespace DentalClinic.Services.AppointmentService
 
             return appointments;
         }
-        public async Task<Appointment> DeleteAppointment(int AppID)
+        public async Task<Appointment> DeleteAppointment(AppointmentVerificationDTO DTO)
         {
             var appointment = await _context.Appointments
-                                    .Where(ap=> ap.AppointmentId == AppID)
+                                    .Where(ap=> ap.AppointmentId == DTO.AppointmentID)
+                                    .Include(ap=> ap.Patient)
+                                    .Include(ap=> ap.ActionBy)
+                                    .Include(ap=> ap.Dentist)
                                     .FirstOrDefaultAsync()?? throw new KeyNotFoundException("Appointment Not Found!");
+
+
+            AppointmentLog appointmentLog = new AppointmentLog
+            {
+                AppointmentId = appointment.AppointmentId,
+                PatientName = appointment.Patient.PatientFullName,
+                DentistName = appointment.Dentist.EmployeeName,
+                AppointmentSetDate = appointment.AppointmentSetDate,
+                AppointmentStartTime = appointment.AppointmentStartTime,
+                AppointmentEndTime = appointment.AppointmentEndTime,
+                ActionByName = appointment.ActionBy.EmployeeName,
+                AllDay = appointment.AllDay,
+                ActionName = DTO.ActionName,
+                LogDate = DateTime.Now
+            };
+            _context.AppointmentLogs.Add(appointmentLog);
             _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();
             return appointment;
@@ -156,12 +190,75 @@ namespace DentalClinic.Services.AppointmentService
         {
             var appointment = await _context.Appointments
                                     .Where(ap => ap.AppointmentId == appointmentDTO.AppointmentID)
+                                    .Include(ap=> ap.Patient)
+                                    .Include(ap=> ap.ActionBy)
+                                    .Include(ap=> ap.Dentist)
                                     .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Appointment Not Found");
             appointment = _mapper.Map(appointmentDTO, appointment);
 
+            var patient = await _context.Patients
+                                                .Where(a => a.PatientId == appointmentDTO.PatientID)
+                                                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Patient Not Found");
+
+            var Dentist = await _context.Employees
+                                                .Where(e => e.EmployeeId == appointmentDTO.DentistID)
+                                                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Dentist Not Found");
+
+            var ActionBY = await _context.Employees
+                                                .Where(e => e.EmployeeId == appointmentDTO.ActionByID)
+                                                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("ActionBy Not Found");
+
+            AppointmentLog appointmentLog = new AppointmentLog
+            {
+                AppointmentId = appointment.AppointmentId,
+                PatientName =  patient.PatientFullName,
+                DentistName = Dentist.EmployeeName,
+                AppointmentSetDate = appointment.AppointmentSetDate,
+                AppointmentStartTime = appointment.AppointmentStartTime,
+                AppointmentEndTime = appointment.AppointmentEndTime,
+                ActionByName = ActionBY.EmployeeName,
+                AllDay = appointment.AllDay,
+                ActionName = appointment.ActionName,
+                LogDate = DateTime.Now
+            };
+            _context.AppointmentLogs.Add(appointmentLog);
             _context.Appointments.Update(appointment); 
             await _context.SaveChangesAsync();
             return appointment;
+        }
+
+        public async Task<Appointment> AppointmentMake(AppointmentVerificationDTO DTO)
+        {
+            var appointment = await _context.Appointments
+                                            .Where(ap=> ap.AppointmentId == DTO.AppointmentID)
+                                            .Include(ap => ap.Patient)
+                                            .Include(ap => ap.ActionBy)
+                                            .Include(ap => ap.Dentist)
+                                            .FirstOrDefaultAsync()?? throw new KeyNotFoundException("Appointment Not Found");
+            appointment.ActionName = DTO.ActionName;
+
+            AppointmentLog appointmentLog = new AppointmentLog
+            {
+                AppointmentId = appointment.AppointmentId,
+                PatientName = appointment.Patient.PatientFullName,
+                DentistName = appointment.Dentist.EmployeeName,
+                AppointmentSetDate = appointment.AppointmentSetDate,
+                AppointmentStartTime = appointment.AppointmentStartTime,
+                AppointmentEndTime = appointment.AppointmentEndTime,
+                ActionByName = appointment.ActionBy.EmployeeName,
+                AllDay = appointment.AllDay,
+                ActionName = DTO.ActionName,
+                LogDate = DateTime.Now
+            };
+            _context.AppointmentLogs.Add(appointmentLog);
+            _context.Appointments.Update(appointment);
+            await _context.SaveChangesAsync();
+            return appointment;
+        }
+        public async Task<List<AppointmentLog>> GetAppointmentLog()
+        {
+            var Log = await _context.AppointmentLogs.OrderByDescending(c=> c.LogDate).ToListAsync();
+            return Log;
         }
 
     }

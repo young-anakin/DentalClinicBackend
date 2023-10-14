@@ -10,7 +10,6 @@ namespace DentalClinic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly IAppointmentService _appointmentService;
@@ -96,8 +95,34 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
+        [HttpGet("GetAppointmentLog")]
+        public async Task<ActionResult> GetAppointmentLog()
+        {
+            try
+            {
+                return Ok(await _appointmentService.GetAppointmentLog());
+
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
         [HttpDelete]
-        public async Task<ActionResult> DeleteAppointment (int appointmentID)
+        public async Task<ActionResult> DeleteAppointment (AppointmentVerificationDTO appointmentID)
         {
             try
             {
@@ -128,6 +153,31 @@ namespace DentalClinic.Controllers
             {
 
                 return Ok(await _appointmentService.UpdateAppointment(appointmentDTO));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
+        [HttpPut("AppointmentMakeAction")]
+        public async Task<ActionResult> UpdateAppointmentMakeAction(AppointmentVerificationDTO appointmentDTO)
+        {
+            try
+            {
+
+                return Ok(await _appointmentService.AppointmentMake(appointmentDTO));
             }
             catch (KeyNotFoundException ex)
             {

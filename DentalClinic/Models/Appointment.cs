@@ -22,5 +22,6 @@ namespace DentalClinic.Models
         public Employee? ActionBy { get; set; } 
         public string ActionName { get; set; } = string.Empty;
         public bool AllDay { get; set; }
+
     }
 }

@@ -4,6 +4,7 @@ using DentalClinic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DentalClinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231014215423_isDeletedAddedtoAppointment")]
+    partial class isDeletedAddedtoAppointment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,6 +55,9 @@ namespace DentalClinic.Migrations
                     b.Property<int?>("DentistID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PatientID")
                         .HasColumnType("int");
 
@@ -64,49 +70,6 @@ namespace DentalClinic.Migrations
                     b.HasIndex("PatientID");
 
                     b.ToTable("Appointments");
-                });
-
-            modelBuilder.Entity("DentalClinic.Models.AppointmentLog", b =>
-                {
-                    b.Property<int>("LogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogID"));
-
-                    b.Property<string>("ActionByName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActionName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("AllDay")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("AppointmentEndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AppointmentSetDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("AppointmentStartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DentistName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LogDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PatientName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LogID");
-
-                    b.ToTable("AppointmentLogs");
                 });
 
             modelBuilder.Entity("DentalClinic.Models.City", b =>

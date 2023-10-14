@@ -25,7 +25,7 @@ namespace DentalClinic.Services.PatientService
             patient.CreatedAt = DateTime.Now;
             DateTime date = new DateTime(2000, 1, 1);
 
-            patient.UpdatedAt = date;
+            patient.UpdatedAt = DateTime.Now;
             if (patientDTO.Age == 0)
             {
                 patient.Age = _toolsService.CalculateAge(patientDTO.DateOfBirth);

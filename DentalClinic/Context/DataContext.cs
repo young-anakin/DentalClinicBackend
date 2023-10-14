@@ -34,7 +34,7 @@ namespace DentalClinic.Context
 
         public DbSet<City> Cities { get; set; }
         public DbSet<SubCity> SubCities { get; set; }
-
+        public DbSet<AppointmentLog> AppointmentLogs { get; set; }
         public DbSet<CompanySetting> CompanySettings { get; set; }
 
         public DbSet<PaymentType> paymentTypes { get; set; }
