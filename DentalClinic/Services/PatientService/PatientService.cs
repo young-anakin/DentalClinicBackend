@@ -144,6 +144,7 @@ namespace DentalClinic.Services.PatientService
             var procedure = await _context.Procedures.Where(p=> p.ProcedureName == "card" || p.ProcedureName == "Card" || p.ProcedureName == "CARD")
                 .FirstOrDefaultAsync(); 
 
+
             
             var patientDTO = new DisplayPatientDTO
             {
@@ -162,7 +163,7 @@ namespace DentalClinic.Services.PatientService
                 CreatedAt = patients.CreatedAt,
                 UpdatedAt = patients.UpdatedAt ?? date,
                 CardNeeded = boolcheck,
-
+                Procedure = procedure,
             };
             
             return patientDTO;
