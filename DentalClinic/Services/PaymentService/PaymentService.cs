@@ -33,10 +33,29 @@ namespace DentalClinic.Services.PaymentService
                 var flag = false;
                 var card = await _context.Procedures.Where(p => p.ProcedureName == "card" || p.ProcedureName == "Card" || p.ProcedureName == "CARD").FirstOrDefaultAsync();
                 var arr = DTO.ProcedureIDs;
-                if (arr.Contains(card.ProcedureID))
+                var patientCard = await _context.PatientCards.Where(p => p.PatientID == DTO.PatientID).FirstOrDefaultAsync();
+                var CompanySetting = await _context.CompanySettings.FirstOrDefaultAsync();
+                var cardExpireAfter = CompanySetting.CardExpireAfter;
+                if (patientCard == null)
                 {
+                    var pc = new PatientCard
+                    {
+                        PatientID = DTO.PatientID,
+                        CreatedAT = DateTime.Now,
+                    };
+                    await _context.PatientCards.AddAsync(pc);
                     flag = true;
+
                 }
+                else if (patientCard != null && patientCard.CreatedAT < DateTime.Now.AddDays(-cardExpireAfter))
+                {
+
+                    patientCard.CreatedAT = DateTime.Now;
+                    _context.PatientCards.Update(patientCard);
+                    flag = true;
+
+                }
+
                 var newMedicalRecord = new MedicalRecord
                 {
                     Date = DateTime.Now,
@@ -108,7 +127,7 @@ namespace DentalClinic.Services.PaymentService
                     IsCredit = DTO.IsCredit,
                     ReferenceNumber = DTO.ReferenceNumber,
                     ImageAttachment = DTO.ImageAttachment,
-                    MobileBanking = DTO.MobileBanking
+                    MobileBanking = DTO.MobileBanking,
                 };
                 _context.MedicalRecords.Add(newMedicalRecord);
                 _context.Payments.Add(newPayment);
@@ -188,6 +207,7 @@ namespace DentalClinic.Services.PaymentService
                 MobileBanking = DTO.MobileBanking
             };
             record.IsPaid = true;
+            record.IsCard = false;
             _context.MedicalRecords.Update(record);
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();

@@ -266,6 +266,21 @@ namespace DentalClinic.Services.AppointmentService
             var Log = await _context.AppointmentLogs.OrderByDescending(c=> c.LogDate).ToListAsync();
             return Log;
         }
+        public async Task<List<Appointment>> EarlyReminder()
+        {
+            var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
+            var EarlyReminderDays = CompSettings.EarlyReminderDate;
+
+            var StartDate = DateTime.Today.AddDays(-EarlyReminderDays); // Calculate the start date for the range
+
+            var AppointmentsWithinVicinity = await _context.Appointments
+                .Where(ap => ap.AppointmentStartTime.Date >= StartDate && ap.AppointmentStartTime.Date <= DateTime.Today)
+                .ToListAsync();
+
+            return AppointmentsWithinVicinity;
+        }
+
+
 
     }
 }
