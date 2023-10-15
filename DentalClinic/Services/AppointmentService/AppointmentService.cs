@@ -240,7 +240,8 @@ namespace DentalClinic.Services.AppointmentService
                                             .Include(ap => ap.ActionBy)
                                             .Include(ap => ap.Dentist)
                                             .FirstOrDefaultAsync()?? throw new KeyNotFoundException("Appointment Not Found");
-            appointment.ActionName = DTO.ActionName;
+            //appointment.ActionName = DTO.ActionName;
+            appointment.ActivityName = DTO.ActionName;
 
             AppointmentLog appointmentLog = new AppointmentLog
             {
