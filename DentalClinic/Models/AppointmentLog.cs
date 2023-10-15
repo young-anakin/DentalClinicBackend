@@ -17,6 +17,8 @@ namespace DentalClinic.Models
         public string? ActionName { get; set; } 
         public bool AllDay { get; set; }
 
+        public string ActivityName { get; set; } = string.Empty;
+
         public DateTime LogDate { get; set; }
     }
 }

@@ -73,6 +73,7 @@ namespace DentalClinic.Services.AppointmentService
                 AppointmentStartTime = appointmentDTO.AppointmentStartTime,
                 AppointmentEndTime = appointmentDTO.AppointmentEndTime,
                 ActionName = appointmentDTO.ActionName,
+                ActivityName = appointmentDTO.ActivityName,
             };
             appointment.Patient = patient;
             appointment.ActionBy = ActionBY;
@@ -89,7 +90,8 @@ namespace DentalClinic.Services.AppointmentService
                 ActionByName = appointment.ActionBy.EmployeeName,
                 AllDay = appointment.AllDay,
                 ActionName = appointment.ActionName,
-                LogDate = DateTime.Now
+                LogDate = DateTime.Now,
+                ActivityName = appointmentDTO.ActivityName
             };
             _context.AppointmentLogs.Add(appointmentLog);
 
@@ -118,6 +120,7 @@ namespace DentalClinic.Services.AppointmentService
                                             DentistID = appointment.DentistID,
                                             AppointmentSetDate = appointment.AppointmentSetDate,
                                             ActionBy = appointment.ActionBy,
+                                            ActivityName = appointment.ActivityName
 
                                         })
                                         .ToListAsync();
@@ -144,7 +147,7 @@ namespace DentalClinic.Services.AppointmentService
                                             DentistID = appointment.DentistID,
                                             AppointmentSetDate = appointment.AppointmentSetDate,
                                             ActionBy = appointment.ActionBy,
-
+                                            ActivityName= appointment.ActivityName
                                         })
                                         .ToListAsync();
             return appointments;
@@ -179,7 +182,8 @@ namespace DentalClinic.Services.AppointmentService
                 ActionByName = appointment.ActionBy.EmployeeName,
                 AllDay = appointment.AllDay,
                 ActionName = DTO.ActionName,
-                LogDate = DateTime.Now
+                LogDate = DateTime.Now,
+                ActivityName = DTO.ActionName
             };
             _context.AppointmentLogs.Add(appointmentLog);
             _context.Appointments.Remove(appointment);
@@ -219,7 +223,8 @@ namespace DentalClinic.Services.AppointmentService
                 ActionByName = ActionBY.EmployeeName,
                 AllDay = appointment.AllDay,
                 ActionName = appointment.ActionName,
-                LogDate = DateTime.Now
+                LogDate = DateTime.Now,
+                ActivityName = appointment.ActivityName
             };
             _context.AppointmentLogs.Add(appointmentLog);
             _context.Appointments.Update(appointment); 
@@ -248,7 +253,8 @@ namespace DentalClinic.Services.AppointmentService
                 ActionByName = appointment.ActionBy.EmployeeName,
                 AllDay = appointment.AllDay,
                 ActionName = DTO.ActionName,
-                LogDate = DateTime.Now
+                LogDate = DateTime.Now,
+                ActivityName = appointment.ActivityName
             };
             _context.AppointmentLogs.Add(appointmentLog);
             _context.Appointments.Update(appointment);

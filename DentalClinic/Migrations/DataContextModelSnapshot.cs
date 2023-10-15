@@ -37,6 +37,9 @@ namespace DentalClinic.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ActivityName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("AllDay")
                         .HasColumnType("bit");
 
@@ -78,6 +81,10 @@ namespace DentalClinic.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ActionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActivityName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("AllDay")

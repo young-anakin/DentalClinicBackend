@@ -23,5 +23,7 @@ namespace DentalClinic.Models
         public string ActionName { get; set; } = string.Empty;
         public bool AllDay { get; set; }
 
+        public string? ActivityName { get; set; }
+
     }
 }

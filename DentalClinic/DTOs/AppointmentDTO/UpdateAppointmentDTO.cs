@@ -11,6 +11,7 @@
         public int? ActionByID { get; set; }
         public string ActionName { get; set; } = string.Empty;
         public bool AllDay { get; set; }
+        public string ActivityName { get; set; } = string.Empty;
 
     }
 }
