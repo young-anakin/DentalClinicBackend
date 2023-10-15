@@ -181,7 +181,7 @@ namespace DentalClinic.Services.AppointmentService
                 AppointmentEndTime = appointment.AppointmentEndTime,
                 ActionByName = appointment.ActionBy.EmployeeName,
                 AllDay = appointment.AllDay,
-                ActionName = DTO.ActionName,
+                ActionName = appointment.ActionName,
                 LogDate = DateTime.Now,
                 ActivityName = DTO.ActionName
             };
@@ -252,9 +252,9 @@ namespace DentalClinic.Services.AppointmentService
                 AppointmentEndTime = appointment.AppointmentEndTime,
                 ActionByName = appointment.ActionBy.EmployeeName,
                 AllDay = appointment.AllDay,
-                ActionName = DTO.ActionName,
+                ActionName = appointment.ActionName,
                 LogDate = DateTime.Now,
-                ActivityName = appointment.ActivityName
+                ActivityName = DTO.ActionName
             };
             _context.AppointmentLogs.Add(appointmentLog);
             _context.Appointments.Update(appointment);
