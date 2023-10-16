@@ -27,13 +27,13 @@ namespace DentalClinic.Services.ReportService
         {
             DateTime startDate = DateTime.Now;
             DateTime endDate = DateTime.Now;
+
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
                 startDate = DateTime.Now.AddDays(-1);
                 endDate = DateTime.Now;
             }
-
-            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
                 startDate = DateTime.Now.AddDays(-6);
                 endDate = DateTime.Now;
@@ -58,22 +58,25 @@ namespace DentalClinic.Services.ReportService
                 startDate = DTO.StartDate;
                 endDate = DTO.EndDate;
             }
+
             var data = _context.Patients
                 .Where(patient =>
                     (patient.CreatedAt >= startDate) &&
                     (patient.CreatedAt <= endDate) &&
-                    (DTO.CityName != "All" || patient.City == DTO.CityName) &&
-                    (DTO.CountryName == "All" || patient.Country == DTO.CountryName))
+                    (DTO.CityName.Equals("All", StringComparison.OrdinalIgnoreCase) || patient.City == DTO.CityName || DTO.CountryName.Equals("All", StringComparison.OrdinalIgnoreCase) || patient.Country == DTO.CountryName))
+
                 .GroupBy(p => p.Subcity)
-                            .Select(g => new
-                    {
-                        SubCity = g.Key,
-                        Male = g.Count(p => p.Gender == "Male"),
-                        Female = g.Count(p => p.Gender == "Female")
-                    })
-                    .ToList();
+                .Select(g => new
+                {
+                    SubCity = g.Key,
+                    Male = g.Count(p => p.Gender == "Male"),
+                    Female = g.Count(p => p.Gender == "Female")
+                })
+                .ToList();
+
             return data.Cast<object>().ToList();
         }
+
         //public async Task<RevenuesDisplayDTO> Revenues()
         //{
         //    List<Payment> payments = await _context.Payments.ToListAsync();
