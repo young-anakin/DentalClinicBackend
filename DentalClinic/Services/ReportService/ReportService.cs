@@ -373,6 +373,22 @@ namespace DentalClinic.Services.ReportService
 
             return data.Cast<Object>().ToList();
         }
+        public async Task<List<Object>> TotalActiveInactiveEmployeesByRole()
+        {
+            var data = await _context.Roles
+                .Include(role => role.UserAccounts)
+                    .ThenInclude(userAccount => userAccount.Employee)
+                .Select(role => new
+                {
+                    RoleName = role.RoleName,
+                    ActiveCount = role.UserAccounts.Count(u => u.Employee != null && u.Employee.IsCurrentlyActive),
+                    InactiveCount = role.UserAccounts.Count(u => u.Employee != null && !u.Employee.IsCurrentlyActive)
+                })
+                .ToListAsync();
+
+            return data.Cast<Object>().ToList();
+        }
+
 
 
 
