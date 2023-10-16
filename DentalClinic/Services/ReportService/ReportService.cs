@@ -4,6 +4,7 @@ using DentalClinic.DTOs.ReportDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.Tools;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace DentalClinic.Services.ReportService
 {
@@ -392,6 +393,54 @@ namespace DentalClinic.Services.ReportService
 
             return data.Cast<Object>().ToList();
         }
+        public async Task<List<ProcedureUsage>> GetProcedureUsage()
+        {
+            List<ProcedureUsage> procedureUsageList = new List<ProcedureUsage>();
+            var _medicalRecords = await _context.MedicalRecords.Include(p=> p.Patient).ToListAsync();
+
+
+            foreach (var record in _medicalRecords)
+            {
+                var procedureIds = string.IsNullOrEmpty(record.ProcedureIDs) ? new int[] { 1 } : JsonSerializer.Deserialize<int[]>(record.ProcedureIDs);
+
+                foreach (var procedureId in procedureIds)
+                {
+                    var procedureName =  GetProcedureNameById(procedureId).ToString();
+
+                    var existingUsage = procedureUsageList.FirstOrDefault(p => p.Procedures == procedureName);
+
+                    if (existingUsage != null)
+                    {
+                        if (record.Patient.Gender.Equals("Male", StringComparison.OrdinalIgnoreCase)) // Assuming PatientId is used for gender differentiation
+                            existingUsage.Male++;
+                        else
+                            existingUsage.Female++;
+                    }
+                    else
+                    {
+                        var usage = new ProcedureUsage
+                        {
+                            Procedures = procedureName,
+                            Male = record.PatientId % 2 == 0 ? 1 : 0,
+                            Female = record.PatientId % 2 != 0 ? 1 : 0
+                        };
+                        procedureUsageList.Add(usage);
+                    }
+                }
+            }
+
+            return procedureUsageList;
+        }
+        private async Task<string> GetProcedureNameById(int procedureId)
+        {
+            var procedure = await _context.Procedures
+                .Where(p => p.ProcedureID == procedureId)
+                .FirstOrDefaultAsync();
+            var name = procedure.ProcedureName.ToString();
+
+            return name;
+        }
+
 
 
 
