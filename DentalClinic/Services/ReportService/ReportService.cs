@@ -23,11 +23,44 @@ namespace DentalClinic.Services.ReportService
         //{
         //    var procedure = await _context.Procedures.Where(p => p.)
         //}
-        public async Task<List<Object>> GenderBySubCity()
+        public async Task<List<Object>> GenderBySubCity(DateTimeRangeDTOForCity DTO)
         {
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-1);
+                endDate = DateTime.Now;
+            }
+
+            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-6);
+                endDate = DateTime.Now;
+            }
+            else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else
+            {
+                startDate = DTO.StartDate;
+                endDate = DTO.EndDate;
+            }
             var data = _context.Patients
-                    .GroupBy(p => p.Subcity)
-                    .Select(g => new
+                .Where(patient =>
+                    (patient.CreatedAt >= startDate) &&
+                    (patient.CreatedAt <= endDate) &&
+                    (DTO.CityName != "All" || patient.City == DTO.CityName) &&
+                    (DTO.CountryName == "All" || patient.Country == DTO.CountryName))
+                .GroupBy(p => p.Subcity)
+                            .Select(g => new
                     {
                         SubCity = g.Key,
                         Male = g.Count(p => p.Gender == "Male"),
@@ -36,22 +69,27 @@ namespace DentalClinic.Services.ReportService
                     .ToList();
             return data.Cast<object>().ToList();
         }
-        public async Task<RevenuesDisplayDTO> Revenues()
-        {
-            List<Payment> payments = await _context.Payments.ToListAsync();
+        //public async Task<RevenuesDisplayDTO> Revenues()
+        //{
+        //    List<Payment> payments = await _context.Payments.ToListAsync();
 
-            decimal totalRevenue = payments.Sum(payment => payment.Total);
+        //    decimal totalRevenue = payments.Sum(payment => payment.Total);
 
-            RevenuesDisplayDTO rv = new RevenuesDisplayDTO
-            {
-                TotalRevenues = totalRevenue,
-            };
-            return rv;
-        }
+        //    RevenuesDisplayDTO rv = new RevenuesDisplayDTO
+        //    {
+        //        TotalRevenues = totalRevenue,
+        //    };
+        //    return rv;
+        //}
         public async Task<RevenuesDisplayDTO> Revenues(DateTimeRangeDTO DTO)
         {
             DateTime startDate = DateTime.Now;
             DateTime endDate = DateTime.Now;
+            if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-1);
+                endDate = DateTime.Now;
+            }
 
             if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
@@ -94,45 +132,106 @@ namespace DentalClinic.Services.ReportService
         }
 
 
-        public async Task<RevenuesDisplayDTO> CollectedAmount()
+        public async Task<RevenuesDisplayDTO> CollectedAmounts(DateTimeRangeDTO DTO)
         {
-            List<Payment> payments = await _context.Payments.Where(r=> r.IsCredit == false).ToListAsync();
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-1);
+                endDate = DateTime.Now;
+            }
+
+            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-6);
+                endDate = DateTime.Now;
+            }
+            else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else
+            {
+                startDate = DTO.StartDate;
+                endDate = DTO.EndDate;
+            }
+
+            List<Payment> payments = await _context.Payments
+                .Where(payment =>
+                    (payment.PaymentDate >= startDate) &&
+                    (payment.PaymentDate <= endDate) && (payment.IsCredit == false))
+                .ToListAsync();
 
             decimal totalRevenue = payments.Sum(payment => payment.Total);
+
+
 
             RevenuesDisplayDTO rv = new RevenuesDisplayDTO
             {
                 TotalRevenues = totalRevenue,
+                // Add other properties as needed (collected amount, credited amount, etc.)
             };
+
             return rv;
         }
-        public async Task<RevenuesDisplayDTO> CreditedAmount()
+        public async Task<RevenuesDisplayDTO> CreditedAmount(DateTimeRangeDTO DTO)
         {
-            List<Payment> payments = await _context.Payments.Where(r => r.IsCredit == true).ToListAsync();
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-1);
+                endDate = DateTime.Now;
+            }
+
+            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-6);
+                endDate = DateTime.Now;
+            }
+            else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else
+            {
+                startDate = DTO.StartDate;
+                endDate = DTO.EndDate;
+            }
+
+            List<Payment> payments = await _context.Payments
+                .Where(payment =>
+                    (payment.PaymentDate >= startDate) &&
+                    (payment.PaymentDate <= endDate) && (payment.IsCredit == true))
+                .ToListAsync();
 
             decimal totalRevenue = payments.Sum(payment => payment.Total);
+
+
 
             RevenuesDisplayDTO rv = new RevenuesDisplayDTO
             {
                 TotalRevenues = totalRevenue,
+                // Add other properties as needed (collected amount, credited amount, etc.)
             };
+
             return rv;
         }
-        //public async Task<Dictionary<string, decimal>> TotalRevenuePerGender()
-        //{
-        //    // Assuming you have a list of Payment objects named payments
-        //    List<Payment> payments = await _context.Payments.Where(r => r.IsCredit == true).ToListAsync();
 
-        //    var totalRevenuePerGender = payments
-        //        .Where(payment => payment.Patient != null && payment.Patient.Gender != null)
-        //        .GroupBy(payment => payment.Patient.Gender)
-        //        .ToDictionary(
-        //            group => group.Key,
-        //            group => group.Sum(payment => payment.Total)
-        //        );
 
-        //    return totalRevenuePerGender;
-        //}
         public async Task<List<Object>> TotalNumberofPatientByGender()
         {
             var data = _context.Patients
@@ -187,9 +286,39 @@ namespace DentalClinic.Services.ReportService
             return data.Cast<Object>().ToList();
         }
 
-        public async Task<List<Object>> TotalRevenuesPerGender()
+        public async Task<List<Object>> TotalRevenuesPerGender(DateTimeRangeDTO DTO)
         {
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-1);
+                endDate = DateTime.Now;
+            }
+            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-6);
+                endDate = DateTime.Now;
+            }
+            else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else
+            {
+                startDate = DTO.StartDate;
+                endDate = DTO.EndDate;
+            }
             var data = await _context.Payments
+                 .Where(payment =>
+                    (payment.PaymentDate >= startDate) &&
+                    (payment.PaymentDate <= endDate) && (payment.IsCredit == true))
                 .Include(p => p.Patient) // Include the related Patient
                 .GroupBy(p => p.Patient.Gender) // Group by patient's gender
                 .Select(g => new

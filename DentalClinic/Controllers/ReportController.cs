@@ -16,13 +16,13 @@ namespace DentalClinic.Controllers
         {
             _reportService = reportService;
         }
-        [HttpGet("GenderedReportBySubCity")]
-        public async Task<ActionResult> GenderedReportBySubCity()
+        [HttpPost("GenderedReportBySubCity")]
+        public async Task<ActionResult> GenderedReportBySubCity(DateTimeRangeDTOForCity DTO)
         {
             try
             {
 
-                return Ok(await _reportService.GenderBySubCity());
+                return Ok(await _reportService.GenderBySubCity(DTO));
             }
             catch (KeyNotFoundException ex)
             {
@@ -66,13 +66,13 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
-        [HttpGet("CollectedAmount")]
-        public async Task<ActionResult> CollecctedAmount()
+        [HttpPost("CollectedAmount")]
+        public async Task<ActionResult> CollecctedAmount(DateTimeRangeDTO DTO)
         {
             try
             {
 
-                return Ok(await _reportService.CollectedAmount());
+                return Ok(await _reportService.CollectedAmounts(DTO));
             }
             catch (KeyNotFoundException ex)
             {
@@ -91,13 +91,13 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
-        [HttpGet("CreditedAmount")]
-        public async Task<ActionResult> CreditedAmount()
+        [HttpPost("CreditedAmount")]
+        public async Task<ActionResult> CreditedAmount(DateTimeRangeDTO DTO)
         {
             try
             {
 
-                return Ok(await _reportService.CreditedAmount());
+                return Ok(await _reportService.CreditedAmount(DTO));
             }
             catch (KeyNotFoundException ex)
             {
@@ -117,12 +117,12 @@ namespace DentalClinic.Controllers
             }
         }
         [HttpGet("TotalRevenuePerGender")]
-        public async Task<ActionResult> TotalRevenuePerGender()
+        public async Task<ActionResult> TotalRevenuePerGender(DateTimeRangeDTO DTO)
         {
             try
             {
 
-                return Ok(await _reportService.TotalRevenuesPerGender());
+                return Ok(await _reportService.TotalRevenuesPerGender(DTO));
             }
             catch (KeyNotFoundException ex)
             {
