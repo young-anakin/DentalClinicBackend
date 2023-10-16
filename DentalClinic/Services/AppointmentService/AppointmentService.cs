@@ -270,16 +270,19 @@ namespace DentalClinic.Services.AppointmentService
         public async Task<List<Appointment>> EarlyReminder()
         {
             var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
-            var EarlyReminderDays = CompSettings.EarlyReminderDate;
+            var EarlyReminderDays = CompSettings.EarlyReminderDate; // stores a value of days such as 1 or 2 
 
             var StartDate = DateTime.Today.AddDays(-EarlyReminderDays); // Calculate the start date for the range
+            var EndDate = DateTime.Today; // Current date
 
-            var AppointmentsWithinVicinity = await _context.Appointments
-                .Where(ap => ap.AppointmentStartTime.Date >= StartDate && ap.AppointmentStartTime.Date <= DateTime.Today)
-                .ToListAsync();
+            // Retrieve appointments within the date range
+            var appointments = await _context.Appointments
+                                    .Where(appointment => appointment.AppointmentStartTime >= StartDate && appointment.AppointmentStartTime <= EndDate)
+                                    .ToListAsync();
 
-            return AppointmentsWithinVicinity;
+            return appointments;
         }
+
 
 
 
