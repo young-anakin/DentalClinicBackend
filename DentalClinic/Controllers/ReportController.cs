@@ -121,7 +121,7 @@ namespace DentalClinic.Controllers
             try
             {
 
-                return Ok(await _reportService.TotalRevenuePerGender());
+                return Ok(await _reportService.TotalRevenuesPerGender());
             }
             catch (KeyNotFoundException ex)
             {

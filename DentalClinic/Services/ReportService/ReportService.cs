@@ -72,21 +72,21 @@ namespace DentalClinic.Services.ReportService
             };
             return rv;
         }
-        public async Task<Dictionary<string, decimal>> TotalRevenuePerGender()
-        {
-            // Assuming you have a list of Payment objects named payments
-            List<Payment> payments = await _context.Payments.Where(r => r.IsCredit == true).ToListAsync();
+        //public async Task<Dictionary<string, decimal>> TotalRevenuePerGender()
+        //{
+        //    // Assuming you have a list of Payment objects named payments
+        //    List<Payment> payments = await _context.Payments.Where(r => r.IsCredit == true).ToListAsync();
 
-            var totalRevenuePerGender = payments
-                .Where(payment => payment.Patient != null && payment.Patient.Gender != null)
-                .GroupBy(payment => payment.Patient.Gender)
-                .ToDictionary(
-                    group => group.Key,
-                    group => group.Sum(payment => payment.Total)
-                );
+        //    var totalRevenuePerGender = payments
+        //        .Where(payment => payment.Patient != null && payment.Patient.Gender != null)
+        //        .GroupBy(payment => payment.Patient.Gender)
+        //        .ToDictionary(
+        //            group => group.Key,
+        //            group => group.Sum(payment => payment.Total)
+        //        );
 
-            return totalRevenuePerGender;
-        }
+        //    return totalRevenuePerGender;
+        //}
         public async Task<List<Object>> TotalNumberofPatientByGender()
         {
             var data = _context.Patients
@@ -141,6 +141,20 @@ namespace DentalClinic.Services.ReportService
             return data.Cast<Object>().ToList();
         }
 
+        public async Task<List<Object>> TotalRevenuesPerGender()
+        {
+            var data = await _context.Payments
+                .Include(p => p.Patient) // Include the related Patient
+                .GroupBy(p => p.Patient.Gender) // Group by patient's gender
+                .Select(g => new
+                {
+                    Gender = g.Key,
+                    TotalRevenue = g.Sum(p => p.Total)
+                })
+                .ToListAsync();
+
+            return data.Cast<Object>().ToList();
+        }
 
 
 
