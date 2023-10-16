@@ -48,6 +48,11 @@ namespace DentalClinic.Services.ReportService
                 startDate = new DateTime(DateTime.Now.Year, 1, 1);
                 endDate = startDate.AddYears(1).AddDays(-1);
             }
+            else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(2000, 1, 1);
+                endDate = DateTime.Now;
+            }
             else
             {
                 startDate = DTO.StartDate;
@@ -106,6 +111,11 @@ namespace DentalClinic.Services.ReportService
                 startDate = new DateTime(DateTime.Now.Year, 1, 1);
                 endDate = startDate.AddYears(1).AddDays(-1);
             }
+            else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(2000, 1, 1);
+                endDate = DateTime.Now;
+            }
             else
             {
                 startDate = DTO.StartDate ;
@@ -157,6 +167,11 @@ namespace DentalClinic.Services.ReportService
                 startDate = new DateTime(DateTime.Now.Year, 1, 1);
                 endDate = startDate.AddYears(1).AddDays(-1);
             }
+            else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(2000, 1, 1);
+                endDate = DateTime.Now;
+            }
             else
             {
                 startDate = DTO.StartDate;
@@ -205,6 +220,11 @@ namespace DentalClinic.Services.ReportService
             {
                 startDate = new DateTime(DateTime.Now.Year, 1, 1);
                 endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(2000, 1, 1);
+                endDate = DateTime.Now;
             }
             else
             {
@@ -310,6 +330,11 @@ namespace DentalClinic.Services.ReportService
                 startDate = new DateTime(DateTime.Now.Year, 1, 1);
                 endDate = startDate.AddYears(1).AddDays(-1);
             }
+            else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(2000, 1, 1);
+                endDate = DateTime.Now;
+            }
             else
             {
                 startDate = DTO.StartDate;
@@ -325,6 +350,24 @@ namespace DentalClinic.Services.ReportService
                 {
                     Gender = g.Key,
                     TotalRevenue = g.Sum(p => p.Total)
+                })
+                .ToListAsync();
+
+            return data.Cast<Object>().ToList();
+        }
+
+        public async Task<List<Object>> GetRoleGenderCounts()
+        {
+            var data = await _context.UserAccounts
+                .Include(u => u.Role)
+                .Include(u => u.Employee)
+                .Where(u => u.Employee != null && u.Employee.EmployeeGender != null)
+                .GroupBy(u => u.Role.RoleName)
+                .Select(g => new
+                {
+                    RoleName = g.Key,
+                    Male = g.Count(u => u.Employee.EmployeeGender == "Male"),
+                    Female = g.Count(u => u.Employee.EmployeeGender == "Female")
                 })
                 .ToListAsync();
 
