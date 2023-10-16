@@ -48,6 +48,52 @@ namespace DentalClinic.Services.ReportService
             };
             return rv;
         }
+        public async Task<RevenuesDisplayDTO> Revenues(DateTimeRangeDTO DTO)
+        {
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+
+            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-6);
+                endDate = DateTime.Now;
+            }
+            else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else
+            {
+                startDate = DTO.StartDate ;
+                endDate = DTO.EndDate ;
+            }
+
+            List<Payment> payments = await _context.Payments
+                .Where(payment =>
+                    (payment.PaymentDate >= startDate) &&
+                    (payment.PaymentDate <= endDate))
+                .ToListAsync();
+
+            decimal totalRevenue = payments.Sum(payment => payment.Total);
+
+
+
+            RevenuesDisplayDTO rv = new RevenuesDisplayDTO
+            {
+                TotalRevenues = totalRevenue,
+                // Add other properties as needed (collected amount, credited amount, etc.)
+            };
+
+            return rv;
+        }
+
+
         public async Task<RevenuesDisplayDTO> CollectedAmount()
         {
             List<Payment> payments = await _context.Payments.Where(r=> r.IsCredit == false).ToListAsync();

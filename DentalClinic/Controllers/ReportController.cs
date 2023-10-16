@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DTOs.ProcedureDTO;
+using DentalClinic.DTOs.ReportDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.ProcedureService;
 using DentalClinic.Services.ReportService;
@@ -40,13 +41,13 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
-        [HttpGet("TotalRevenues")]
-        public async Task<ActionResult> Revenues()
+        [HttpPost("TotalRevenues")]
+        public async Task<ActionResult> Revenues([FromBody]DateTimeRangeDTO DTO)
         {
             try
             {
 
-                return Ok(await _reportService.Revenues());
+                return Ok(await _reportService.Revenues(DTO));
             }
             catch (KeyNotFoundException ex)
             {
