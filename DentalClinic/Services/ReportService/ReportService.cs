@@ -375,6 +375,7 @@ namespace DentalClinic.Services.ReportService
         }
         public async Task<List<Object>> TotalActiveInactiveEmployeesByRole()
         {
+
             var data = await _context.Roles
                 .Include(role => role.UserAccounts)
                     .ThenInclude(userAccount => userAccount.Employee)
