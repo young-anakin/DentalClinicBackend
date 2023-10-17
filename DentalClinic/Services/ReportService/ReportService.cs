@@ -436,6 +436,64 @@ namespace DentalClinic.Services.ReportService
         }
 
         // Inner class private method
+
+        // procedure wise amount
+        public async Task<List<ProcedureRevenue>> GetProcedureRevenues()
+        {
+            List<ProcedureRevenue> procedureRevenueList = new List<ProcedureRevenue>();
+            var _medicalRecords = await _context.MedicalRecords.Include(p => p.Patient).ToListAsync();
+
+            foreach (var record in _medicalRecords)
+            {
+                var procedureIds = string.IsNullOrEmpty(record.ProcedureIDs) ? new int[] { } : JsonSerializer.Deserialize<int[]>(record.ProcedureIDs);
+                var quantities = string.IsNullOrEmpty(record.Quantities) ? new int[] { } : JsonSerializer.Deserialize<int[]>(record.Quantities);
+
+                if (procedureIds.Length != quantities.Length)
+                {
+                    throw new InvalidOperationException("Procedure IDs and Quantities do not match.");
+                }
+
+                for (int i = 0; i < procedureIds.Length; i++)
+                {
+                    int procedureId = procedureIds[i];
+                    int quantity = quantities[i];
+
+                    var procedureName = await GetProcedureNameById(procedureId);
+                    var procedurePrice = await GetProcedurePriceById(procedureId);
+
+                    decimal subtotal = quantity * procedurePrice;
+                    decimal discountAmount = subtotal * (record.DiscountPercent / 100m);
+                    decimal totalAmount = subtotal - discountAmount;
+
+                    var existingProcedure = procedureRevenueList.FirstOrDefault(p => p.Procedure == procedureName);
+
+                    if (existingProcedure != null)
+                    {
+                        existingProcedure.Revenue += totalAmount;
+                    }
+                    else
+                    {
+                        var procedureRevenue = new ProcedureRevenue
+                        {
+                            Procedure = procedureName,
+                            Revenue = totalAmount
+                        };
+                        procedureRevenueList.Add(procedureRevenue);
+                    }
+                }
+            }
+
+            return procedureRevenueList;
+        }
+        // Inner class private method to get procedure price
+        private async Task<decimal> GetProcedurePriceById(int procedureId)
+        {
+            var procedure = await _context.Procedures
+                .Where(p => p.ProcedureID == procedureId)
+                .FirstOrDefaultAsync();
+
+            return (decimal)procedure.Price;
+        }
         private async Task<string> GetProcedureNameById(int procedureId)
         {
             var procedure = await _context.Procedures
@@ -445,10 +503,6 @@ namespace DentalClinic.Services.ReportService
 
             return name;
         }
-
-
-        // procedure wise amount
-
 
 
 
