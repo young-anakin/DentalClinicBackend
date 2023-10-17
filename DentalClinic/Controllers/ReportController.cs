@@ -42,7 +42,7 @@ namespace DentalClinic.Controllers
             }
         }
         [HttpPost("TotalRevenues")]
-        public async Task<ActionResult> Revenues([FromBody]DateTimeRangeDTO DTO)
+        public async Task<ActionResult> Revenues(DateTimeRangeDTO DTO)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
-        [HttpGet("TotalRevenuePerGender")]
+        [HttpPost("TotalRevenuePerGender")]
         public async Task<ActionResult> TotalRevenuePerGender(DateTimeRangeDTO DTO)
         {
             try
