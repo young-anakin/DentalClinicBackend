@@ -264,6 +264,12 @@ namespace DentalClinic.Services.PaymentService
                                             .ToListAsync();
             return PaymentRecord;
         }
+        //public async Task<Credit> LoanExpireDate()
+        //{
+        //    var companySetting = await _context.CompanySettings.FirstOrDefaultAsync();
+        //    var loanExpireDateDay = companySetting.LoanExpireAfter;
+
+        //}
 
         
 

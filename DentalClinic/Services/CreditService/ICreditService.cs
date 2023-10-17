@@ -9,5 +9,6 @@ namespace DentalClinic.Services.CreditService
         Task<Credit> ChargeCredit(ChargeCreditDTO DTO);
         Task<List<DisplayCreditHistoryDTO>> CreditHistoryForPatient(int DTO);
         Task<Credit> CurrentCreditInfo(int DTO);
+        Task<List<Credit>> LoanExpireAfter();
     }
 }

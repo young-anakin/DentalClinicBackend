@@ -38,6 +38,7 @@ namespace DentalClinic.Models
         public List<Appointment>? Appointments { get; set;}
 
         public PatientCard? PatientCard { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
 
         public List<Credit>? Credits { get; set; }
 

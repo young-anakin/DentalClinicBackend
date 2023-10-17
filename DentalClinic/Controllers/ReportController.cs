@@ -298,7 +298,6 @@ namespace DentalClinic.Controllers
 
             try
             {
-
                 return Ok(await _reportService.GetProcedureUsage());
             }
             catch (KeyNotFoundException ex)

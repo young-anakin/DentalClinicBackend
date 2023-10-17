@@ -20,6 +20,7 @@ namespace DentalClinic.Controllers
         [HttpPost]
         public async Task<ActionResult> ChargeCredit(ChargeCreditDTO chargeCreditDTO)
         {
+
             try
             {
                 return Ok(await _creditService.ChargeCredit(chargeCreditDTO));
@@ -69,8 +70,6 @@ namespace DentalClinic.Controllers
         [HttpGet("HistoryForPatient")]
         public async Task<ActionResult> GetCreditHistoryforPatient(int patientID)
         {
-            return Ok(await _creditService.CreditHistoryForPatient(patientID));
-
             try
             {
                 return Ok(await _creditService.CreditHistoryForPatient(patientID));
@@ -92,5 +91,31 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
+        [HttpGet("CreditExpireReminder")]
+        public async Task<ActionResult> CreditExpireReminder()
+        {
+
+            try
+            {
+                return Ok(await _creditService.LoanExpireAfter());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
+
     }
 }

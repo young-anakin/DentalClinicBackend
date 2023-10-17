@@ -20,5 +20,6 @@ namespace DentalClinic.Models
 
 
         public DateTime ChargeDate { get; set; }
+
     }
 }

@@ -56,6 +56,7 @@ namespace DentalClinic.Services.CreditService
             cr.TotalCreditAmount = cr.TotalCreditAmount + DTO.CreditAmount;
             cr.Paid = cr.Paid + DTO.CreditAmount;
             cr.UnPaid = cr.UnPaid - DTO.CreditAmount;
+            cr.ChargeDate = DTO.DateTime;
 
             _context.Credits.Update(cr);
             _context.CreditPaymentRecords.Add(CPR);
@@ -97,6 +98,22 @@ namespace DentalClinic.Services.CreditService
             }
 
             return displayDTOs;
+        }
+        public async Task<List<Credit>> LoanExpireAfter()
+        {
+            var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
+            var EarlyReminderDays = CompSettings.EarlyReminderDate; // stores a value of days such as 1 or 2 
+            var LoanExpireAfter = CompSettings.LoanExpireAfter;
+
+            var EndDate = DateTime.Today.AddDays(EarlyReminderDays); // Calculate the start date for the range
+            var StartDate = DateTime.Today; // Current date
+
+            // Retrieve appointments within the date range
+            var Loans = await _context.Credits
+                                    .Include(loan => loan.Patient)
+                                    .Where(loan => loan.ChargeDate.AddDays(LoanExpireAfter) >= StartDate && loan.ChargeDate.AddDays(LoanExpireAfter) <= EndDate && loan.UnPaid < 0)
+                                    .ToListAsync();
+            return Loans;
         }
 
 
