@@ -291,10 +291,9 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
-        [HttpGet("GetProcedureUsage")]
+        [HttpGet("GetProcedureUsageByGender")]
         public async Task<ActionResult> GetProcedureUsage()
         {
-            return Ok(await _reportService.GetProcedureUsage());
 
             try
             {
