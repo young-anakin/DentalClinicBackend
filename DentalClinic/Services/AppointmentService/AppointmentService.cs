@@ -272,8 +272,8 @@ namespace DentalClinic.Services.AppointmentService
             var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
             var EarlyReminderDays = CompSettings.EarlyReminderDate; // stores a value of days such as 1 or 2 
 
-            var StartDate = DateTime.Today.AddDays(-EarlyReminderDays); // Calculate the start date for the range
-            var EndDate = DateTime.Today; // Current date
+            var EndDate = DateTime.Today.AddDays(EarlyReminderDays); // Calculate the start date for the range
+            var StartDate = DateTime.Today; // Current date
 
             // Retrieve appointments within the date range
             var appointments = await _context.Appointments
