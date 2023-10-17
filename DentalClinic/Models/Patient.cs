@@ -33,6 +33,7 @@ namespace DentalClinic.Models
         public PatientProfile? Profile { get; set; }
 
         public List<PatientVisit>? PatientVisits { get; set;}
+        [System.Text.Json.Serialization.JsonIgnore]
 
         public List<Appointment>? Appointments { get; set;}
 

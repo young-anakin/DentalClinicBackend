@@ -7,6 +7,8 @@ namespace DentalClinic.Services.AppointmentService
     {
         Task<Appointment> AddAppointment(AddAppointmentDTO appointmentDTO);
         Task<Appointment> AppointmentMake(AppointmentVerificationDTO DTO);
+        Task<List<Appointment>> AppointmentsDueToday();
+        Task<List<Appointment>> AppointmentsDueTodayForEmployee(int id);
         Task<Appointment> DeleteAppointment(AppointmentVerificationDTO DTO);
         Task<List<Appointment>> EarlyReminder();
         Task<List<Appointment>> GetAllAppointments();
