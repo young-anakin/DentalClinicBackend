@@ -4,7 +4,7 @@
     {
         public int PatientID { set; get; }
         public string PatientFullName { get; set; } = string.Empty;
-        public DateTime DateOfBirth { get; set; }
+        public int Age { get; set; }
         public string Phone { get; set; } = null!;
 
         public string Gender { get; set; } = string.Empty;
@@ -13,7 +13,7 @@
 
         public string City { get; set; } = string.Empty;
 
-        public string subcity { get; set; } = string.Empty;
+        public string Subcity { get; set; } = string.Empty;
 
         public string Address { get; set; } = string.Empty;
 

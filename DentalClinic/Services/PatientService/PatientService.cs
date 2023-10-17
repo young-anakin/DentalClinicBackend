@@ -81,9 +81,12 @@ namespace DentalClinic.Services.PatientService
             .FirstOrDefaultAsync()
             ?? throw new KeyNotFoundException("Patient Not Found");
 
+
+
             patient = _mapper.Map(patientDTO, patient);
             PatientProfile = _mapper.Map(patientDTO, PatientProfile);
             patient.Profile = PatientProfile;
+            patient.DateOfBirth = _toolsService.CalculateDOB(patientDTO.Age);
             _context.Patients.Update(patient);
             await _context.SaveChangesAsync();
 
