@@ -347,7 +347,7 @@ namespace DentalClinic.Services.ReportService
             var data = await _context.Payments
                  .Where(payment =>
                     (payment.PaymentDate >= startDate) &&
-                    (payment.PaymentDate <= endDate) && (payment.IsCredit == true))
+                    (payment.PaymentDate <= endDate))
                 .Include(p => p.Patient) // Include the related Patient
                 .GroupBy(p => p.Patient.Gender) // Group by patient's gender
                 .Select(g => new
