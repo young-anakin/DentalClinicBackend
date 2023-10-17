@@ -271,5 +271,55 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
+        [HttpGet("AppointmentDueThisWeek")]
+        public async Task<ActionResult> AppointmentDueThisWeek()
+        {
+            try
+            {
+
+                return Ok(await _appointmentService.AppointmentsDueThisWeek());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
+        [HttpGet("AppointmentDueThisWeekForEmployee")]
+        public async Task<ActionResult> AppointmentDueThisWeekForEmployee(int id)
+        {
+            try
+            {
+
+                return Ok(await _appointmentService.AppointmentsDueThisWeekForEmployee(id));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
     }
 }

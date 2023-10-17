@@ -313,7 +313,39 @@ namespace DentalClinic.Services.AppointmentService
 
             return appointments;
         }
+        
+        public async Task<List<Appointment>> AppointmentsDueThisWeek()
+        {
+            var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
+            var EarlyReminderDays = CompSettings.EarlyReminderDate; // stores a value of days such as 1 or 2 
 
+            var EndDate = DateTime.Today.AddDays(7); // Calculate the start date for the range
+            var StartDate = DateTime.Today.Date; // Current date
+
+            // Retrieve appointments within the date range
+            var appointments = await _context.Appointments
+                                    .Include(appointment => appointment.Patient)
+                                    .Where(appointment => appointment.AppointmentStartTime >= StartDate && appointment.AppointmentStartTime <= EndDate)
+                                    .ToListAsync();
+
+            return appointments;
+        }
+        public async Task<List<Appointment>> AppointmentsDueThisWeekForEmployee(int id)
+        {
+            var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
+            var EarlyReminderDays = CompSettings.EarlyReminderDate; // stores a value of days such as 1 or 2 
+
+            var EndDate = DateTime.Today.AddDays(7); // Calculate the start date for the range
+            var StartDate = DateTime.Today.Date; // Current date
+
+            // Retrieve appointments within the date range
+            var appointments = await _context.Appointments
+                                    .Include(appointment => appointment.Patient)
+                                    .Where(appointment => appointment.AppointmentStartTime >= StartDate && appointment.AppointmentStartTime <= EndDate && appointment.DentistID == id)
+                                    .ToListAsync();
+
+            return appointments;
+        }
 
 
 
