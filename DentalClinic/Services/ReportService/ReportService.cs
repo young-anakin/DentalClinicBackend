@@ -394,10 +394,45 @@ namespace DentalClinic.Services.ReportService
 
             return data.Cast<Object>().ToList();
         }
-        public async Task<List<ProcedureUsage>> GetProcedureUsage()
+        public async Task<List<ProcedureUsage>> GetProcedureUsage(DateTimeRangeDTO DTO)
         {
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-1);
+                endDate = DateTime.Now;
+            }
+
+            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-6);
+                endDate = DateTime.Now;
+            }
+            else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(2000, 1, 1);
+                endDate = DateTime.Now;
+            }
+            else
+            {
+                startDate = DTO.StartDate;
+                endDate = DTO.EndDate;
+            }
             List<ProcedureUsage> procedureUsageList = new List<ProcedureUsage>();
-            var _medicalRecords = await _context.MedicalRecords.Include(p => p.Patient).ToListAsync();
+            var _medicalRecords = await _context.MedicalRecords
+                                              .Where(mr => mr.Date >= startDate && mr.Date <= endDate)
+                                              .Include(p => p.Patient).ToListAsync();
 
             foreach (var record in _medicalRecords)
             {
@@ -438,10 +473,45 @@ namespace DentalClinic.Services.ReportService
         // Inner class private method
 
         // procedure wise amount
-        public async Task<List<ProcedureRevenue>> GetProcedureRevenues()
+        public async Task<List<ProcedureRevenue>> GetProcedureRevenues(DateTimeRangeDTO DTO)
         {
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now;
+            if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-1);
+                endDate = DateTime.Now;
+            }
+
+            if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = DateTime.Now.AddDays(-6);
+                endDate = DateTime.Now;
+            }
+            else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
+            }
+            else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
+            {
+                startDate = new DateTime(2000, 1, 1);
+                endDate = DateTime.Now;
+            }
+            else
+            {
+                startDate = DTO.StartDate;
+                endDate = DTO.EndDate;
+            }
             List<ProcedureRevenue> procedureRevenueList = new List<ProcedureRevenue>();
-            var _medicalRecords = await _context.MedicalRecords.Include(p => p.Patient).ToListAsync();
+            var _medicalRecords = await _context.MedicalRecords
+                                                            .Where(mr=> mr.Date>=startDate && mr.Date <= endDate)
+                                                            .Include(p => p.Patient).ToListAsync();
 
             foreach (var record in _medicalRecords)
             {

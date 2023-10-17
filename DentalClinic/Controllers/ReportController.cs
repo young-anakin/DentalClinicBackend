@@ -291,13 +291,13 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
-        [HttpGet("GetProcedureUsageByGender")]
-        public async Task<ActionResult> GetProcedureUsage()
+        [HttpPost("GetProcedureUsageByGender")]
+        public async Task<ActionResult> GetProcedureUsage(DateTimeRangeDTO DTO)
         {
 
             try
             {
-                return Ok(await _reportService.GetProcedureUsage());
+                return Ok(await _reportService.GetProcedureUsage(DTO));
             }
             catch (KeyNotFoundException ex)
             {
@@ -316,13 +316,13 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
-        [HttpGet("GetProcedureRevenue")]
-        public async Task<ActionResult> GetProcedureRevenue()
+        [HttpPost("GetProcedureRevenue")]
+        public async Task<ActionResult> GetProcedureRevenue(DateTimeRangeDTO DTO)
         {
 
             try
             {
-                return Ok(await _reportService.GetProcedureRevenues());
+                return Ok(await _reportService.GetProcedureRevenues(DTO));
             }
             catch (KeyNotFoundException ex)
             {

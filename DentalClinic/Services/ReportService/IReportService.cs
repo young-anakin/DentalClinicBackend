@@ -7,8 +7,10 @@ namespace DentalClinic.Services.ReportService
         Task<RevenuesDisplayDTO> CollectedAmounts(DateTimeRangeDTO DTO);
         Task<RevenuesDisplayDTO> CreditedAmount(DateTimeRangeDTO DTO);
         Task<List<object>> GenderBySubCity(DateTimeRangeDTOForCity DTO);
-        Task<List<ProcedureRevenue>> GetProcedureRevenues();
-        Task<List<ProcedureUsage>> GetProcedureUsage();
+        //Task<List<ProcedureRevenue>> GetProcedureRevenues();
+        Task<List<ProcedureRevenue>> GetProcedureRevenues(DateTimeRangeDTO DTO);
+        //Task<List<ProcedureUsage>> GetProcedureUsage();
+        Task<List<ProcedureUsage>> GetProcedureUsage(DateTimeRangeDTO DTO);
         Task<List<object>> GetRoleGenderCounts();
         Task<RevenuesDisplayDTO> Revenues(DateTimeRangeDTO DTO);
         Task<List<object>> TotalActiveInactiveEmployeesByRole();
