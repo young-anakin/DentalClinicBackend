@@ -105,6 +105,7 @@ namespace DentalClinic.Services.AppointmentService
         {
             var appointments = await _context.Appointments
                                         .OrderByDescending(appointment => appointment.AppointmentStartTime)
+                                        .Where(appointment => appointment.AppointmentStartTime > DateTime.Now)
                                         .Select(appointment => new Appointment
                                         {
                                             AppointmentId = appointment.AppointmentId,
@@ -130,7 +131,7 @@ namespace DentalClinic.Services.AppointmentService
         public async Task<List<Appointment>> GetAppointmentByEmployee(int EmployeeID)
         {
             var appointments = await _context.Appointments
-                                        .Where(ap => ap.DentistID == EmployeeID)
+                                        .Where(ap => ap.DentistID == EmployeeID && ap.AppointmentStartTime > DateTime.Now)
                                         .OrderByDescending(ap => ap.AppointmentStartTime)
                                         .Select(appointment => new Appointment
                                         {

@@ -70,8 +70,8 @@ namespace DentalClinic.Services.ReportService
                 .Select(g => new
                 {
                     SubCity = g.Key,
-                    Male = g.Count(p => p.Gender == "Male"),
-                    Female = g.Count(p => p.Gender == "Female")
+                    Male = g.Count(p => p.Gender.Equals("Male", StringComparison.OrdinalIgnoreCase)),
+                    Female = g.Count(p => p.Gender.Equals("Female", StringComparison.OrdinalIgnoreCase))
                 })
                 .ToList();
 
@@ -277,8 +277,8 @@ namespace DentalClinic.Services.ReportService
                     .Select(g => new
                     {
                         Gender = g.Key,
-                        Male = g.Count(p => p.EmployeeGender == "Male" || p.EmployeeGender == "male" || p.EmployeeGender == "MALE"),
-                        Female = g.Count(p => p.EmployeeGender == "Female" || p.EmployeeGender == "female" || p.EmployeeGender == "FEMALE")
+                        Male = g.Count(p => p.EmployeeGender.Equals("Male", StringComparison.OrdinalIgnoreCase)),
+                        Female = g.Count(p => p.EmployeeGender.Equals("Female", StringComparison.OrdinalIgnoreCase))
                     })
         .ToList();
             return data.Cast<object>().ToList();
@@ -298,7 +298,7 @@ namespace DentalClinic.Services.ReportService
             var data = await _context.Employees
                 .Include(p => p.UserAccount)
                     .ThenInclude(p => p.Role)
-                .Where(p => p.UserAccount.Role.RoleName.Equals("Dentist"))
+                .Where(p => p.UserAccount.Role.RoleName.Equals("Dentist", StringComparison.OrdinalIgnoreCase))
                 .GroupBy(p => p.EmployeeGender)
                 .Select(g => new
                 {
@@ -370,8 +370,8 @@ namespace DentalClinic.Services.ReportService
                 .Select(g => new
                 {
                     RoleName = g.Key,
-                    Male = g.Count(u => u.Employee.EmployeeGender == "Male"),
-                    Female = g.Count(u => u.Employee.EmployeeGender == "Female")
+                    Male = g.Count(u => u.Employee.EmployeeGender.Equals("Male", StringComparison.OrdinalIgnoreCase)),
+                    Female = g.Count(u => u.Employee.EmployeeGender.Equals("Female", StringComparison.OrdinalIgnoreCase))
                 })
                 .ToListAsync();
 
