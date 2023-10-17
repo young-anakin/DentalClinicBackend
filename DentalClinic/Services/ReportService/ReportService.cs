@@ -4,6 +4,7 @@ using DentalClinic.DTOs.ReportDTO;
 using DentalClinic.Models;
 using DentalClinic.Services.Tools;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 
 namespace DentalClinic.Services.ReportService
@@ -396,16 +397,18 @@ namespace DentalClinic.Services.ReportService
         public async Task<List<ProcedureUsage>> GetProcedureUsage()
         {
             List<ProcedureUsage> procedureUsageList = new List<ProcedureUsage>();
-            var _medicalRecords = await _context.MedicalRecords.Include(p=> p.Patient).ToListAsync();
-
+            var _medicalRecords = await _context.MedicalRecords.Include(p => p.Patient).ToListAsync();
 
             foreach (var record in _medicalRecords)
             {
-                var procedureIds = string.IsNullOrEmpty(record.ProcedureIDs) ? new int[] { 1 } : JsonSerializer.Deserialize<int[]>(record.ProcedureIDs);
-
+                var procedureIds = string.IsNullOrEmpty(record.ProcedureIDs) ? new int[] {  } : JsonSerializer.Deserialize<int[]>(record.ProcedureIDs);
+                if (procedureIds.IsNullOrEmpty())
+                {
+                    throw new KeyNotFoundException("Trying to Access Deleted Procedure");
+                }
                 foreach (var procedureId in procedureIds)
                 {
-                    var procedureName =  GetProcedureNameById(procedureId).ToString();
+                    var procedureName = await GetProcedureNameById(procedureId); // Await here
 
                     var existingUsage = procedureUsageList.FirstOrDefault(p => p.Procedures == procedureName);
 
@@ -421,8 +424,8 @@ namespace DentalClinic.Services.ReportService
                         var usage = new ProcedureUsage
                         {
                             Procedures = procedureName,
-                            Male = record.PatientId % 2 == 0 ? 1 : 0,
-                            Female = record.PatientId % 2 != 0 ? 1 : 0
+                            Male = record.Patient.Gender.Equals("Male", StringComparison.OrdinalIgnoreCase) ? 1 : 0,
+                            Female = record.Patient.Gender.Equals("Female", StringComparison.OrdinalIgnoreCase) ? 1 : 0
                         };
                         procedureUsageList.Add(usage);
                     }
@@ -431,6 +434,8 @@ namespace DentalClinic.Services.ReportService
 
             return procedureUsageList;
         }
+
+        // Inner class private method
         private async Task<string> GetProcedureNameById(int procedureId)
         {
             var procedure = await _context.Procedures
@@ -441,6 +446,8 @@ namespace DentalClinic.Services.ReportService
             return name;
         }
 
+
+        // procedure wise amount
 
 
 
