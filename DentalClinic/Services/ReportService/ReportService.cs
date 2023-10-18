@@ -66,7 +66,7 @@ namespace DentalClinic.Services.ReportService
                     (patient.CreatedAt >= startDate) &&
                     (patient.CreatedAt <= endDate) &&
                     (DTO.CityName.Equals("All", StringComparison.OrdinalIgnoreCase) || patient.City == DTO.CityName || DTO.CountryName.Equals("All", StringComparison.OrdinalIgnoreCase) || patient.Country == DTO.CountryName))
-
+                .AsEnumerable() // Perform client-side evaluation from this point onwards
                 .GroupBy(p => p.Subcity)
                 .Select(g => new
                 {
