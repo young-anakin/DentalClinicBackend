@@ -271,19 +271,23 @@ namespace DentalClinic.Services.ReportService
             return data.Cast<object>().ToList();
         }
         //Total Users By Gender
-        public async Task<List<Object>> TotalUsers()
+        public async Task<List<object>> TotalUsers()
         {
-            var data = _context.Employees
-                    .GroupBy(p => p.EmployeeGender)
-                    .Select(g => new
-                    {
-                        Gender = g.Key,
-                        Male = g.Count(p => p.EmployeeGender.Equals("Male", StringComparison.OrdinalIgnoreCase)),
-                        Female = g.Count(p => p.EmployeeGender.Equals("Female", StringComparison.OrdinalIgnoreCase))
-                    })
-        .ToList();
-            return data.Cast<object>().ToList();
+            var data = await _context.Employees
+                .ToListAsync();
+
+            var result = data
+                .GroupBy(p => p.EmployeeGender)
+                .Select(g => new
+                {
+                    Gender = g.Key,
+                    Male = g.Count(p => p.EmployeeGender.Equals("Male", StringComparison.OrdinalIgnoreCase)),
+                    Female = g.Count(p => p.EmployeeGender.Equals("Female", StringComparison.OrdinalIgnoreCase))
+                });
+
+            return result.Cast<object>().ToList();
         }
+
         public async Task<RevenuesDisplayDTO> TotalNumberOfProcedures()
         {
             var data = await _context.Procedures.ToListAsync();
@@ -294,22 +298,27 @@ namespace DentalClinic.Services.ReportService
             };
             return DTO;
         }
-        public async Task<List<Object>> TotalDentistsPerGender()
+        public async Task<List<object>> TotalDentistsPerGender()
         {
             var data = await _context.Employees
                 .Include(p => p.UserAccount)
                     .ThenInclude(p => p.Role)
-                .Where(p => p.UserAccount.Role.RoleName.Equals("Dentist", StringComparison.OrdinalIgnoreCase))
+                .ToListAsync();
+
+            var dentists = data
+                .Where(p => p.UserAccount.Role.RoleName.Equals("Dentist", StringComparison.OrdinalIgnoreCase));
+
+            var result = dentists
                 .GroupBy(p => p.EmployeeGender)
                 .Select(g => new
                 {
                     Gender = g.Key,
                     Count = g.Count()
-                })
-                .ToListAsync();
+                });
 
-            return data.Cast<Object>().ToList();
+            return result.Cast<object>().ToList();
         }
+
 
         public async Task<List<Object>> TotalRevenuesPerGender(DateTimeRangeDTO DTO)
         {
