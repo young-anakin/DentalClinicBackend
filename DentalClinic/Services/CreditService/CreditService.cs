@@ -111,7 +111,7 @@ namespace DentalClinic.Services.CreditService
             // Retrieve appointments within the date range
             var Loans = await _context.Credits
                                     .Include(loan => loan.Patient)
-                                    .Where(loan => loan.ChargeDate.AddDays(LoanExpireAfter) >= StartDate && loan.ChargeDate.AddDays(LoanExpireAfter) <= EndDate && loan.UnPaid < 0)
+                                    .Where(loan => loan.ChargeDate.AddDays(LoanExpireAfter) <= DateTime.Now)
                                     .ToListAsync();
             return Loans;
         }
