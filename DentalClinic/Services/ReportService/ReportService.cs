@@ -361,7 +361,7 @@ namespace DentalClinic.Services.ReportService
             return data.Cast<Object>().ToList();
         }
 
-        public async Task<List<Object>> GetRoleGenderCounts()
+        public async Task<List<object>> GetRoleGenderCounts()
         {
             var data = await _context.UserAccounts
                 .Include(u => u.Role)
@@ -371,13 +371,22 @@ namespace DentalClinic.Services.ReportService
                 .Select(g => new
                 {
                     RoleName = g.Key,
-                    Male = g.Count(u => u.Employee.EmployeeGender.Equals("Male", StringComparison.OrdinalIgnoreCase)),
-                    Female = g.Count(u => u.Employee.EmployeeGender.Equals("Female", StringComparison.OrdinalIgnoreCase))
+                    Employees = g.Select(u => u.Employee)
                 })
                 .ToListAsync();
 
-            return data.Cast<Object>().ToList();
+            var result = data.Select(g => new
+            {
+                RoleName = g.RoleName,
+                Male = g.Employees.Count(e => string.Equals(e.EmployeeGender, "Male", StringComparison.OrdinalIgnoreCase)),
+                Female = g.Employees.Count(e => string.Equals(e.EmployeeGender, "Female", StringComparison.OrdinalIgnoreCase))
+            });
+
+            return result.Cast<object>().ToList();
         }
+
+
+
         public async Task<List<Object>> TotalActiveInactiveEmployeesByRole()
         {
 
