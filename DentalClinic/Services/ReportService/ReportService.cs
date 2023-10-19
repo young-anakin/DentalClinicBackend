@@ -61,8 +61,11 @@ namespace DentalClinic.Services.ReportService
                 .Where(patient =>
                     (patient.CreatedAt >= startDate) &&
                     (patient.CreatedAt <= endDate) &&
-                    (DTO.CityName.Equals("All", StringComparison.OrdinalIgnoreCase) || patient.City == DTO.CityName || DTO.CountryName.Equals("All", StringComparison.OrdinalIgnoreCase) || patient.Country == DTO.CountryName))
-                .AsEnumerable() // Perform client-side evaluation from this point onwards
+                    ((DTO.CityName.Equals("All", StringComparison.OrdinalIgnoreCase) && DTO.CountryName.Equals("All", StringComparison.OrdinalIgnoreCase)) ||
+                     (DTO.CountryName.Equals("All", StringComparison.OrdinalIgnoreCase) && patient.City == DTO.CityName) ||
+                     (DTO.CityName.Equals("All", StringComparison.OrdinalIgnoreCase) && patient.Country == DTO.CountryName) ||
+                     (patient.Country == DTO.CountryName && patient.City == DTO.CityName)))
+                .AsEnumerable()
                 .GroupBy(p => p.Subcity)
                 .Select(g => new
                 {
@@ -591,7 +594,7 @@ namespace DentalClinic.Services.ReportService
         //}
         public async Task<List<Object>> TotalRevenuePerMonthPastYear()
         {
-            DateTime startDate = DateTime.Now.AddYears(-4);
+            DateTime startDate = DateTime.Now.AddMonths(-12);
 
             var data = await _context.Payments
                 .Where(p => p.PaymentDate >= startDate)
@@ -606,7 +609,7 @@ namespace DentalClinic.Services.ReportService
 
             var result = new List<Object>();
 
-            for (int i = -1; i < 49; i++) // Start from -1 and end at 47
+            for (int i = 1; i < 13; i++)
             {
                 var date = startDate.AddMonths(i);
                 var monthData = data.SingleOrDefault(d => d.Year == date.Year && d.Month == date.Month);
@@ -614,13 +617,14 @@ namespace DentalClinic.Services.ReportService
                 result.Add(new
                 {
                     Year = date.Year,
-                    Month = GetAbbreviatedMonthName(date.Month),
+                    Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month),
                     TotalRevenue = monthData != null ? monthData.TotalRevenue : 0
                 });
             }
 
             return result.Cast<Object>().ToList();
         }
+
 
         // Function to get abbreviated month name
         private string GetAbbreviatedMonthName(int month)
