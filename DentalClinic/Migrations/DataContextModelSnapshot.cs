@@ -167,6 +167,9 @@ namespace DentalClinic.Migrations
                     b.Property<decimal>("MaximumLoanAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("NumberOfBranches")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 

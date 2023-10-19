@@ -17,6 +17,7 @@ namespace DentalClinic.Services.ReportService
         Task<List<object>> TotalDentistsPerGender();
         Task<List<object>> TotalNumberofPatientByGender();
         Task<RevenuesDisplayDTO> TotalNumberOfProcedures();
+        Task<List<object>> TotalRevenuePerMonthPastYear();
         Task<List<object>> TotalRevenuesPerGender(DateTimeRangeDTO DTO);
         Task<List<object>> TotalUsers();
     }

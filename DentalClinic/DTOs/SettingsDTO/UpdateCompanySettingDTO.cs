@@ -13,6 +13,10 @@
         public int EarlyReminderDate { get; set; }
 
         public decimal MaximumLoanAmount { get; set; }
+
+        public int NumberOfBranches { get; set; }
+
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
     }
 }

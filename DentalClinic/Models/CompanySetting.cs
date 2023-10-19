@@ -25,5 +25,7 @@ namespace DentalClinic.Models
 
         public DateTime? UpdatedAt { get; set;} = DateTime.Now;
 
+        public int NumberOfBranches { get; set; }
+
     }
 }

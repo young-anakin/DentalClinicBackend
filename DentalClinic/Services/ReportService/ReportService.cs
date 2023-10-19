@@ -5,6 +5,7 @@ using DentalClinic.Models;
 using DentalClinic.Services.Tools;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 using System.Text.Json;
 
 namespace DentalClinic.Services.ReportService
@@ -591,6 +592,42 @@ namespace DentalClinic.Services.ReportService
 
             return name;
         }
+        public async Task<List<Object>> TotalRevenuePerMonthPastYear()
+        {
+            DateTime startDate = DateTime.Now.AddMonths(-12);
+
+            var data = await _context.Payments
+                .Where(p => p.PaymentDate >= startDate)
+                .GroupBy(p => new { p.PaymentDate.Year, p.PaymentDate.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    TotalRevenue = g.Sum(p => p.Total)
+                })
+                .ToListAsync();
+
+            var result = new List<Object>();
+
+            for (int i = 1; i < 13; i++)
+            {
+                var date = startDate.AddMonths(i);
+                var monthData = data.SingleOrDefault(d => d.Year == date.Year && d.Month == date.Month);
+
+                result.Add(new
+                {
+                    Year = date.Year,
+                    Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month),
+                    TotalRevenue = monthData != null ? monthData.TotalRevenue : 0
+                });
+            }
+
+            return result.Cast<Object>().ToList();
+        }
+
+
+
+
 
 
 
