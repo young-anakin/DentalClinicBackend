@@ -292,13 +292,15 @@ namespace DentalClinic.Services.AppointmentService
             var EndDate = DateTime.Today.AddDays(EarlyReminderDays); // Calculate the start date for the range
             var StartDate = DateTime.Today.Date; // Current date
 
-            // Retrieve appointments within the date range
+            // Retrieve appointments within the entire day
             var appointments = await _context.Appointments
-                                    .Where(appointment => appointment.AppointmentStartTime.Date == StartDate)
-                                    .ToListAsync();
+                                        .Where(appointment => appointment.AppointmentStartTime.Date == StartDate)
+                                        .ToListAsync();
 
             return appointments;
         }
+
+
         public async Task<List<Appointment>> AppointmentsDueTodayForEmployee(int id)
         {
             var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
