@@ -23,10 +23,10 @@ namespace DentalClinic.Controllers
         [HttpPost]
         public async Task<ActionResult> SetCompanySetting(AddCompanySettingsDTO companySettingsDTO)
         {
-            return Ok(await _companySettingService.AddCompanySetting(companySettingsDTO));
 
             try
             {
+                return Ok(await _companySettingService.AddCompanySetting(companySettingsDTO));
 
             }
             catch (KeyNotFoundException ex)
