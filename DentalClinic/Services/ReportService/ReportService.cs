@@ -646,41 +646,47 @@ namespace DentalClinic.Services.ReportService
 
         //    return result.Cast<Object>().ToList();
         //}
-        public async Task<List<Object>> TotalRevenuePerMonthPastYear()
+        public async Task<List<Object>> TotalRevenuePerMonthPastFiveYears()
         {
-
-               
-
-            DateTime startDate = new DateTime(DateTime.Now.Year, 1, 1);
-
-            var data = await _context.Payments
-                .Where(p => p.PaymentDate >= startDate)
-                .GroupBy(p => new { p.PaymentDate.Year, p.PaymentDate.Month })
-                .Select(g => new
-                {
-                    Year = g.Key.Year,
-                    Month = g.Key.Month,
-                    TotalRevenue = g.Sum(p => p.Total)
-                })
-                .ToListAsync();
-
             var result = new List<Object>();
 
-            for (int i = 1; i < 13; i++)
+            for (int yearOffset = 0; yearOffset < 5; yearOffset++)
             {
-                var date = startDate.AddMonths(i);
-                var monthData = data.SingleOrDefault(d => d.Year == date.Year && d.Month == date.Month);
+                DateTime startDate = DateTime.Now.AddYears(-yearOffset);
+                var data = await _context.Payments
+                    .Where(p => p.PaymentDate.Year == startDate.Year)
+                    .GroupBy(p => new { p.PaymentDate.Year, p.PaymentDate.Month })
+                    .Select(g => new
+                    {
+                        Year = g.Key.Year,
+                        Month = g.Key.Month,
+                        TotalRevenue = g.Sum(p => p.Total)
+                    })
+                    .ToListAsync();
+
+                var monthlyData = new List<object>();
+
+                for (int i = 1; i <= 12; i++)
+                {
+                    var monthData = data.SingleOrDefault(d => d.Month == i);
+
+                    monthlyData.Add(new
+                    {
+                        x = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(i),
+                        y = monthData != null ? monthData.TotalRevenue : 0
+                    });
+                }
 
                 result.Add(new
                 {
-                    Year = date.Year,
-                    Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(date.Month),
-                    TotalRevenue = monthData != null ? monthData.TotalRevenue : 0
+                    id = startDate.Year.ToString(),
+                    data = monthlyData
                 });
             }
 
-            return result.Cast<Object>().ToList();
+            return result;
         }
+
 
 
         // Function to get abbreviated month name
