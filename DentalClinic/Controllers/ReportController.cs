@@ -41,6 +41,81 @@ namespace DentalClinic.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
             }
         }
+        [HttpGet("TotalNumberOfEmployees")]
+        public async Task<ActionResult> TotalNumberOfEmployee()
+        {
+            try
+            {
+
+                return Ok(await _reportService.TotalNumberOfEmployees());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
+        [HttpGet("TotalNumberOfDentists")]
+        public async Task<ActionResult> TotalNumberOfDentist()
+        {
+            try
+            {
+
+                return Ok(await _reportService.TotalNumberOfDentists());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
+        [HttpGet("TotalNumberOfPatient")]
+        public async Task<ActionResult> TotalNumberOfPatient()
+        {
+            try
+            {
+
+                return Ok(await _reportService.TotalNumberOfPatient());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+            }
+        }
         [HttpPost("TotalRevenues")]
         public async Task<ActionResult> Revenues(DateTimeRangeDTO DTO)
         {

@@ -99,22 +99,92 @@ namespace DentalClinic.Services.CreditService
 
             return displayDTOs;
         }
-        public async Task<List<Credit>> LoanExpireAfter()
+        public async Task<List<PatientWithCreditDTO>> LoanExpireAfter()
         {
             var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
-            var EarlyReminderDays = CompSettings.EarlyReminderDate; // stores a value of days such as 1 or 2 
+            var Loans = await _context.Credits
+                                    .Where(c => c.UnPaid < 0)
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Employee)
+                                    .ToListAsync();
+            var LoanExpireAfter = CompSettings.LoanExpireAfter;
+            var EarlyReminder = CompSettings.EarlyReminderForLoan;
+
+            // Create a list to hold the DTOs
+            List<PatientWithCreditDTO> patientWithCreditDTOs = new List<PatientWithCreditDTO>();
+
+            // Iterate through each loan and create a DTO
+            foreach (var loan in Loans)
+            {
+                // Calculate the expiration date
+                DateTime expirationDate = loan.ChargeDate.AddDays(LoanExpireAfter);
+                if ((expirationDate - DateTime.Now).Days > EarlyReminder)
+                {
+                    continue;
+                }
+
+                // Create a new DTO instance and populate its properties
+                PatientWithCreditDTO dto = new PatientWithCreditDTO
+                {
+                    Id = loan.CreditID,
+                    PatientName = loan.Patient.PatientFullName,
+                    PhoneNumber = loan.Patient.Phone,
+                    PatientAdress = $"{loan.Patient.Country}, {loan.Patient.City}, {loan.Patient.Subcity}, {loan.Patient.Address}",
+                    Age = loan.Patient.Age,
+                    CreditAmount = loan.UnPaid,
+                    CreditIssuedByName = loan.Employee.EmployeeName,
+                    DaysUntilLoanExpire = (expirationDate - DateTime.Now).Days
+                };
+
+                // Add the DTO to the list
+                patientWithCreditDTOs.Add(dto);
+            }
+
+            return patientWithCreditDTOs;
+        }
+
+
+
+        public async Task<List<PatientWithCreditDTO>> PatientsWithLoan()
+        {
+            var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
+            var Loans = await _context.Credits
+                                    .Where(c => c.UnPaid < 0)
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Employee)
+                                    .ToListAsync();
             var LoanExpireAfter = CompSettings.LoanExpireAfter;
 
-            var EndDate = DateTime.Today.AddDays(EarlyReminderDays); // Calculate the start date for the range
-            var StartDate = DateTime.Today; // Current date
+            // Create a list to hold the DTOs
+            List<PatientWithCreditDTO> patientWithCreditDTOs = new List<PatientWithCreditDTO>();
 
-            // Retrieve appointments within the date range
-            var Loans = await _context.Credits
-                                    .Include(loan => loan.Patient)
-                                    .Where(loan => loan.ChargeDate.AddDays(LoanExpireAfter) <= DateTime.Now)
-                                    .ToListAsync();
-            return Loans;
+            // Iterate through each loan and create a DTO
+            foreach (var loan in Loans)
+            {
+                // Calculate the expiration date
+                DateTime expirationDate = loan.ChargeDate.AddDays(LoanExpireAfter);
+
+                // Create a new DTO instance and populate its properties
+                PatientWithCreditDTO dto = new PatientWithCreditDTO
+                {
+                    Id = loan.CreditID,
+                    PatientName = loan.Patient.PatientFullName,
+                    PhoneNumber = loan.Patient.Phone,
+                    PatientAdress = $"{loan.Patient.Country}, {loan.Patient.City}, {loan.Patient.Subcity}, {loan.Patient.Address}",
+                    Age = loan.Patient.Age,
+                    CreditAmount = loan.UnPaid,
+                    CreditIssuedByName = loan.Employee.EmployeeName,
+                    DaysUntilLoanExpire = (expirationDate - DateTime.Now).Days
+                };
+
+                // Add the DTO to the list
+                patientWithCreditDTOs.Add(dto);
+            }
+
+            return patientWithCreditDTOs;
         }
+
+
 
 
 

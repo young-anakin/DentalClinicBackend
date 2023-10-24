@@ -26,6 +26,35 @@ namespace DentalClinic.Services.ReportService
         //{
         //    var procedure = await _context.Procedures.Where(p => p.)
         //}
+        public async Task<RevenuesDisplayDTO> TotalNumberOfPatient()
+        {
+            var Patient = await _context.Patients.ToListAsync();
+            RevenuesDisplayDTO DTO = new RevenuesDisplayDTO();
+            DTO.TotalRevenues = Patient.Count;
+            return DTO;
+        }
+        public async Task<RevenuesDisplayDTO> TotalNumberOfDentists()
+        {
+            var Dentist = await _context.Employees
+                .Include(e => e.UserAccount.Role) // Ensure Role is loaded
+                .ToListAsync();
+
+            var dentistCount = Dentist.Count(e => e.UserAccount.Role.RoleName.Equals("Dentist", StringComparison.OrdinalIgnoreCase));
+
+            RevenuesDisplayDTO DTO = new RevenuesDisplayDTO();
+            DTO.TotalRevenues = dentistCount;
+            return DTO;
+        }
+
+        public async Task<RevenuesDisplayDTO> TotalNumberOfEmployees()
+        {
+            var employees = await _context.Employees
+                .ToListAsync();
+            RevenuesDisplayDTO DTO = new RevenuesDisplayDTO();
+            DTO.TotalRevenues = employees.Count;
+
+             return DTO;
+        }
         public async Task<List<Object>> GenderBySubCity(DateTimeRangeDTOForCity DTO)
         {
             DateTime startDate = DateTime.Now;
@@ -33,19 +62,23 @@ namespace DentalClinic.Services.ReportService
 
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddHours(-24);
+                startDate = DateTime.Now.Date; // Start of the current day
+                endDate = startDate.AddDays(1).AddSeconds(-1); // End of the current day
             }
             else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                endDate = startDate.AddDays(6);
             }
             else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-30);
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-365);
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
             {
@@ -97,19 +130,23 @@ namespace DentalClinic.Services.ReportService
 
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddHours(-24);
+                startDate = DateTime.Now.Date; // Start of the current day
+                endDate = startDate.AddDays(1).AddSeconds(-1); // End of the current day
             }
             else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                endDate = startDate.AddDays(6);
             }
             else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-30);
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-365);
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
             {
@@ -147,19 +184,23 @@ namespace DentalClinic.Services.ReportService
 
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddHours(-24);
+                startDate = DateTime.Now.Date; // Start of the current day
+                endDate = startDate.AddDays(1).AddSeconds(-1); // End of the current day
             }
             else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                endDate = startDate.AddDays(6);
             }
             else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-30);
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-365);
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
             {
@@ -193,22 +234,25 @@ namespace DentalClinic.Services.ReportService
         {
             DateTime startDate = DateTime.Now;
             DateTime endDate = DateTime.Now;
-
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddHours(-24);
+                startDate = DateTime.Now.Date; // Start of the current day
+                endDate = startDate.AddDays(1).AddSeconds(-1); // End of the current day
             }
             else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                endDate = startDate.AddDays(6);
             }
             else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-30);
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-365);
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
             {
@@ -307,22 +351,25 @@ namespace DentalClinic.Services.ReportService
         {
             DateTime startDate = DateTime.Now;
             DateTime endDate = DateTime.Now;
-
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddHours(-24);
+                startDate = DateTime.Now.Date; // Start of the current day
+                endDate = startDate.AddDays(1).AddSeconds(-1); // End of the current day
             }
             else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                endDate = startDate.AddDays(6);
             }
             else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-30);
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-365);
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
             {
@@ -398,19 +445,23 @@ namespace DentalClinic.Services.ReportService
 
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddHours(-24);
+                startDate = DateTime.Now.Date; // Start of the current day
+                endDate = startDate.AddDays(1).AddSeconds(-1); // End of the current day
             }
             else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                endDate = startDate.AddDays(6);
             }
             else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-30);
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-365);
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
             {
@@ -469,22 +520,25 @@ namespace DentalClinic.Services.ReportService
         {
             DateTime startDate = DateTime.Now;
             DateTime endDate = DateTime.Now;
-
             if (DTO.ActionName.Equals("daily", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddHours(-24);
+                startDate = DateTime.Now.Date; // Start of the current day
+                endDate = startDate.AddDays(1).AddSeconds(-1); // End of the current day
             }
             else if (DTO.ActionName.Equals("weekly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-7);
+                startDate = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                endDate = startDate.AddDays(6);
             }
             else if (DTO.ActionName.Equals("monthly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-30);
+                startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("yearly", StringComparison.OrdinalIgnoreCase))
             {
-                startDate = DateTime.Now.AddDays(-365);
+                startDate = new DateTime(DateTime.Now.Year, 1, 1);
+                endDate = startDate.AddYears(1).AddDays(-1);
             }
             else if (DTO.ActionName.Equals("AllTime", StringComparison.OrdinalIgnoreCase))
             {
@@ -594,7 +648,10 @@ namespace DentalClinic.Services.ReportService
         //}
         public async Task<List<Object>> TotalRevenuePerMonthPastYear()
         {
-            DateTime startDate = DateTime.Now.AddMonths(-12);
+
+               
+
+            DateTime startDate = new DateTime(DateTime.Now.Year, 1, 1);
 
             var data = await _context.Payments
                 .Where(p => p.PaymentDate >= startDate)

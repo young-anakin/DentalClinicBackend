@@ -157,6 +157,9 @@ namespace DentalClinic.Migrations
                     b.Property<int>("EarlyReminderDate")
                         .HasColumnType("int");
 
+                    b.Property<int>("EarlyReminderForLoan")
+                        .HasColumnType("int");
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

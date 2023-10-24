@@ -25,6 +25,8 @@ namespace DentalClinic.Models
 
         public DateTime? UpdatedAt { get; set;} = DateTime.Now;
 
+        public int EarlyReminderForLoan { get; set; }
+
         public int NumberOfBranches { get; set; }
 
     }

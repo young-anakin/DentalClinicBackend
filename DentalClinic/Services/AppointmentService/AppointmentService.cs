@@ -42,8 +42,17 @@ namespace DentalClinic.Services.AppointmentService
             if (appointmentDTO.AppointmentEndTime < appointmentDTO.AppointmentStartTime)
             {
                 throw new ArgumentException("Appointment end time cannot be in the past of Appointment Start time.");
-
             }
+            var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync();
+            var Duration = TimeSpan.FromMinutes(CompSettings.AppointmentDuration);
+
+            TimeSpan appointmentDuration = appointmentDTO.AppointmentEndTime - appointmentDTO.AppointmentStartTime;
+
+            if (Math.Abs(appointmentDuration.TotalMinutes) < Duration.TotalMinutes)
+            {
+                throw new ArgumentException($"The duration of appointment has to be atleast {Duration.TotalMinutes} minutes long.");
+            }
+
             // Check if Dentist already has an appointment at the specified time
             bool dentistHasConflict = await _context.Appointments
                 .AnyAsync(a => a.Dentist.EmployeeId == appointmentDTO.DentistID &&
@@ -295,6 +304,7 @@ namespace DentalClinic.Services.AppointmentService
             // Retrieve appointments within the entire day
             var appointments = await _context.Appointments
                                         .Where(appointment => appointment.AppointmentStartTime.Date == StartDate)
+                                        .Include(ap=> ap.Patient)
                                         .ToListAsync();
 
             return appointments;
