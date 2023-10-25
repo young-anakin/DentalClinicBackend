@@ -26,6 +26,7 @@ namespace DentalClinic.Services.CompanySettingService
                 throw new Exception("Company setting is already set, update the existing setting.");
             }
             var compSetting = _mapper.Map<CompanySetting>(add);
+            compSetting.EarlyReminderForLoan = add.EarlyReminderForLoan;
             _context.CompanySettings.Add(compSetting);
             await _context.SaveChangesAsync();
             return compSetting;
@@ -37,6 +38,7 @@ namespace DentalClinic.Services.CompanySettingService
                                     .FirstOrDefaultAsync();
 
                 compSetting = _mapper.Map(update, compSetting);
+            compSetting.EarlyReminderForLoan = update.EarlyReminderForLoan;
                 _context.CompanySettings.Update(compSetting);
                 await _context.SaveChangesAsync();
                 return compSetting;

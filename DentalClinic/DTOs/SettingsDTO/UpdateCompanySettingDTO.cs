@@ -16,6 +16,8 @@
 
         public int NumberOfBranches { get; set; }
 
+        public int EarlyReminderForLoan { get; set; }
+
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     }
