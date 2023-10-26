@@ -221,7 +221,34 @@ namespace DentalClinic.Services.AppointmentService
             var ActionBY = await _context.Employees
                                                 .Where(e => e.EmployeeId == appointmentDTO.ActionByID)
                                                 .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("ActionBy Not Found");
+            if (appointmentDTO.AppointmentStartTime < DateTime.Now)
+            {
+                throw new ArgumentException("Appointment start time cannot be in the past.");
+            }
+            if (appointmentDTO.AppointmentEndTime < appointmentDTO.AppointmentStartTime)
+            {
+                throw new ArgumentException("Appointment end time cannot be in the past of Appointment Start time.");
+            }
+            var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync();
+            var Duration = TimeSpan.FromMinutes(CompSettings.AppointmentDuration);
 
+            TimeSpan appointmentDuration = appointmentDTO.AppointmentEndTime - appointmentDTO.AppointmentStartTime;
+
+            if (Math.Abs(appointmentDuration.TotalMinutes) < Duration.TotalMinutes)
+            {
+                throw new ArgumentException($"The duration of appointment has to be atleast {Duration.TotalMinutes} minutes long.");
+            }
+
+            // Check if Dentist already has an appointment at the specified time
+            bool dentistHasConflict = await _context.Appointments
+                .AnyAsync(a => a.Dentist.EmployeeId == appointmentDTO.DentistID &&
+                               a.AppointmentStartTime < appointmentDTO.AppointmentEndTime &&
+                               a.AppointmentEndTime > appointmentDTO.AppointmentStartTime);
+
+            if (dentistHasConflict)
+            {
+                throw new InvalidOperationException("Dentist already has an appointment at this time.");
+            }
             AppointmentLog appointmentLog = new AppointmentLog
             {
                 AppointmentId = appointment.AppointmentId,
