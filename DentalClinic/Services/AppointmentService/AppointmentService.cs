@@ -241,7 +241,8 @@ namespace DentalClinic.Services.AppointmentService
 
             // Check if Dentist already has an appointment at the specified time
             bool dentistHasConflict = await _context.Appointments
-                .AnyAsync(a => a.Dentist.EmployeeId == appointmentDTO.DentistID &&
+                .AnyAsync(a => a.AppointmentId != appointmentDTO.AppointmentID &&
+                               a.Dentist.EmployeeId == appointmentDTO.DentistID &&
                                a.AppointmentStartTime < appointmentDTO.AppointmentEndTime &&
                                a.AppointmentEndTime > appointmentDTO.AppointmentStartTime);
 
