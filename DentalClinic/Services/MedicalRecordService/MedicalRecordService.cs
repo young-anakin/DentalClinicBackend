@@ -82,6 +82,13 @@ namespace DentalClinic.Services.MedicalRecordService
                 }
 
             }
+            var payments = await _context.Payments.Where(p => p.PatientID == recordDTO.PatientId)
+                                .OrderByDescending(p => p.PaymentDate)
+                                .FirstOrDefaultAsync();
+            if (payments == null || payments.PaymentDate < DateTime.Now.AddDays(-cardExpireAfter))
+            {
+                record.IsCard = true;
+            }
             record.TreatedBy = TreatmentBY;
             //string[] separatedStrings = _toolsService.ReturnArrayofCommaSeparatedStrings(recordDTO.ReferalsList);
 

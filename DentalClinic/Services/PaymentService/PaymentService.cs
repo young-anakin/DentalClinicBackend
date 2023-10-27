@@ -129,6 +129,16 @@ namespace DentalClinic.Services.PaymentService
                     ImageAttachment = DTO.ImageAttachment,
                     MobileBanking = DTO.MobileBanking,
                 };
+                var MedicalRecordsForPatients = await _context.MedicalRecords.Where(mr=>mr.IsCard == true && mr.IsPaid == false).ToListAsync();
+                foreach (var mr in MedicalRecordsForPatients)
+                {
+                    mr.IsCard = false;
+                }
+                foreach (var mr in MedicalRecordsForPatients)
+                {
+                    _context.MedicalRecords.Update(mr);
+                }
+
                 _context.MedicalRecords.Add(newMedicalRecord);
                 _context.Payments.Add(newPayment);
                 await _context.SaveChangesAsync();
@@ -209,6 +219,15 @@ namespace DentalClinic.Services.PaymentService
             record.IsPaid = true;
             record.IsCard = false;
             _context.MedicalRecords.Update(record);
+            var MedicalRecordsForPatient = await _context.MedicalRecords.Where(mr => mr.IsCard == true && mr.IsPaid == false).ToListAsync();
+            foreach (var mr in MedicalRecordsForPatient)
+            {
+                mr.IsCard = false;
+            }
+            foreach (var mr in MedicalRecordsForPatient)
+            {
+                _context.MedicalRecords.Update(mr);
+            }
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
             return payment;
