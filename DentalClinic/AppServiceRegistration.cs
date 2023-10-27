@@ -25,6 +25,7 @@ namespace DentalClinic
     {
         public static void AddAppServices(this IServiceCollection services)
         {
+           
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IRoleService,  RoleService>();
             services.AddScoped<IPatientService, PatientService>();
@@ -44,6 +45,7 @@ namespace DentalClinic
             services.AddScoped<ICreditService, CreditService>();
             services.AddScoped<IMobileBankingService, MobileBankingService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IDatabaseService, DatabaseService>();
         }
 
     }
