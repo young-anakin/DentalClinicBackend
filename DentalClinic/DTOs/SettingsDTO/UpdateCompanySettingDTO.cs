@@ -15,6 +15,7 @@
         public decimal MaximumLoanAmount { get; set; }
 
         public int NumberOfBranches { get; set; }
+        public int AppointmentDuration { get; set; }
 
         public int EarlyReminderForLoan { get; set; }
 

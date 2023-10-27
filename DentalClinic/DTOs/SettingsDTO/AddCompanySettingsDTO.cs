@@ -12,6 +12,7 @@
         public int CardExpireAfter { get; set; }
 
         public int EarlyReminderDate { get; set; }
+        public int AppointmentDuration { get; set; }
 
         public decimal MaximumLoanAmount { get; set; }
         public int NumberOfBranches { get; set; }

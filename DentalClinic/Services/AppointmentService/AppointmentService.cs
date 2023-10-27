@@ -257,6 +257,7 @@ namespace DentalClinic.Services.AppointmentService
                 AppointmentSetDate = appointment.AppointmentSetDate,
                 AppointmentStartTime = appointment.AppointmentStartTime,
                 AppointmentEndTime = appointment.AppointmentEndTime,
+                
                 ActionByName = ActionBY.EmployeeName,
                 AllDay = appointment.AllDay,
                 ActionName = appointment.ActionName,
