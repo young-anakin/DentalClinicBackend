@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using DentalClinic.Context;
 using DentalClinic.DTOs.AppointmentDTO;
+using DentalClinic.DTOs.MedicalRecordDTO;
 using DentalClinic.DTOs.MobileBankingDTO;
 using DentalClinic.DTOs.PaymentDTO;
+using DentalClinic.Migrations;
 using DentalClinic.Models;
 using DentalClinic.Services.Tools;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.Swagger;
 using System.Text.Json;
 
 namespace DentalClinic.Services.PaymentService
@@ -129,6 +132,9 @@ namespace DentalClinic.Services.PaymentService
                     ImageAttachment = DTO.ImageAttachment,
                     MobileBanking = DTO.MobileBanking,
                 };
+
+                newPayment.MedicalRecord = newMedicalRecord;
+
                 var MedicalRecordsForPatients = await _context.MedicalRecords.Where(mr=>mr.IsCard == true && mr.IsPaid == false).ToListAsync();
                 foreach (var mr in MedicalRecordsForPatients)
                 {
@@ -216,6 +222,7 @@ namespace DentalClinic.Services.PaymentService
                 ImageAttachment = DTO.ImageAttachment,
                 MobileBanking = DTO.MobileBanking
             };
+            payment.MedicalRecord = record;
             record.IsPaid = true;
             record.IsCard = false;
             _context.MedicalRecords.Update(record);
@@ -266,16 +273,68 @@ namespace DentalClinic.Services.PaymentService
         public async Task<List<Payment>> PaymentLogForPatient(int DTO)
         {
             var PaymentRecord = await _context.Payments.Where(p=> p.PatientID == DTO)
+                                                       .Include(p=> p.MedicalRecord)
                                                         .OrderByDescending(p=> p.PaymentDate)
                                                         .ToListAsync();
             return PaymentRecord;
         }
-        public async Task<Payment> PaymentHistoryDetails(int DTO)
+        public async Task<DisplayPaymentHistoryDTO> PaymentHistoryDetails(int DTO)
         {
-            var PaymentRecord = await _context.Payments.Where(p => p.Id == DTO)
-                                                       .FirstOrDefaultAsync()??throw new KeyNotFoundException("Payment Record Not Found");
-            return PaymentRecord;
+            var data = await _context.Payments
+                                        .Where(p => p.Id == DTO)
+                                        .Include(p => p.MedicalRecord)
+                                        .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Payment Record Not Found");
+
+            int[] proceduresArray = string.IsNullOrEmpty(data.MedicalRecord.ProcedureIDs) ? new int[] { 0 } : JsonSerializer.Deserialize<int[]>(data.MedicalRecord.ProcedureIDs);
+            int[] quantityArray = string.IsNullOrEmpty(data.MedicalRecord.Quantities) ? new int[] { 0 } : JsonSerializer.Deserialize<int[]>(data.MedicalRecord.Quantities);
+
+            var DisplayRecord = new DisplayPaymentHistoryDTO
+            {
+                Id = data.Id,
+                Discount = data.Discount,
+                PatientID = data.PatientID,
+                Tax = data.Tax,
+                SubTotal = data.SubTotal,
+                IssuedByID = data.IssuedByID,
+                Total = data.Total,
+                PaymentTypeID = data.PaymentTypeID,
+                PaymentDate = data.PaymentDate,
+                IsCredit = data.IsCredit,
+                MobileBanking = data.MobileBanking,
+                ReferenceNumber = data.ReferenceNumber,
+                ImageAttachment = data.ImageAttachment,
+                ProcedureQuantity = new List<ProcedureQuantityDTO>()
+            };
+
+            if (proceduresArray != null)
+            {
+                for (int i = 0; i < proceduresArray.Length; i++)
+                {
+                    var procedureName = await _context.Procedures.Where(p=> p.ProcedureID == proceduresArray[i]).FirstOrDefaultAsync();
+                    int quantity = quantityArray[i];
+
+                    ProcedureQuantityDTO procedureQuantity = new ProcedureQuantityDTO
+                    {
+                        Name = procedureName.ProcedureName,
+                        Quantity = quantity
+                    };
+
+                    DisplayRecord.ProcedureQuantity.Add(procedureQuantity);
+                }
+                if (data.MedicalRecord.IsCard == true)
+                {
+                    ProcedureQuantityDTO pro = new ProcedureQuantityDTO
+                    {
+                        Name = "Card",
+                        Quantity = 1
+                    };
+                    DisplayRecord.ProcedureQuantity.Add(pro);
+                }
+            }
+
+            return DisplayRecord;
         }
+
         public async Task<List<Payment>> PaymentLogForAll()
         {
             var PaymentRecord = await _context.Payments

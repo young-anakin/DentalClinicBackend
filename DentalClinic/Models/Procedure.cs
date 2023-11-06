@@ -22,8 +22,9 @@ namespace DentalClinic.Models
 
         public decimal ? Price { get; set; }
 
-
-
-
+        public static implicit operator string?(Procedure? v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -584,6 +584,9 @@ namespace DentalClinic.Migrations
                     b.Property<int>("IssuedByID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("MedicalRecordMedical_RecordID")
+                        .HasColumnType("int");
+
                     b.Property<string>("MobileBanking")
                         .HasColumnType("nvarchar(max)");
 
@@ -614,6 +617,8 @@ namespace DentalClinic.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IssuedByID");
+
+                    b.HasIndex("MedicalRecordMedical_RecordID");
 
                     b.HasIndex("MobileBankingID");
 
@@ -996,6 +1001,10 @@ namespace DentalClinic.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DentalClinic.Models.MedicalRecord", "MedicalRecord")
+                        .WithMany()
+                        .HasForeignKey("MedicalRecordMedical_RecordID");
+
                     b.HasOne("DentalClinic.Models.MobileBanking", null)
                         .WithMany("Payments")
                         .HasForeignKey("MobileBankingID");
@@ -1011,6 +1020,8 @@ namespace DentalClinic.Migrations
                         .HasForeignKey("PaymentTypeID");
 
                     b.Navigation("Employee");
+
+                    b.Navigation("MedicalRecord");
 
                     b.Navigation("Patient");
 

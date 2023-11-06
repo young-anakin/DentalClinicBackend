@@ -96,6 +96,8 @@ namespace DentalClinic.Controllers
         [HttpGet("PaymentHistory")]
         public async Task<ActionResult> PaymentHistory(int DTO)
         {
+            return Ok(await _patientService.PaymentHistoryDetails(DTO));
+
             try
             {
                 return Ok(await _patientService.PaymentHistoryDetails(DTO));

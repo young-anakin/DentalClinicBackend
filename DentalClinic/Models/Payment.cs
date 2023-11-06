@@ -31,6 +31,8 @@ namespace DentalClinic.Models
         public string? ReferenceNumber { get; set; }
 
         public string? ImageAttachment { get; set; }
+
+        public MedicalRecord? MedicalRecord { get; set; }
          
         }
     }

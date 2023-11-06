@@ -149,7 +149,7 @@ namespace DentalClinic.Services.CreditService
         {
             var CompSettings = await _context.CompanySettings.FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Company Settings Not Set.");
             var Loans = await _context.Credits
-                                    .Where(c => c.UnPaid < 0)
+                                    .Where(c => c.TotalCreditAmount < 0)
                                     .Include(c => c.Patient)
                                     .Include(c => c.Employee)
                                     .ToListAsync();
