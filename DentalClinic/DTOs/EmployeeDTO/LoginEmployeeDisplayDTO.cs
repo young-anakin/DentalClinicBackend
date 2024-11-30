@@ -35,6 +35,6 @@ namespace DentalClinic.DTOs.EmployeeDTO
         //public List<Referal>? Referals { get; set; }
 
         public List<Appointment>? Appointments { get; set; }
-        public string Token { get; set; } = string.Empty;
+        public string Token { get   ; set; } = string.Empty;
     }
 }

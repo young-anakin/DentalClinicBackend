@@ -5,7 +5,6 @@ using DentalClinic.DTOs.PatientDTO;
 using Microsoft.EntityFrameworkCore;
 using DentalClinic.Services.Tools;
 using DentalClinic.Migrations;
-
 namespace DentalClinic.Services.PatientService
 {
     public class PatientService : IPatientService
@@ -107,7 +106,7 @@ namespace DentalClinic.Services.PatientService
                 PatientId = p.PatientId,
                 PatientFullName = p.PatientFullName,
                 Age = _toolsService.CalculateAge(p.DateOfBirth),
-                Phone = p.Phone,
+                Phone = p.TelephonePhone,
                 Gender = p.Gender,
                 Country = p.Country,
                 City = p.City,
@@ -154,7 +153,7 @@ namespace DentalClinic.Services.PatientService
                 PatientId = patients.PatientId,
                 PatientFullName = patients.PatientFullName,
                 Age = _toolsService.CalculateAge(patients.DateOfBirth),
-                Phone = patients.Phone,
+                Phone = patients.TelephonePhone,
                 Gender = patients.Gender,
                 Country = patients.Country,
                 City = patients.City,

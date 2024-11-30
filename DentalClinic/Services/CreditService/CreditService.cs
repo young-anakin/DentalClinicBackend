@@ -128,7 +128,7 @@ namespace DentalClinic.Services.CreditService
                 {
                     Id = loan.CreditID,
                     PatientName = loan.Patient.PatientFullName,
-                    PhoneNumber = loan.Patient.Phone,
+                    PhoneNumber = loan.Patient.TelephonePhone,
                     PatientAdress = $"{loan.Patient.Country}, {loan.Patient.City}, {loan.Patient.Subcity}, {loan.Patient.Address}",
                     Age = loan.Patient.Age,
                     CreditAmount = loan.UnPaid,
@@ -169,7 +169,7 @@ namespace DentalClinic.Services.CreditService
                 {
                     Id = loan.CreditID,
                     PatientName = loan.Patient.PatientFullName,
-                    PhoneNumber = loan.Patient.Phone,
+                    PhoneNumber = loan.Patient.TelephonePhone,
                     PatientAdress = $"{loan.Patient.Country}, {loan.Patient.City}, {loan.Patient.Subcity}, {loan.Patient.Address}",
                     Age = loan.Patient.Age,
                     CreditAmount = loan.UnPaid,

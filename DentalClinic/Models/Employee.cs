@@ -38,5 +38,8 @@ namespace DentalClinic.Models
 
         public List<Appointment>? Appointments { get; set; }
         public List<Credit>? Credits { get; set; }
+
+        //public List<Prescription>? PrescriptionsAdministered { get; set; }
+
     }
 }

@@ -35,7 +35,7 @@ namespace DentalClinic.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(new ErrorResponse { Message = ex.Message });
+                return Conflict(new ErrorResponse    { Message = ex.Message });
             }
             catch (Exception ex)
             {
